@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.towerdeffense.MainTowerDeffense;
@@ -25,6 +27,25 @@ public class PantallaBase implements Screen
         cam = new OrthographicCamera();
         cam.setToOrtho(false, 800, 480);
     }
+
+    protected boolean isButtonPress(Texture btn, int x, int y) {
+
+        return (Gdx.input.getX() > x && Gdx.input.getX() < x + btn.getHeight())
+                && (Gdx.input.getY() > y && Gdx.input.getY() < y + btn.getWidth());
+    }
+
+    protected void scaleFont(BitmapFont font, float scaleX, float scaleY){
+
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        font.getData().setScale(scaleX, scaleY);
+    }
+
+    protected void scaleFont(BitmapFont font, float scale){
+
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        font.getData().setScale(scale);
+    }
+
     @Override
     public void show() {
 
