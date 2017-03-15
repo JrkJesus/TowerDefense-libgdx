@@ -12,7 +12,7 @@ import com.towerdeffense.MainTowerDeffense;
 public class PantallaPrincipal extends PantallaBase
 {
     private Texture button;
-    private static int MARGINBUTTONX = 70, MARGINBUTTONY = 90;
+    private static int MARGINBUTTONX = 35, MARGINBUTTONY = 55;
 
     public PantallaPrincipal(MainTowerDeffense m) {
         super(m);
@@ -26,11 +26,11 @@ public class PantallaPrincipal extends PantallaBase
 
         cam.update();
         mtd.batch.begin();
-        mtd.batch.draw(button, 100, 300);
+        mtd.batch.draw(button, 150, 300);
         scaleFont(mtd.font, 2);
-        mtd.font.draw(mtd.batch, "Iniciar Juego", 100 + PantallaPrincipal.MARGINBUTTONX, 300 + PantallaPrincipal.MARGINBUTTONY);
-        mtd.batch.draw(button, 100, 150);
-        mtd.font.draw(mtd.batch, "Configuracion", 100 + PantallaPrincipal.MARGINBUTTONX, 150 + PantallaPrincipal.MARGINBUTTONY);
+        mtd.font.draw(mtd.batch, "Iniciar Juego", 150 + PantallaPrincipal.MARGINBUTTONX, 300 + PantallaPrincipal.MARGINBUTTONY);
+        mtd.batch.draw(button, 150, 150);
+        mtd.font.draw(mtd.batch, "Configuracion", 150 + PantallaPrincipal.MARGINBUTTONX, 150 + PantallaPrincipal.MARGINBUTTONY);
         scaleFont(mtd.font, 1f, 0.75f);
         mtd.font.draw(mtd.batch, "TowerDeffense desarrollado por Antonio, Juan Francisco y Jesus \n para la Universidad de Huelva", 100,50);
         mtd.batch.end();

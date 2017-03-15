@@ -12,7 +12,7 @@ import com.towerdeffense.MainTowerDeffense;
 public class PantallaConfiguracion extends PantallaBase
 {
     Texture button;
-    private static int MARGINBUTTONX = 70, MARGINBUTTONY = 90;
+    private static int MARGINBUTTONX = 35, MARGINBUTTONY = 55;
 
 
     public PantallaConfiguracion(MainTowerDeffense _mtd) {
