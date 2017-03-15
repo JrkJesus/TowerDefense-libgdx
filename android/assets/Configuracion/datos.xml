@@ -1,0 +1,28 @@
+<?xml versión="1.0"   encoding="ISO-8859-1"?>
+<TowerDeffense>
+	<configuracion>
+	    <dificultad> 1 </dificultad>
+	    <sonido> 1 </sonido>
+		<sonido-active> true </sonido-active>    
+	</configuracion>
+	<stages>
+		<stage id="1">
+			<puntuacion id = "1"> 0 </puntuacion>
+			<puntuacion id = "2"> 0 </puntuacion>
+			<puntuacion id = "3"> 0 </puntuacion>
+			<bloqueado> false </bloqueado>
+		</stage>
+		<stage id="2">
+			<puntuacion id = "1"> 0 </puntuacion>
+			<puntuacion id = "2"> 0 </puntuacion>
+			<puntuacion id = "3"> 0 </puntuacion>
+			<bloqueado> true </bloqueado>
+		</stage>
+		<stage id="3">
+			<puntuacion id = "1"> 0 </puntuacion>
+			<puntuacion id = "2"> 0 </puntuacion>
+			<puntuacion id = "3"> 0 </puntuacion>
+			<bloqueado> true </bloqueado>
+		</stage>
+	</stages>
+</TowerDeffense>

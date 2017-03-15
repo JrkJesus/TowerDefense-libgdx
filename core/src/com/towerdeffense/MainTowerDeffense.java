@@ -4,12 +4,14 @@ import com.Vistas.PantallaPrincipal;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class MainTowerDeffense extends Game {
 
 
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public ShapeRenderer shape;
 
 	@Override
 	public void create () {

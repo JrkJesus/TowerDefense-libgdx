@@ -30,12 +30,12 @@ public class PantallaConfiguracion extends PantallaBase
         mtd.font.draw(mtd.batch, "Configuracion", 200, 450);
         scaleFont(mtd.font, 2);
 
-        mtd.batch.draw(button, 100, 150);
-        mtd.font.draw(mtd.batch, "Volver a Inicio", 100 + this.MARGINBUTTONX, 150 + this.MARGINBUTTONY);
+        mtd.batch.draw(button, 150, 150);
+        mtd.font.draw(mtd.batch, "Volver a Inicio", 150 + this.MARGINBUTTONX, 150 + this.MARGINBUTTONY);
 
         mtd.batch.end();
 
-        if( Gdx.input.justTouched() && isButtonPress(button, 150, 100)){
+        if( Gdx.input.justTouched() && isButtonPress(button, 150, 150)){
             mtd.setScreen(new PantallaPrincipal(mtd));
             System.out.println("Cambiando a pantalla principal");
         }

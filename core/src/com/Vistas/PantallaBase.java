@@ -30,8 +30,9 @@ public class PantallaBase implements Screen
 
     protected boolean isButtonPress(Texture btn, int x, int y) {
 
-        return (Gdx.input.getX() > x && Gdx.input.getX() < x + btn.getHeight())
-                && (Gdx.input.getY() > y && Gdx.input.getY() < y + btn.getWidth());
+        return ( Gdx.input.getX() >  x && Gdx.input.getX() <  x + btn.getWidth())
+                && (Gdx.graphics.getHeight() - Gdx.input.getY() > y
+                    && Gdx.graphics.getHeight() - Gdx.input.getY() <  y + btn.getHeight());
     }
 
     protected void scaleFont(BitmapFont font, float scaleX, float scaleY){
