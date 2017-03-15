@@ -1,6 +1,13 @@
 package com.Vistas;
 
+import com.badlogic.gdx.Game;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.towerdeffense.MainTowerDeffense;
 
 /**
@@ -9,13 +16,15 @@ import com.towerdeffense.MainTowerDeffense;
 
 public class PantallaBase implements Screen
 {
-    protected MainTowerDeffense mtd;
+    protected final MainTowerDeffense mtd;
+    OrthographicCamera cam;
 
-    public PantallaBase(MainTowerDeffense m)
+    public PantallaBase(MainTowerDeffense _mtd)
     {
-        this.mtd = M;
+        mtd = _mtd;
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, 800, 480);
     }
-
     @Override
     public void show() {
 
@@ -50,7 +59,4 @@ public class PantallaBase implements Screen
     public void dispose() {
 
     }
-
-
-
 }
