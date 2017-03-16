@@ -11,11 +11,22 @@ import com.towerdeffense.MainTowerDeffense;
 
 public class PantallaJuego extends PantallaBase {
 
-    Texture img;
-
-    public PantallaJuego(MainTowerDeffense _mtd) {
+    Texture fondo;
+    Enemy[] enemies;
+    ArrayList<Turret> turrets;
+    
+    public PantallaJuego(MainTowerDeffense _mtd, int fase) {
         super(_mtd);
-        img = new Texture(Gdx.files.internal("towerDefense_tile001.png"));
+        fondo = new Texture(Gdx.files.internal("towerDefense_backgroun" + String.format("%02d", fase)+ ".png"));
+        switch(fase){
+            case this.FASE1: 
+                break;
+            case this.FASE2:
+                break;
+            case this.FASE3:
+                break;
+        }
+        turrets = new ArrayList<turret>();
     }
 
     @Override
@@ -35,6 +46,6 @@ public class PantallaJuego extends PantallaBase {
     @Override
     public void dispose() {
         super.dispose();
-        img.dispose();
+        fondo.dispose();
     }
 }
