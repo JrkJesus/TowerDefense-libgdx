@@ -1,15 +1,12 @@
-package com.Vistas;
-
-import com.badlogic.gdx.Game;
+package com.vistas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.towerdeffense.MainTowerDeffense;
 
 /**
@@ -22,20 +19,23 @@ public class PantallaBase implements Screen
     protected OrthographicCamera cam;
     protected Viewport view;
 
+
     public PantallaBase(MainTowerDeffense _mtd)
     {
         mtd = _mtd;
         // cam = new OrthographicCamera(1366, 768);
-        cam = new OrthographicCamera();
+        cam = new OrthographicCamera(1280, 720);
         cam.setToOrtho(false, 1280, 720); // Asigno una vista de mi mapa.
         cam.rotate(90); // Ponemos la vista en vertical.
-        new FitViewport(1280, 720, camera);
+        view = new FitViewport(1280, 720, cam);
     }
 
     protected boolean isButtonPress(Texture btn, int x, int y) {
 
-        return (Gdx.input.getX() > x && Gdx.input.getX() < x + btn.getHeight())
-                && (Gdx.input.getY() > y && Gdx.input.getY() < y + btn.getWidth());
+        System.out.println(Gdx.input.getX()  +",  "+ Gdx.input.getY() + " --> "+ x +",  " + y);
+        return ( Gdx.input.getX() >  x && Gdx.input.getX() <  x + btn.getWidth())
+                && (Gdx.graphics.getHeight() - Gdx.input.getY() > y
+                && Gdx.graphics.getHeight() - Gdx.input.getY() < y + btn.getHeight());
     }
 
     protected void scaleFont(BitmapFont font, float scaleX, float scaleY){
@@ -75,7 +75,7 @@ public class PantallaBase implements Screen
         // Gdx.gl.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
         // stage.setViewport(800, 480, true, viewportX, viewportY, viewportWidth, viewportHeight);
         view.update(width, height);
-        camera.update();
+        cam.update();
     }
 
     @Override

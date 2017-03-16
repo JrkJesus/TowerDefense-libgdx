@@ -1,9 +1,11 @@
-package com.Vistas;
+package com.vistas;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.towerdeffense.MainTowerDeffense;
+import com.util.Constants;
 
 /**
  * Created by skarg on 09/03/2017.
@@ -11,15 +13,17 @@ import com.towerdeffense.MainTowerDeffense;
 
 public class PantallaPrincipal extends PantallaBase
 {
-    private Texture button;
-    private static int MARGINBUTTONX = 35, MARGINBUTTONY = 55;
-    private int width, height;
+    private final int buttonPressWidht, buttonPressHeight, width, height;
+    private Texture button, background;
 
     public PantallaPrincipal(MainTowerDeffense m) {
         super(m);
         button = new Texture(Gdx.files.internal("Buttons\\RedButton-Bar.png"));
-        witdh = Gdx.graphics.getWidth();
-        height = Gdx.graphics.getHeight
+        background = new Texture(Gdx.files.internal("Buttons\\background.png"));
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
+        buttonPressWidht = width / 2 - button.getWidth() / 2;
+        buttonPressHeight = height - (height / 5 + button.getWidth() / 2);
     }
 
     @Override
@@ -29,23 +33,25 @@ public class PantallaPrincipal extends PantallaBase
 
         cam.update();
         mtd.batch.begin();
-        
-        scaleFont(mtd.font, 3);
-        addButton(button, 150, height - 300, "Selecionar Juego", this.MARGINBUTTONX, this.MARGINBUTTONY);
-        addButton(button, 150, height - 200, "Configuracion", this.MARGINBUTTONX, this.MARGINBUTTONY);
-        addButton(button, 150, height - 100, "Salir", this.MARGINBUTTONX, this.MARGINBUTTONY)
+        mtd.batch.draw(background, 0, 0, width, height);
+
+        scaleFont(mtd.font, 2);
+        addButton(button, "Selecionar Juego", buttonPressWidht, buttonPressHeight, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
+        addButton(button, "Configuracion", buttonPressWidht, buttonPressHeight - 100, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
+        addButton(button, "Salir", buttonPressWidht, buttonPressHeight - 200, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
        
         mtd.batch.end();
 
-        if( Gdx.input.justTouched() && isButtonPress(button, 100, height - 300) ){
-            mtd.setScreen(new PantallaJuego(mtd));
+        if( Gdx.input.justTouched() && isButtonPress(button, buttonPressWidht, buttonPressHeight) ){
+            mtd.setScreen(new PantallaSeleccion(mtd));
         }
-        if( Gdx.input.justTouched() && isButtonPress(button, 100, height - 200) ){
-            mtd.setScreen(new PantallaConfiguracion(mtd));
+        if( Gdx.input.justTouched() && isButtonPress(button, buttonPressWidht, buttonPressHeight - 100) ){
+            mtd.setScreen(new com.vistas.PantallaConfiguracion(mtd));
         }
-        if( Gdx.input.justTouched() && isButtonPress(button, 100, height - 100) ){
+        if( Gdx.input.justTouched() && isButtonPress(button, buttonPressWidht, buttonPressHeight - 200) ){
             Gdx.app.exit();
         }
+
     }
 
 

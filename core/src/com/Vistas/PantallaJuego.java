@@ -1,9 +1,16 @@
-package com.Vistas;
+package com.vistas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.Array;
+import com.models.Enemy;
+import com.models.Turret;
 import com.towerdeffense.MainTowerDeffense;
+import com.util.Constants;
+
+import java.util.ArrayList;
 
 /**
  * Created by jesus on 15/03/2017.
@@ -12,21 +19,28 @@ import com.towerdeffense.MainTowerDeffense;
 public class PantallaJuego extends PantallaBase {
 
     Texture fondo;
-    Enemy[] enemies;
-    ArrayList<Turret> turrets;
+    Array<Enemy> enemies;
+    Array<Turret> turrets;
+    Sprite sprite;
     
     public PantallaJuego(MainTowerDeffense _mtd, int fase) {
         super(_mtd);
-        fondo = new Texture(Gdx.files.internal("towerDefense_backgroun" + String.format("%02d", fase)+ ".png"));
+        fondo = new Texture(Gdx.files.internal("Paths\\towerDefense_background"+ String.format("%02d", fase)+ ".png"));
         switch(fase){
-            case this.FASE1: 
+            case Constants.FASE1:
                 break;
-            case this.FASE2:
+            case Constants.FASE2:
                 break;
-            case this.FASE3:
+            case Constants.FASE3:
                 break;
         }
-        turrets = new ArrayList<turret>();
+        enemies = new Array<Enemy>();
+        sprite = new Sprite(new Texture(Gdx.files.internal("Sprites\\enemy01.png")));
+// TODO: 16/03/2017 ver como se crean los sprites en libgdx
+// TODO: 16/03/2017 añadir como estatico las rutas de los mapas. Aqui o en Constants.
+//       enemies.add(new Enemy(sprite));
+        turrets = new Array<Turret>();
+        cam.rotate(270);
     }
 
     @Override
@@ -38,7 +52,7 @@ public class PantallaJuego extends PantallaBase {
         mtd.batch.setProjectionMatrix(cam.combined);
 
         mtd.batch.begin();
-        mtd.batch.draw(img, 200, 200);
+        mtd.batch.draw(fondo, 0, 0);
         mtd.batch.end();
 
     }
@@ -47,5 +61,6 @@ public class PantallaJuego extends PantallaBase {
     public void dispose() {
         super.dispose();
         fondo.dispose();
+        sprite.getTexture().dispose();
     }
 }
