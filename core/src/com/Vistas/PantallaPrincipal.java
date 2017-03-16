@@ -13,10 +13,13 @@ public class PantallaPrincipal extends PantallaBase
 {
     private Texture button;
     private static int MARGINBUTTONX = 35, MARGINBUTTONY = 55;
+    private int width, height;
 
     public PantallaPrincipal(MainTowerDeffense m) {
         super(m);
         button = new Texture(Gdx.files.internal("Buttons\\RedButton-Bar.png"));
+        witdh = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight
     }
 
     @Override
@@ -26,22 +29,22 @@ public class PantallaPrincipal extends PantallaBase
 
         cam.update();
         mtd.batch.begin();
-        mtd.batch.draw(button, 150, 300);
-        scaleFont(mtd.font, 2);
-        mtd.font.draw(mtd.batch, "Iniciar Juego", 150 + PantallaPrincipal.MARGINBUTTONX, 300 + PantallaPrincipal.MARGINBUTTONY);
-        mtd.batch.draw(button, 150, 150);
-        mtd.font.draw(mtd.batch, "Configuracion", 150 + PantallaPrincipal.MARGINBUTTONX, 150 + PantallaPrincipal.MARGINBUTTONY);
-        scaleFont(mtd.font, 1f, 0.75f);
-        mtd.font.draw(mtd.batch, "TowerDeffense desarrollado por Antonio, Juan Francisco y Jesus \n para la Universidad de Huelva", 100,50);
+        
+        scaleFont(mtd.font, 3);
+        addButton(button, 150, height - 300, "Selecionar Juego", this.MARGINBUTTONX, this.MARGINBUTTONY);
+        addButton(button, 150, height - 200, "Configuracion", this.MARGINBUTTONX, this.MARGINBUTTONY);
+        addButton(button, 150, height - 100, "Salir", this.MARGINBUTTONX, this.MARGINBUTTONY)
+       
         mtd.batch.end();
 
-        if( Gdx.input.justTouched() && isButtonPress(button, 100, 300)){
+        if( Gdx.input.justTouched() && isButtonPress(button, 100, height - 300) ){
             mtd.setScreen(new PantallaJuego(mtd));
-            System.out.println("Cambiando a pantalla de juego");
         }
-        if( Gdx.input.justTouched() && isButtonPress(button, 100, 150)){
+        if( Gdx.input.justTouched() && isButtonPress(button, 100, height - 200) ){
             mtd.setScreen(new PantallaConfiguracion(mtd));
-            System.out.println("Cambiando a Pantalla de configuracion");
+        }
+        if( Gdx.input.justTouched() && isButtonPress(button, 100, height - 100) ){
+            Gdx.app.exit();
         }
     }
 
