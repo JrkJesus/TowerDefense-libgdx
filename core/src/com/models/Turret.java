@@ -10,13 +10,14 @@ package com.models;
 
 public class Turret extends Actor{
   
-  private float radiusAttack, speedAttack;
+  private float radiusAttack, speedAttack, reload;
   private int dmg, initialCost, upgradeCost, level;
   private boolean reachFlying, optionsReveal = false;
   private Vector2 position;
-  private Texture turretLv1, turretLv2, turretLv3, currentTurret;
+  private Texture currentTurret;
+  private Texture[] turret;
   
-  public Turret(Texture _turret, int type, int x, int y){
+  public Turret(Texture[] _turret, int type, int x, int y){
     setBounds(x,y, _turret.getWidth(), _turret.getHeight());
     position = new Vector2(x,y);
     //TODO: 21/03/2017 Ver si con el listener puede ejecutar alguna funcion desde el stage (player)
@@ -26,8 +27,8 @@ public class Turret extends Actor{
             return true;
         }
     });
-    turretLv1 = _turret;
-    currentTurret = turretLv1;
+    turret = _turret;
+    currentTurret = turret.get(0);
     level = 1;
     int heigh = Gdx.graphics.getHeigh();
     switch(type){
@@ -54,24 +55,45 @@ public class Turret extends Actor{
         break;
       }
   }
-    
-  public boolean isReachable(int x, int y){
-      return Math.sqrt( (x-position.x)*(x-position.x) + (y-position.y)*(y-position.y) ) < radiusAttack;
+  
+  /**
+   * Metodo 
+   */
+  public int getAttack(){
+      return dmg;
   }
   
-  public setUpgradeTexture(Texture lv2, Texture lv3){
-    // Se puede hacer en un Array si vamos a querer que leven mas de 3 niveles
-    turretLv2 = lv2;
-    turretLv3 = lv3;
+  /**
+   * Metodo 
+   */
+  public void reload(){
+      reload = speedAttack;
   }
   
+  /**
+   * Metodo para comprobar si un enemigo esta al alcance
+   */
+  public boolean isReachable(Vector2 enemy){
+      return Math.sqrt( (enemy.x-position.x)*(enemy.x-position.x) + (yenemy.-position.y)*(enemy.y-position.y) ) < radiusAttack;
+  }
+  
+  /**
+   * Metodo para comprobar si un enemigo esta al alcance
+   */
+  public boolean isReloading(Vector2 enemy){
+      return reload > 0;
+  }
+  
+  /**
+   * Metodo para upgradear una torreta
+   */
   public void levelUp(){
     if( level < 3 ){ // si lo controlamos desde el panel se puede obviar.
       radiusAttack += radiusAttack*0.1;
       speedAttack -= speedAttack*0.05;
       dmg += dmg*0.1 > 0 ? dmg*0.1 : 1;
       level++;
-      currentTurret = level == 2 ? turretLv2 : turretLv3;
+      currentTurret = turret.get(level);
     }
   }
   
@@ -83,6 +105,12 @@ public class Turret extends Actor{
       }
   }
   
-//TODO: 21/03/2017 No se si seria obligatorio hacer un @Overrride act() ya que desde el stage se invocaria el metodo act
+  @Override
+  public void act(float deltaTime){
+      if( reload > 0 ) {
+          reload -= reload-deltaTime < 0 ? 0 : reload - deltaTime;
+      }
+  }
+  
   
 }
