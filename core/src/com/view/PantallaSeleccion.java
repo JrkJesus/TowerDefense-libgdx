@@ -12,19 +12,13 @@ import com.util.Constants;
 
 public class PantallaSeleccion extends PantallaBase
 {
-
-    private Texture buttonPress, buttonTopScore, background;
-    private final int buttonPressWidht, buttonPressHeight, width, height;
+    private final int width, height;
 
     public PantallaSeleccion(MainTowerDeffense m) {
         super(m);
-        buttonPress = new Texture(Gdx.files.internal("Buttons\\RedButton-Bar.png"));
-        background = new Texture(Gdx.files.internal("Buttons\\background.png"));
        // buttonTopScore = new Texture(Gdx.files.internal("Buttons\\ScoreButton.png"));
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
-        buttonPressWidht = width / 2 - buttonPress.getWidth() / 2;
-        buttonPressHeight = height - (height / 8 + buttonPress.getWidth() / 8);
     }
 
     @Override
@@ -37,42 +31,40 @@ public class PantallaSeleccion extends PantallaBase
         scaleFont(mtd.font, 2);
         mtd.batch.draw(background, 0, 0, width, height);
         //addButton(buttonTopScore,  " ", 150, 300, 0, 0);
-        addButton(buttonPress, "Menu Principal", buttonPressWidht, (height - buttonPressHeight), Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-
-        addButton(buttonPress, "Modo survival", buttonPressWidht, buttonPressHeight, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-        addButton(buttonPress, "Fase 1", buttonPressWidht, buttonPressHeight - 100, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-        addButton(buttonPress, "Fase 2", buttonPressWidht, buttonPressHeight - 200, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-        addButton(buttonPress, "Fase 3",buttonPressWidht, buttonPressHeight - 300, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
+//        addButton(buttonPress, "Menu Principal", buttonPressWidht, (height - buttonPressHeight), Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
+//
+//        addButton(buttonPress, "Modo survival", buttonPressWidht, buttonPressHeight, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
+//        addButton(buttonPress, "Fase 1", buttonPressWidht, buttonPressHeight - 100, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
+//        addButton(buttonPress, "Fase 2", buttonPressWidht, buttonPressHeight - 200, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
+//        addButton(buttonPress, "Fase 3",buttonPressWidht, buttonPressHeight - 300, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
 
 
         mtd.batch.end();
 
-        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight -100) ){
-            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE1));
-        }
-        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight - 200) ){
-            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE2));
-        }
-        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight - 300) ){
-            System.out.println("Fase 3");
-            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE3));
-        }
+//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight -100) ){
+//            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE1));
+//        }
+//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight - 200) ){
+//            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE2));
+//        }
+//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight - 300) ){
+//            System.out.println("Fase 3");
+//            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE3));
+//        }
 //        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight) ){
 //             mtd.setScreen(new PantallaJuegoSurvival(mtd));
 //        }
 //        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, 300)){
 //            mtd.setScreen(new PantallaPuntuación(mtd));
 //        }
-        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, (height - buttonPressHeight))){
-            mtd.setScreen(new com.view.PantallaPrincipal(mtd));
-        }
+//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, (height - buttonPressHeight))){
+//            mtd.setScreen(new com.view.PantallaPrincipal(mtd));
+//        }
     }
 
 
     @Override
     public void dispose() {
         super.dispose();
-        buttonPress.dispose();
-        buttonTopScore.dispose();
     }
 }

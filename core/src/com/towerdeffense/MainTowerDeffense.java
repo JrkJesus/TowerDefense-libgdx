@@ -1,6 +1,6 @@
 package com.towerdeffense;
 
-import com.Vistas.PantallaPrincipal;
+import com.view.PantallaPrincipal;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

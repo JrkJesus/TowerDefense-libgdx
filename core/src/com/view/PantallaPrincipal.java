@@ -4,6 +4,9 @@ package com.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.towerdeffense.MainTowerDeffense;
 import com.util.Constants;
 
@@ -13,17 +16,55 @@ import com.util.Constants;
 
 public class PantallaPrincipal extends PantallaBase
 {
-    private final int buttonPressWidht, buttonPressHeight, width, height;
-    private Texture button, background;
+//    buttonPressWidht, buttonPressHeight,
+    private final int  width, height;
+
+    private TextButton play, conf, exit;
 
     public PantallaPrincipal(MainTowerDeffense m) {
         super(m);
-        button = new Texture(Gdx.files.internal("Buttons\\RedButton-Bar.png"));
-        background = new Texture(Gdx.files.internal("Buttons\\background.png"));
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
-        buttonPressWidht = width / 2 - button.getWidth() / 2;
-        buttonPressHeight = height - (height / 5 + button.getWidth() / 2);
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        style.up = skin.getDrawable("button");
+        style.down = skin.getDrawable("button-pressed");
+
+        play = new TextButton("Jugar", style);
+        addButton(play, 3*width/8, height-height/5, width/4, 75);
+
+        conf = new TextButton("Configuracion", style);
+        addButton(conf, 3*width/8, height-height/5 - 75, width/4, 75);
+
+        exit = new TextButton("Exit", style);
+        addButton(exit, 3*width/8, (height-height/5) - 75*2, width/4, 75);
+
+
+        play.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                mtd.setScreen(new PantallaSeleccion(mtd));
+            }
+        });
+        conf.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                mtd.setScreen(new PantallaConfiguracion(mtd));
+            }
+        });
+        exit.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Gdx.app.exit();
+            }
+        });
+
+        stage.addActor(play);
+        stage.addActor(conf);
+        stage.addActor(exit);
     }
 
     @Override
@@ -33,30 +74,15 @@ public class PantallaPrincipal extends PantallaBase
 
         mtd.batch.begin();
         mtd.batch.draw(background, 0, 0, width, height);
-
-        scaleFont(mtd.font, 2);
-        addButton(button, "Selecionar Juego", buttonPressWidht, buttonPressHeight, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-        addButton(button, "Configuracion", buttonPressWidht, buttonPressHeight - 100, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-        addButton(button, "Salir", buttonPressWidht, buttonPressHeight - 200, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-       
         mtd.batch.end();
 
-        if( Gdx.input.justTouched() && isButtonPress(button, buttonPressWidht, buttonPressHeight) ){
-            mtd.setScreen(new PantallaSeleccion(mtd));
-        }
-        if( Gdx.input.justTouched() && isButtonPress(button, buttonPressWidht, buttonPressHeight - 100) ){
-            mtd.setScreen(new PantallaConfiguracion(mtd));
-        }
-        if( Gdx.input.justTouched() && isButtonPress(button, buttonPressWidht, buttonPressHeight - 200) ){
-            Gdx.app.exit();
-        }
-
+        stage.draw();
     }
 
 
     @Override
     public void dispose() {
         super.dispose();
-        button.dispose();
+        background.dispose();
     }
 }

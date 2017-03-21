@@ -2,11 +2,14 @@ package com.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.towerdeffense.MainTowerDeffense;
 
 /**
@@ -15,12 +18,27 @@ import com.towerdeffense.MainTowerDeffense;
 
 public class PantallaBase implements Screen
 {
+    protected Texture background;
     protected final MainTowerDeffense mtd;
+    protected final Skin skin;
+    protected final Stage stage;
+    protected final TextureAtlas atlas;
+    protected final TextButton.TextButtonStyle style;
+    protected final BitmapFont font;
 
 
     public PantallaBase(MainTowerDeffense _mtd)
     {
         mtd = _mtd;
+        background = new Texture(Gdx.files.internal("Buttons\\background.png"));
+        font = new BitmapFont(Gdx.files.internal("GUI\\font-export.fnt"));
+        skin = new Skin(Gdx.files.internal("GUI\\quantum-horizon-ui.json"));
+        atlas = new TextureAtlas(Gdx.files.internal("GUI\\quantum-horizon-ui.atlas"));
+        skin.addRegions(atlas);
+        style = new TextButton.TextButtonStyle();
+        style.font = font;
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
     }
 
     protected boolean isButtonPress(Texture btn, int x, int y) {
@@ -42,10 +60,10 @@ public class PantallaBase implements Screen
         font.getData().setScale(scale);
     }
     
-    protected void addButton(Texture btn, String text, int x, int y, int marginLeft, int marginBottom){
-        mtd.batch.draw(btn, x, y);
-        mtd.font.draw(mtd.batch, text, x + marginLeft, y + marginBottom);
-    
+    protected void addButton(TextButton btn, int x, int y, int width, int height){
+        btn.setWidth(width);
+        btn.setHeight(height);
+        btn.setPosition(x, y);
     }
     @Override
     public void show() {
@@ -79,6 +97,8 @@ public class PantallaBase implements Screen
 
     @Override
     public void dispose() {
-
+        skin.dispose();
+        stage.dispose();
+        background.dispose();
     }
 }
