@@ -1,13 +1,15 @@
 package com.models;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.Texture;
 import com.util.Constants;
-import com.view.PantallaJuego;
 
 /**
  * Created by jesus on 16/03/2017.
@@ -25,13 +27,10 @@ public class Enemy extends Actor {
     private Array<Vector2> path;
     private int waypoint;
     private Texture alive, death, current;
-    private PantallaJuego player;
-    
-    public Enemy(PantallaJuego _player, Texture[] textures, Array<Vector2> _path, int _starTime, int type){
-        player = _player;
-        alive = textures[0];
-        death = textures[1];
-        velocity = new Vector2();
+
+    public Enemy(Texture[] textures, Array<Vector2> _path, int _starTime, int type){
+        alive = textures.get(0);
+        death = textures.get(1);
         current = alive;
         path = _path;
         position = path.get(0);
@@ -77,7 +76,7 @@ public class Enemy extends Actor {
      */
     @Override
     public void draw(Batch batch, float alpha) {
-        if( startTime <= 0 ) {
+        if( starTime > 0 ){
             batch.draw(current, position.x, position.y);
         }
     }
@@ -92,19 +91,19 @@ public class Enemy extends Actor {
         if( !isAlive ){
             deathTime += deltaTime;
         } else {
-            if( startTime > 0 ){
-                startTime -= deltaTime;
+            if( starTime > 0 ){
+                starTime -= deltaTime;
             } else {
                 float angle = (float) Math.atan2(path.get(waypoint).y - position.y, path.get(waypoint).x - position.x);
                 velocity.set((float) Math.cos(angle)*speed, (float) Math.sin(angle)*speed);
 
-                position.x += velocity.x * deltaTime;
-                position.y += velocity.y * deltaTime;
+                position.x =+ velocity.x * deltaTime;
+                position.y =+ velocity.y * deltaTime;
 
                 //TODO: 21/03/2017 comprobar si el enemigo rota con esta funcion.
                 setRotation(angle * MathUtils.radiansToDegrees);
 
-                if( position.x == path.get(waypoint).x && position.y == path.get(waypoint).y ){
+                if( position.x == path.get(waypoint).x && position.y = path.get(waypoint).y ){
                     waypoint++;
                 }
             }

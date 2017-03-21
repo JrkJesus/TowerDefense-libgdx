@@ -1,4 +1,4 @@
-package com.vistas;
+package com.view;
 
 import com.towerdeffense.MainTowerDeffense;
 

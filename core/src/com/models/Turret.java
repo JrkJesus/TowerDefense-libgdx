@@ -1,60 +1,71 @@
 package com.models;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.util.Constants;
+
 /**
  * Created by jesus on 16/03/2017.
  *
  * Clase que guarda toda la información de las torretas.
- * @param radiusAttack radio de accion de la torreta
+ *
  * 
  */
 
-public class Turret extends Actor{
+public class Turret extends Actor {
   
-  private float radiusAttack, speedAttack, reload;
-  private int dmg, initialCost, upgradeCost, level;
-  private boolean reachFlying, optionsReveal = false;
-  private Vector2 position;
-  private Texture currentTurret;
-  private Texture[] turret;
+    private float radiusAttack, speedAttack, reload;
+    private int dmg, initialCost, level;
+    private int[] upgradeCost;
+    private boolean reachFlying, optionsReveal = false;
+    private Vector2 position;
+    private Texture currentTurret;
+    private Texture[] turret;
   
-  public Turret(Texture[] _turret, int type, int x, int y){
-    setBounds(x,y, _turret.getWidth(), _turret.getHeight());
-    position = new Vector2(x,y);
-    //TODO: 21/03/2017 Ver si con el listener puede ejecutar alguna funcion desde el stage (player)
-    addListener(new InputListener(){
-        public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            ((MyActor)event.getTarget()).optionsReveal = !((MyActor)event.getTarget()).optionsReveal;
-            return true;
-        }
-    });
-    turret = _turret;
-    currentTurret = turret.get(0);
-    level = 1;
-    int heigh = Gdx.graphics.getHeigh();
-    switch(type){
-        case Constants.ANTIPLANE:
-          radiusAttack = heigh * 0.25;
-          dmg = 7;
-          speedAttack = 1000;
-          initalcost = 75;
-          upgradeCost = new int[]{ 50, 100 };
-        break;
-        case Constants.ANTITANK:
-          radiusAttack = heigh * 0.14;
-          dmg = 6;
-          speedAttack = 2000;
-          initalcost = 100;
-          upgradeCost = new int[]{ 75, 150 };
-        break;
-        case Constants.MACHINEGUN:
-          radiusAttack = heigh * 0.18;
-          dmg = 2;
-          speedAttack = 500;
-          initalcost = 50;
-          upgradeCost = new int[]{ 25, 75 };
-        break;
-      }
-  }
+    public Turret(Texture[] _turret, int type, int x, int y){
+
+        position = new Vector2(x,y);
+        //TODO: 21/03/2017 Ver si con el listener puede ejecutar alguna funcion desde el stage (player)
+        addListener(new InputListener(){
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                ((Turret)event.getTarget()).optionsReveal = !((Turret)event.getTarget()).optionsReveal;
+                return true;
+            }
+        });
+        turret = _turret;
+        currentTurret = turret[0];
+        setBounds(x,y, currentTurret.getWidth(), currentTurret.getHeight());
+        level = 1;
+        int heigh = Gdx.graphics.getHeight();
+        switch(type){
+            case Constants.ANTIAIR:
+                radiusAttack = (float)(heigh * 0.25);
+                dmg = 7;
+                speedAttack = 1000;
+                initialCost = 75;
+                upgradeCost = new int[]{ 50, 100 };
+            break;
+            case Constants.ANTITANK:
+                radiusAttack = (float) (heigh * 0.14);
+                dmg = 6;
+                speedAttack = 2000;
+                initialCost = 100;
+                upgradeCost = new int[]{ 75, 150 };
+            break;
+            case Constants.MACHINEGUN:
+                radiusAttack = (float) (heigh * 0.18);
+                dmg = 2;
+                speedAttack = 500;
+                initialCost = 50;
+                upgradeCost = new int[]{ 25, 75 };
+            break;
+          }
+    }
   
   /**
    * Metodo 
@@ -74,7 +85,7 @@ public class Turret extends Actor{
    * Metodo para comprobar si un enemigo esta al alcance
    */
   public boolean isReachable(Vector2 enemy){
-      return Math.sqrt( (enemy.x-position.x)*(enemy.x-position.x) + (yenemy.-position.y)*(enemy.y-position.y) ) < radiusAttack;
+      return Math.sqrt( (enemy.x-position.x)*(enemy.x-position.x) + (enemy.y-position.y)*(enemy.y-position.y) ) < radiusAttack;
   }
   
   /**
@@ -93,14 +104,14 @@ public class Turret extends Actor{
       speedAttack -= speedAttack*0.05;
       dmg += dmg*0.1 > 0 ? dmg*0.1 : 1;
       level++;
-      currentTurret = turret.get(level);
+      currentTurret = turret[level];
     }
   }
   
   @Override
   public void draw(Batch batch, float alpha){
       batch.draw(currentTurret, position.x, position.y);
-      if( optionReveal ){
+      if( optionsReveal ){
         //TODO: 21/03/2017 Añadir los botones de acciones con sus propias opciones.
       }
   }

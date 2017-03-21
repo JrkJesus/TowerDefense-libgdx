@@ -1,4 +1,4 @@
-package com.vistas;
+package com.Vistas;
 
 
 import com.badlogic.gdx.Gdx;
@@ -46,7 +46,7 @@ public class PantallaPrincipal extends PantallaBase
             mtd.setScreen(new PantallaSeleccion(mtd));
         }
         if( Gdx.input.justTouched() && isButtonPress(button, buttonPressWidht, buttonPressHeight - 100) ){
-            mtd.setScreen(new com.vistas.PantallaConfiguracion(mtd));
+            mtd.setScreen(new com.Vistas.PantallaConfiguracion(mtd));
         }
         if( Gdx.input.justTouched() && isButtonPress(button, buttonPressWidht, buttonPressHeight - 200) ){
             Gdx.app.exit();
