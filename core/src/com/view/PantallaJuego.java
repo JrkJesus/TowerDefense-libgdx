@@ -30,7 +30,6 @@ public class PantallaJuego extends PantallaBase {
         super(_mtd);
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        
         enemies = new Array<Enemy>();
         turrets = new Array<Turret>();
         initTextures(fase);
@@ -75,7 +74,7 @@ public class PantallaJuego extends PantallaBase {
     }
     
     public void initTextures(int fase){
-        fondo = new Texture(Gdx.files.internal("Paths\\grass.png"));
+        fondo = new Texture(Gdx.files.internal("Paths\\towerDefense_background01.png"));
         
         plane = new Texture[]{new Texture(Gdx.files.internal("Textures\\plane.png")), 
                               new Texture(Gdx.files.internal("Textures\\planeDead.png")) };

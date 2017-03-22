@@ -3,6 +3,9 @@ package com.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.towerdeffense.MainTowerDeffense;
 import com.util.Constants;
 
@@ -13,12 +16,46 @@ import com.util.Constants;
 public class PantallaSeleccion extends PantallaBase
 {
     private final int width, height;
+    private TextButton.TextButtonStyle styleBtn;
+    private TextButton stage1, stage2, stage3, survival;
+    private VerticalGroup vg;
 
     public PantallaSeleccion(MainTowerDeffense m) {
         super(m);
-       // buttonTopScore = new Texture(Gdx.files.internal("Buttons\\ScoreButton.png"));
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
+        styleBtn = new TextButton.TextButtonStyle();
+        vg = new VerticalGroup();
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        styleBtn.font = font;
+        styleBtn.up = skin.getDrawable("button");
+        styleBtn.down = skin.getDrawable("button-pressed");
+
+        stage1 = new TextButton("Fase 1", styleBtn);
+
+        stage2 = new TextButton("Fase 2", styleBtn);
+
+        stage3 = new TextButton("Fase 3", styleBtn);
+
+        survival = new TextButton("Survival", styleBtn);
+
+        vg.addActor(survival);
+        vg.addActor(stage1);
+        vg.addActor(stage2);
+        vg.addActor(stage3);
+
+        vg.setFillParent(true);
+
+        vg.setPosition(0, -height/4);
+        vg.setWidth(width/4);
+        vg.setHeight(75);
+
+        stage.addActor(vg);
+
     }
 
     @Override
@@ -27,39 +64,10 @@ public class PantallaSeleccion extends PantallaBase
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         mtd.batch.begin();
-
-        scaleFont(mtd.font, 2);
         mtd.batch.draw(background, 0, 0, width, height);
-        //addButton(buttonTopScore,  " ", 150, 300, 0, 0);
-//        addButton(buttonPress, "Menu Principal", buttonPressWidht, (height - buttonPressHeight), Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-//
-//        addButton(buttonPress, "Modo survival", buttonPressWidht, buttonPressHeight, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-//        addButton(buttonPress, "Fase 1", buttonPressWidht, buttonPressHeight - 100, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-//        addButton(buttonPress, "Fase 2", buttonPressWidht, buttonPressHeight - 200, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-//        addButton(buttonPress, "Fase 3",buttonPressWidht, buttonPressHeight - 300, Constants.BUTTONPRESS_X, Constants.BUTTONPRESS_Y);
-
-
         mtd.batch.end();
 
-//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight -100) ){
-//            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE1));
-//        }
-//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight - 200) ){
-//            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE2));
-//        }
-//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight - 300) ){
-//            System.out.println("Fase 3");
-//            mtd.setScreen(new PantallaJuego(mtd, Constants.FASE3));
-//        }
-//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, buttonPressHeight) ){
-//             mtd.setScreen(new PantallaJuegoSurvival(mtd));
-//        }
-//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, 300)){
-//            mtd.setScreen(new PantallaPuntuación(mtd));
-//        }
-//        if( Gdx.input.justTouched() && isButtonPress(buttonPress, buttonPressWidht, (height - buttonPressHeight))){
-//            mtd.setScreen(new com.view.PantallaPrincipal(mtd));
-//        }
+        stage.draw();
     }
 
 

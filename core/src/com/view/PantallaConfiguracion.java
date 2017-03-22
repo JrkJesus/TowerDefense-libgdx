@@ -19,6 +19,7 @@ public class PantallaConfiguracion extends PantallaBase
     private final int width, height;
     private final VerticalGroup vg;
     private TextButton music, home, easy, normal, hard;
+    private final TextButton.TextButtonStyle style;
     // TODO: 22/03/2017 Añadir styles (radioBtn y scroll) 
 
 
@@ -27,33 +28,35 @@ public class PantallaConfiguracion extends PantallaBase
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         vg = new VerticalGroup();
+        style = new TextButton.TextButtonStyle();
 
    }
 
     @Override
     public void show() {
         super.show();
-        vg.setFillParent(true);
-        style.up = skin.getDrawable("scroll-bar-back-horizontal");
-        music = new TextButton("Volumen", style);
-        addButton(music, 3*width/8, height-height/5, width/4, 75);
-        vg.addActor(music);
-
-        style.up = skin.getDrawable("button");
-        style.down = skin.getDrawable("button-pressed");
-
-        home = new TextButton("Volver", style);
-        addButton(home, 3*width/8, height/5, width/4, 75);
-
-        home.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                mtd.setScreen(new PantallaPrincipal(mtd));
-            }
-        });
-
-        stage.addActor(vg);
-        stage.addActor(home);
+//        vg.setFillParent(true);
+//        music
+//        style.up = skin.getDrawable("scroll-bar-back-horizontal");
+//        music = new TextButton("Volumen", style);
+//        addButton(music, 3*width/8, height-height/5, width/4, 75);
+//        vg.addActor(music);
+//
+//        style.up = skin.getDrawable("button");
+//        style.down = skin.getDrawable("button-pressed");
+//
+//        home = new TextButton("Volver", style);
+//        addButton(home, 3*width/8, height/5, width/4, 75);
+//
+//        home.addListener(new ClickListener(){
+//            @Override
+//            public void clicked(InputEvent event, float x, float y){
+//                mtd.setScreen(new PantallaPrincipal(mtd));
+//            }
+//        });
+//
+//        stage.addActor(vg);
+//        stage.addActor(home);
     }
 
     @Override

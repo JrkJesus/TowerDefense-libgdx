@@ -24,11 +24,25 @@ public final class Constants {
     public final static int ANTITANK = 2;
     public final static int MACHINEGUN = 3;
 
-
     public static Array<Vector2> PATH_FASE1() {
         Array<Vector2> path = new Array<Vector2>();
-        path.add(new Vector2(0,200));
-        path.add(new Vector2(Gdx.graphics.getWidth(), 200));
+        path.add(new Vector2(0,10));
+        path.add(new Vector2(3,10));
+        path.add(new Vector2(4,9));
+        path.add(new Vector2(4,7));
+        path.add(new Vector2(3,6));
+        path.add(new Vector2(3,4));
+        path.add(new Vector2(8,4));
+        path.add(new Vector2(8,9));
+        path.add(new Vector2(9,10));
+        path.add(new Vector2(12,10));
+        path.add(new Vector2(11,9));
+        path.add(new Vector2(11,7));
+        path.add(new Vector2(12,6));
+        path.add(new Vector2(15,6));
+        path.add(new Vector2(15,4));
+        path.add(new Vector2(16,3));
+        path.add(new Vector2(20,3));
 
         return path;
     }

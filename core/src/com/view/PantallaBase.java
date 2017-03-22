@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -23,7 +24,6 @@ public class PantallaBase implements Screen
     protected final Skin skin;
     protected final Stage stage;
     protected final TextureAtlas atlas;
-    protected final TextButton.TextButtonStyle style;
     protected final BitmapFont font;
 
 
@@ -35,23 +35,9 @@ public class PantallaBase implements Screen
         skin = new Skin(Gdx.files.internal("GUI\\quantum-horizon-ui.json"));
         atlas = new TextureAtlas(Gdx.files.internal("GUI\\quantum-horizon-ui.atlas"));
         skin.addRegions(atlas);
-        style = new TextButton.TextButtonStyle();
-        style.font = font;
+
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-    }
-
-    protected boolean isButtonPress(Texture btn, int x, int y) {
-
-       return ( Gdx.input.getX() >  x && Gdx.input.getX() <  x + btn.getWidth())
-                && (Gdx.graphics.getHeight() - Gdx.input.getY() > y
-                && Gdx.graphics.getHeight() - Gdx.input.getY() < y + btn.getHeight());
-    }
-
-    protected void scaleFont(BitmapFont font, float scaleX, float scaleY){
-
-        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        font.getData().setScale(scaleX, scaleY);
     }
 
     protected void scaleFont(BitmapFont font, float scale){
@@ -60,7 +46,7 @@ public class PantallaBase implements Screen
         font.getData().setScale(scale);
     }
     
-    protected void addButton(TextButton btn, int x, int y, int width, int height){
+    protected void addButton(Button btn, int x, int y, int width, int height){
         btn.setWidth(width);
         btn.setHeight(height);
         btn.setPosition(x, y);

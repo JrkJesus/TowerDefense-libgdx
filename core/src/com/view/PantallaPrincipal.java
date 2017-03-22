@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.towerdeffense.MainTowerDeffense;
@@ -19,28 +20,37 @@ public class PantallaPrincipal extends PantallaBase
 //    buttonPressWidht, buttonPressHeight,
     private final int  width, height;
 
-    private TextButton play, conf, exit;
+    private TextButton play, exit;
+    private Button conf;
+    private final TextButton.TextButtonStyle styleBtn;
+    private final Button.ButtonStyle styleConf;
 
     public PantallaPrincipal(MainTowerDeffense m) {
         super(m);
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
+        styleBtn = new TextButton.TextButtonStyle();
+        styleConf = new TextButton.TextButtonStyle();
     }
 
     @Override
     public void show() {
         super.show();
-        style.up = skin.getDrawable("button");
-        style.down = skin.getDrawable("button-pressed");
 
-        play = new TextButton("Jugar", style);
+        styleBtn.font = font;
+        styleBtn.up = skin.getDrawable("button");
+        styleBtn.down = skin.getDrawable("button-pressed");
+        styleConf.up = skin.getDrawable("touchpad");
+        styleConf.down = skin.getDrawable("touchpad-pressed");
+
+        play = new TextButton("Jugar", styleBtn);
         addButton(play, 3*width/8, height-height/5, width/4, 75);
 
-        conf = new TextButton("Configuracion", style);
-        addButton(conf, 3*width/8, height-height/5 - 75, width/4, 75);
+        conf = new Button(styleConf);
+        addButton(conf, width-60, height-60, 50, 50);
 
-        exit = new TextButton("Exit", style);
-        addButton(exit, 3*width/8, (height-height/5) - 75*2, width/4, 75);
+        exit = new TextButton("Salir", styleBtn);
+        addButton(exit, 3*width/8, (height/15), width/4, 75);
 
 
         play.addListener(new ClickListener(){
