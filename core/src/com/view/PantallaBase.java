@@ -25,7 +25,7 @@ public class PantallaBase implements Screen
     protected final Stage stage;
     protected final TextureAtlas atlas;
     protected final BitmapFont font;
-
+    public final int width, height;
 
     public PantallaBase(MainTowerDeffense _mtd)
     {
@@ -35,7 +35,8 @@ public class PantallaBase implements Screen
         skin = new Skin(Gdx.files.internal("GUI\\quantum-horizon-ui.json"));
         atlas = new TextureAtlas(Gdx.files.internal("GUI\\quantum-horizon-ui.atlas"));
         skin.addRegions(atlas);
-
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
     }

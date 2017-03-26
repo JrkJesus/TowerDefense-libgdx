@@ -1,5 +1,7 @@
 package com.towerdeffense;
 
+import com.util.Constants;
+import com.view.PantallaJuego;
 import com.view.PantallaPrincipal;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,14 +12,12 @@ public class MainTowerDeffense extends Game {
 
 
 	public SpriteBatch batch;
-	public BitmapFont font;
-	public ShapeRenderer shape;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		font = new BitmapFont();
-		this.setScreen(new PantallaPrincipal(this));
+//		this.setScreen(new PantallaPrincipal(this));
+		this.setScreen(new PantallaJuego(this, Constants.FASE1));
 	}
 
 	@Override
@@ -28,6 +28,5 @@ public class MainTowerDeffense extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		font.dispose();
 	}
 }

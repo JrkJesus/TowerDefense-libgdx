@@ -3,13 +3,17 @@ package com.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.models.Enemy;
 import com.models.Turret;
 import com.towerdeffense.MainTowerDeffense;
 import com.util.Constants;
 
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -29,7 +33,6 @@ public class PantallaJuego extends PantallaBase {
     public PantallaJuego(MainTowerDeffense _mtd, int fase) {
         super(_mtd);
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
         enemies = new Array<Enemy>();
         turrets = new Array<Turret>();
         initTextures(fase);
@@ -63,18 +66,22 @@ public class PantallaJuego extends PantallaBase {
 //                for(int i = 0; i < 5; i++){
 //                    enemies.add( new Enemy(this, plane, Constants.PATH_FASE1(), (int) (rnd.nextInt(4)+18)*100, Constants.PLANE) );
 //                }
-                enemies.add(new Enemy(this, people, Constants.PATH_FASE1(), 0, Constants.PEOPLE));
+                enemies.add(new Enemy(this, people, Constants.PATH_FASE1(), rnd.nextInt(6)*100, Constants.PEOPLE));
+                enemies.add(new Enemy(this, tank, Constants.PATH_FASE1(), (rnd.nextInt(5)+2)*100, Constants.TANK));
+                enemies.add(new Enemy(this, plane, Constants.PATH_PLANE(), (rnd.nextInt(4)+4)*100, Constants.PLANE));
             break;
         }
         for(Enemy enemy : enemies){
+            enemy.addAction(parallel(rotateTo(90.0f,5f)));
             stage.addActor(enemy);
         }
         life = 10;
+        Gdx.input.setInputProcessor(stage);
         //TODO: 21/03/2017 la vida tiene que depender de la dificultad elegida.
     }
     
     public void initTextures(int fase){
-        fondo = new Texture(Gdx.files.internal("Paths\\towerDefense_background01.png"));
+        fondo = new Texture(Gdx.files.internal("Paths\\path_stage"+fase+".png"));
         
         plane = new Texture[]{new Texture(Gdx.files.internal("Textures\\plane.png")), 
                               new Texture(Gdx.files.internal("Textures\\planeDead.png")) };
@@ -110,11 +117,26 @@ public class PantallaJuego extends PantallaBase {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-
-        
+        for(Enemy enemy : enemies) {
+            for (Iterator<Action> iter = enemy.getActions().iterator(); iter.hasNext(); ) {
+                iter.next().act(delta);
+            }
+        }
         //TODO: 21/03/2017 controlar de alguna forma la destruccion de enemigos
             // mejor forma de hacer pasandole un objeto al enemigo y que llame a metodos de aqui.
 
+    }
+
+    private void eliminateEnemy(Enemy enemy){
+        for(Actor e : stage.getActors()){
+            if(enemy == e)
+                e.remove();
+        }
+    }
+
+    public void loseLife(Enemy enemy){
+        eliminateEnemy(enemy);
+        life--;
     }
 
     @Override
