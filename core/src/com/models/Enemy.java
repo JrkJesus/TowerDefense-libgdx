@@ -1,13 +1,11 @@
 package com.models;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.sun.org.apache.xpath.internal.SourceTree;
 import com.util.Constants;
 import com.view.PantallaJuego;
 
@@ -20,7 +18,7 @@ import java.util.Iterator;
  */
 
 
-public class Enemy extends Actor {
+public class Enemy extends Sprite {
 
     private Vector2 velocity, position, scala;
     private float speed;
@@ -28,14 +26,11 @@ public class Enemy extends Actor {
     private boolean isAlive;
     private Array<Vector2> path;
     private int waypoint;
-    // TODO: 26/03/2017 cambiar texture a spritebatch
-    private Texture alive, death, current;
     private PantallaJuego player;
     
-    public Enemy(PantallaJuego _player, Texture[] textures, Array<Vector2> _path, int _starTime, int type){
+    public Enemy(PantallaJuego _player, Sprite sprite, Array<Vector2> _path, int _starTime, int type){
+        super(sprite);
         player = _player;
-        alive = textures[0];
-        death = textures[1];
         velocity = new Vector2();
         current = alive;
         current.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -57,7 +52,7 @@ public class Enemy extends Actor {
                 defense = 2;
             break;
             case Constants.PEOPLE:
-               life = 4;
+                life = 4;
                 speed = 100;
                 defense = 0;
             break;
@@ -82,12 +77,13 @@ public class Enemy extends Actor {
      * Metodo 
      */
     @Override
-    public void draw(Batch batch, float alpha) {
+//    public void draw(Batch batch, float alpha) {
+    public void draw(SpriteBatch batch) {
+        act(Gdx.graphics.getDeltaTime);
         if(startTime <= 0) {
-            batch.draw(current, position.x - current.getWidth() / 2, position.y - current.getHeight() / 2);
-//          batch.draw(current, position.x - current.getWidth()/2, getY(),position.y - current.getHeight()/2, this.getOriginY(),this.getWidth(),
-//                this.getHeight(),this.getScaleX(), this.getScaleY(),this.getRotation(),0,0,
-//                current.getWidth(),current.getHeight(),false,false);
+//            batch.draw(current, position.x - current.getWidth() / 2, position.y - current.getHeight() / 2);
+            super(batch);
+
             if(waypoint >= path.size) {
                 player.loseLife(this);
                 waypoint--;
@@ -99,7 +95,7 @@ public class Enemy extends Actor {
      *  Metodo para calcular los datos necesarios para donde se deberia pintar la siguiente 
      *  vez que llame a draw
      */
-    @Override
+//    @Override
     public void act(float deltaTime) {
         
         if( !isAlive ){
@@ -127,7 +123,7 @@ public class Enemy extends Actor {
      * Metodo para compropar si el actor se puede quitar del stage
      */
     public boolean isErasable(){
-        return deathTime >= 3000;
+        return deathTime >= 300;
     }
     
     /**
