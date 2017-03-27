@@ -1,6 +1,7 @@
 package com.models;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -32,11 +33,10 @@ public class Enemy extends Sprite {
         super(sprite);
         player = _player;
         velocity = new Vector2();
-        current = alive;
-        current.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         path = _path;
         scala = new Vector2(player.width/20, player.height/11);
         position = new Vector2(path.get(0).x*scala.x, path.get(0).y*scala.y);
+        setPosition(position.x-getWidth()/2, position.y-getHeight()/2);
         waypoint = 1;
         isAlive = true;
         startTime = _starTime;
@@ -78,11 +78,11 @@ public class Enemy extends Sprite {
      */
     @Override
 //    public void draw(Batch batch, float alpha) {
-    public void draw(SpriteBatch batch) {
-        act(Gdx.graphics.getDeltaTime);
+    public void draw(Batch batch) {
+        act(Gdx.graphics.getDeltaTime());
         if(startTime <= 0) {
 //            batch.draw(current, position.x - current.getWidth() / 2, position.y - current.getHeight() / 2);
-            super(batch);
+            super.draw(batch);
 
             if(waypoint >= path.size) {
                 player.loseLife(this);
@@ -90,6 +90,8 @@ public class Enemy extends Sprite {
             }
         }
     }
+
+
 
     /**
      *  Metodo para calcular los datos necesarios para donde se deberia pintar la siguiente 
@@ -109,6 +111,7 @@ public class Enemy extends Sprite {
 
                 position.x += velocity.x * deltaTime;
                 position.y += velocity.y * deltaTime;
+                setPosition(position.x-getWidth()/2, position.y-getHeight()/2);
 
                 setRotation(angle * MathUtils.radiansToDegrees);
 
@@ -135,7 +138,6 @@ public class Enemy extends Sprite {
         life -= realDmg>0 ? realDmg : 0;
         if( life <= 0 ){
             isAlive = false;
-            current = death;
         }
         
         return realDmg;

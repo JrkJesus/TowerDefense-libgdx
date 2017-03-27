@@ -91,7 +91,7 @@ public class Turret extends Actor {
   /**
    * Metodo para comprobar si un enemigo esta al alcance
    */
-  public boolean isReloading(Vector2 enemy){
+  public boolean isReloading(){
       return reload > 0;
   }
   
@@ -124,5 +124,7 @@ public class Turret extends Actor {
   }
 
 
-  
+    public double getValue() {
+        return initialCost;
+    }
 }

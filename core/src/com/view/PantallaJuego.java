@@ -3,10 +3,13 @@ package com.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.Array;
 import com.models.Enemy;
 import com.models.Turret;
@@ -26,7 +29,6 @@ public class PantallaJuego extends PantallaBase {
     private Texture fondo;
     private Texture[] machineGun, antiAir, antiTank;
     private Button btnMachine, btnAntiAir, bntAntiTank;
-    private 
     private Sprite plane, tank, people;
     private Array<Enemy> enemies;
     //private Array<Turret> turrets;
@@ -37,7 +39,6 @@ public class PantallaJuego extends PantallaBase {
         super(_mtd);
         stage = new Stage();
         enemies = new Array<Enemy>();
-        turrets = new Array<Turret>();
         initTextures(fase);
         Random rnd = new Random(System.currentTimeMillis());
         switch(fase){
@@ -69,7 +70,7 @@ public class PantallaJuego extends PantallaBase {
 //                for(int i = 0; i < 5; i++){
 //                    enemies.add( new Enemy(this, plane, Constants.PATH_FASE1(), (int) (rnd.nextInt(4)+18)*100, Constants.PLANE) );
 //                }
-                enemies.add(new Enemy(this, people, Constants.PATH_FASE1(), rnd.nextInt(6)*100, Constants.PEOPLE));
+                enemies.add(new Enemy(this, people, Constants.PATH_FASE1(), 0, Constants.PEOPLE));
                 enemies.add(new Enemy(this, tank, Constants.PATH_FASE1(), (rnd.nextInt(5)+2)*100, Constants.TANK));
                 enemies.add(new Enemy(this, plane, Constants.PATH_PLANE(), (rnd.nextInt(4)+4)*100, Constants.PLANE));
             break;
@@ -128,8 +129,9 @@ public class PantallaJuego extends PantallaBase {
     }
     //TODO: 27/03/2017 sobrecargar el touchdown para que pinte las torres
      
-    private turretsAttack(){
-       for(Actor turret : stage.getActors()){
+    private void turretsAttack(){
+       for(Actor t : stage.getActors()){
+           Turret turret = (Turret) t;
           if( !turret.isReloading() ){
                int i = 1;
                Enemy enemy = enemies.get(0);
@@ -151,7 +153,8 @@ public class PantallaJuego extends PantallaBase {
      
     public void eliminateTurret(Turret eliminate){
          //TODO: 27/03/2017 hacerlo con un while
-         for(Actor turret : stage.getActors()){
+         for(Actor t : stage.getActors()){
+             Turret turret = (Turret)t;
               if(turret.equals(eliminate)){
                    //TODO: 27/03/2017 quitar del stage turret
                    addMoney( (int) (turret.getValue() / 3.5) );

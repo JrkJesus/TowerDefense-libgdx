@@ -20,7 +20,7 @@ import com.towerdeffense.MainTowerDeffense;
 public class PantallaBase implements Screen
 {
     protected Texture background;
-    protected final MainTowerDeffense mtd;
+    public final MainTowerDeffense mtd;
     protected final Skin skin;
     protected final Stage stage;
     protected final TextureAtlas atlas;
