@@ -1,6 +1,8 @@
 package com.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -24,11 +26,12 @@ public final class Constants {
     public final static int ANTITANK = 2;
     public final static int MACHINEGUN = 3;
 
-    public static Array<Vector2> PATH_PLANE(){
+    public static Array<Vector2> PATH_PLANE(RandomXS128 rnd){
         Array<Vector2> path = new Array<Vector2>();
-        int height = ((int) Math.random()%8)+3;
-        path.add(new Vector2(0, height));
-        path.add(new Vector2(20, height));
+        int initHeight = (rnd.nextInt(9))+3,
+                endHeigth = (rnd.nextInt(9))+3;
+        path.add(new Vector2(0, initHeight));
+        path.add(new Vector2(20, endHeigth));
 
         return path;
     }

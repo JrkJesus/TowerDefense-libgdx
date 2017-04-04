@@ -4,19 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.math.RandomXS128;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.Array;
 import com.models.Enemy;
 import com.models.Turret;
 import com.towerdeffense.MainTowerDeffense;
 import com.util.Constants;
-
-import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -28,56 +25,43 @@ public class PantallaJuego extends PantallaBase {
             // ademas si lo declaramos touchable sería mas facil a la hora de poner las torretas.
     private Texture fondo;
     private Texture[] machineGun, antiAir, antiTank;
-    private Button btnMachine, btnAntiAir, bntAntiTank;
+    private Button btnMachine, btnAntiAir, bntAntiTank, btnLvlUp, btnSell;
+    private Button.ButtonStyle cssMachine, cssAntiAir, cssAntiTank, cssLvlUp, cssSell;
     private Sprite plane, tank, people;
     private Array<Enemy> enemies;
-    //private Array<Turret> turrets;
     private Stage stage;
     private int life, money;
-    
+    private Array<Vector2> path;
+    private Vector2 lastTouch;
+    private boolean isBuilding, isUpgrading;
+
     public PantallaJuego(MainTowerDeffense _mtd, int fase) {
         super(_mtd);
+        isBuilding = false;
+        isUpgrading = false;
         stage = new Stage();
         enemies = new Array<Enemy>();
+        path = Constants.PATH_FASE1();
+        lastTouch = new Vector2(-1,-1);
         initTextures(fase);
         Random rnd = new Random(System.currentTimeMillis());
-        switch(fase){
-            case Constants.FASE3:
-//                for(int i = 0; i < 10; i++){
-//                    enemies.add( new Enemy(this, people, Constants.PATH_FASE1(), (int) rnd.nextInt(6)*100, Constants.PEOPLE) );
-//                }
-//                for(int i = 0; i < 5; i++){
-//                    enemies.add( new Enemy(this, tank, Constants.PATH_FASE1(), (int) (rnd.nextInt(5)+2)*100, Constants.TANK) );
-//                }
-//                enemies.add( new Enemy(this, plane, Constants.PATH_FASE1(), (int) (rnd.nextInt(4)+4)*100, Constants.PLANE) );
-            case Constants.FASE2:
-//                for(int i = 0; i < 20; i++){
-//                    enemies.add( new Enemy(this, people, Constants.PATH_FASE1(), (int) (rnd.nextInt(6)+6)*100, Constants.PEOPLE) );
-//                }
-//                for(int i = 0; i < 10; i++){
-//                    enemies.add( new Enemy(this, tank, Constants.PATH_FASE1(), (int) (rnd.nextInt(5)+9)*100, Constants.TANK) );
-//                }
-//                for(int i = 0; i < 2; i++){
-//                    enemies.add( new Enemy(this, plane, Constants.PATH_FASE1(), (int) (rnd.nextInt(4)+10)*100, Constants.PLANE) );
-//                }
-            case Constants.FASE1:
-//                for(int i = 0; i < 30; i++){
-//                    enemies.add( new Enemy(this, people, Constants.PATH_FASE1(), (int) (rnd.nextInt(6)+10)*100, Constants.PEOPLE) );
-//                }
-//                for(int i = 0; i < 15; i++){
-//                    enemies.add( new Enemy(this, tank, Constants.PATH_FASE1(), (int) (rnd.nextInt(5)+15)*100, Constants.TANK) );
-//                }
-//                for(int i = 0; i < 5; i++){
-//                    enemies.add( new Enemy(this, plane, Constants.PATH_FASE1(), (int) (rnd.nextInt(4)+18)*100, Constants.PLANE) );
-//                }
-                enemies.add(new Enemy(this, people, Constants.PATH_FASE1(), 0, Constants.PEOPLE));
-                enemies.add(new Enemy(this, tank, Constants.PATH_FASE1(), (rnd.nextInt(5)+2)*100, Constants.TANK));
-                enemies.add(new Enemy(this, plane, Constants.PATH_PLANE(), (rnd.nextInt(4)+4)*100, Constants.PLANE));
-            break;
-        }
+        newWave(0, 10);
         life = 10;
         Gdx.input.setInputProcessor(stage);
         //TODO: 21/03/2017 la vida tiene que depender de la dificultad elegida.
+    }
+
+    private void newWave(int initTime, int wave){
+        RandomXS128 rnd = new RandomXS128();
+        for (int i = 0; i < 5+(wave*2/5); i++) {
+            enemies.add(new Enemy(this, people, path, 30*i, Constants.PEOPLE));
+        }
+        for (int i = 0; i < 0+wave/4; i++) {
+            enemies.add(new Enemy(this, tank, path,  20*(5+(wave*2/5)) + 70*i , Constants.TANK));
+        }
+        for (int i = 0; i < 0+wave/5; i++) {
+            enemies.add(new Enemy(this, plane, Constants.PATH_PLANE(rnd),  20*(5+(wave*2/5)) + 500*i , Constants.PLANE));
+        }
     }
     
     public void initTextures(int fase){
@@ -103,6 +87,15 @@ public class PantallaJuego extends PantallaBase {
         machineGun = new Texture[]{new Texture(Gdx.files.internal("Textures\\machineGunLv1.png")), 
                                new Texture(Gdx.files.internal("Textures\\machineGunLv2.png")),
                                new Texture(Gdx.files.internal("Textures\\machineGunLv3.png"))};
+        cssMachine = new Button.ButtonStyle();
+        cssMachine.up = skin.getDrawable("touchpad");
+        btnMachine = new Button(cssMachine);
+        cssLvlUp = new Button.ButtonStyle();
+        cssLvlUp.up = skin.getDrawable("tooltip");
+        btnLvlUp = new Button(cssLvlUp);
+        cssSell = new Button.ButtonStyle();
+        cssSell.up = skin.getDrawable("radio-button-clear");
+        btnSell = new Button(cssSell);
     }
     
     @Override
@@ -117,9 +110,11 @@ public class PantallaJuego extends PantallaBase {
              enemy.draw(mtd.batch);
         mtd.batch.end();
 
+        verifyTouch();
+
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-    
+
         if( life <= 0 ){
              //TODO: 27/03/2017 pantalla game over
         } else if ( enemies.size == 0 ) {
@@ -127,7 +122,105 @@ public class PantallaJuego extends PantallaBase {
         }
 
     }
-    //TODO: 27/03/2017 sobrecargar el touchdown para que pinte las torres
+
+    private void verifyTouch(){
+
+        if(Gdx.input.justTouched()){
+            System.out.println("Tocando");
+            int x = Gdx.input.getX()/64,
+                    y = (height - Gdx.input.getY())/64;
+            if( (!isUpgrading || !isBuilding) && path.contains(new Vector2(x,y), false)) { // añadir || camino -1;
+                System.out.println("Camino");
+                clearAllButtons();
+                isBuilding = false;
+                isUpgrading = false;
+                lastTouch = new Vector2();
+            }else if( isBuilding ){
+                System.out.println("Abierto construccion");
+                if(lastTouch.x-1 == x && lastTouch.y == y){
+                    System.out.println("Construir machine");
+                    stage.addActor(new Turret(machineGun, Constants.MACHINEGUN, (int)lastTouch.x*64, (int)lastTouch.y*64));
+                    clearAllButtons();
+                    isBuilding = false;
+                    lastTouch = new Vector2();
+//                } else if(lastTouch == new Vector2(x-1,y)){
+//                    stage.addActor(new Turret(antiAir, Constants.ANTIAIR, (int)lastTouch.x, (int)lastTouch.y));
+//                    clearAllButtons();
+//                    isBuilding = false;
+//                    lastTouch = new Vector2();
+//                } else if(lastTouch == new Vector2(x,y-1)){
+//                    stage.addActor(new Turret(antiTank, Constants.ANTITANK, (int)lastTouch.x, (int)lastTouch.y));
+//                    clearAllButtons();
+//                    isBuilding = false;
+//                    lastTouch = new Vector2();
+                } else if(lastTouch != new Vector2(x,y)){
+                    System.out.println("Tocando en otro lado");
+                    isBuilding = false;
+                    clearAllButtons();
+                    lastTouch.set(x,y);
+                    verifyTouch();
+                }
+            } else if( isUpgrading ){
+                System.out.println("Abierto mejorando");
+                Turret selectTurret = getTurret((int)lastTouch.x, (int)lastTouch.y);
+                isUpgrading = false;
+                if(lastTouch.x-1 == x && lastTouch.y == y){
+                    selectTurret.levelUp();
+                } else if(lastTouch.x+1 == x && lastTouch.y == y){
+                    addMoney((int) selectTurret.getValue());
+                    selectTurret.remove();
+                    isUpgrading = false;
+                    lastTouch = new Vector2();
+                } else if(lastTouch != new Vector2(x,y)){
+                    isUpgrading = false;
+                    clearAllButtons();
+                    lastTouch.set(x,y);
+                    verifyTouch();
+                }else{
+                    isUpgrading = true;
+                }
+            } else if( getTurret(x,y) != null ){
+                System.out.println("Mejorando");
+                clearAllButtons();
+                btnLvlUp.setPosition((x-1)*64,y*64);
+                btnSell.setPosition((x+1)*64,y*64);
+                stage.addActor(btnLvlUp);
+                stage.addActor(btnSell);
+                isUpgrading = true;
+                lastTouch.set(x,y);
+            } else {
+                System.out.println("Construir");
+                clearAllButtons();
+                isBuilding = true;
+                btnMachine.setPosition((x-1)*64,y*64);
+//                btnAntiAir.setPosition((x+1)*64,y*64);
+//                btnAntiAir.setPosition((x*64,(y-1)*64);
+                stage.addActor(btnMachine);
+//                stage.addActor(btnAntiAir);
+//                stage.addActor(bntAntiTank);
+                lastTouch.set(x,y);
+            }
+
+        }
+    }
+    private void clearAllButtons(){
+        for( Actor actor : stage.getActors() ){
+            if( actor instanceof Button ){
+                actor.remove();
+            }
+        }
+    }
+
+    private Turret getTurret(int x, int y){
+        for(Actor actor : stage.getActors() ){
+            if( actor instanceof Turret){
+                if(actor.getX() / 64 == x && actor.getY() / 64 == y){
+                    return (Turret) actor;
+                }
+            }
+        }
+        return null;
+    }
      
     private void turretsAttack(){
        for(Actor t : stage.getActors()){
@@ -139,6 +232,7 @@ public class PantallaJuego extends PantallaBase {
                     enemy = enemies.get(i++);
                enemy.reciveDamage(turret.getAttack());
                turret.reload();
+              // TODO: 04/04/2017 Cambiar la funcion pro attack(x,y)
           }
        }
     }

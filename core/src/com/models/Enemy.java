@@ -23,7 +23,7 @@ public class Enemy extends Sprite {
 
     private Vector2 velocity, position, scala;
     private float speed;
-    private int life, defense, startTime, deathTime;
+    private int life, defense, deathTime;
     private boolean isAlive;
     private Array<Vector2> path;
     private int waypoint;
@@ -35,11 +35,10 @@ public class Enemy extends Sprite {
         velocity = new Vector2();
         path = _path;
         scala = new Vector2(player.width/20, player.height/11);
-        position = new Vector2(path.get(0).x*scala.x, path.get(0).y*scala.y);
+        position = new Vector2(path.get(0).x*scala.x - _starTime, path.get(0).y*scala.y);
         setPosition(position.x-getWidth()/2, position.y-getHeight()/2);
-        waypoint = 1;
+        waypoint = 0;
         isAlive = true;
-        startTime = _starTime;
         switch(type){
             case Constants.PLANE:
                 life = 4;
@@ -48,12 +47,12 @@ public class Enemy extends Sprite {
             break;
             case Constants.TANK:
                 life = 12;
-                speed = 25;
+                speed = 40;
                 defense = 2;
             break;
             case Constants.PEOPLE:
                 life = 4;
-                speed = 100;
+                speed = 75;
                 defense = 0;
             break;
          }
@@ -80,14 +79,12 @@ public class Enemy extends Sprite {
 //    public void draw(Batch batch, float alpha) {
     public void draw(Batch batch) {
         act(Gdx.graphics.getDeltaTime());
-        if(startTime <= 0) {
-//            batch.draw(current, position.x - current.getWidth() / 2, position.y - current.getHeight() / 2);
-            super.draw(batch);
+        //            batch.draw(current, position.x - current.getWidth() / 2, position.y - current.getHeight() / 2);
+        super.draw(batch);
 
-            if(waypoint >= path.size) {
-                player.loseLife(this);
-                waypoint--;
-            }
+        if(waypoint >= path.size) {
+            player.loseLife(this);
+            waypoint--;
         }
     }
 
@@ -103,23 +100,18 @@ public class Enemy extends Sprite {
         if( !isAlive ){
             deathTime += deltaTime;
         } else {
-            if( startTime > 0 ){
-                startTime -= deltaTime;
-            } else {
-                float angle = (float) Math.atan2(path.get(waypoint).y*scala.y - position.y, path.get(waypoint).x*scala.x  - position.x);
-                velocity.set((float) Math.cos(angle)*speed, (float) Math.sin(angle)*speed);
+            float angle = (float) Math.atan2(path.get(waypoint).y*scala.y - position.y, path.get(waypoint).x*scala.x  - position.x);
+            velocity.set((float) Math.cos(angle)*speed, (float) Math.sin(angle)*speed);
 
-                position.x += velocity.x * deltaTime;
-                position.y += velocity.y * deltaTime;
-                setPosition(position.x-getWidth()/2, position.y-getHeight()/2);
+            position.x += velocity.x * deltaTime;
+            position.y += velocity.y * deltaTime;
+            setPosition(position.x-getWidth()/2, position.y-getHeight()/2);
 
-                setRotation(angle * MathUtils.radiansToDegrees);
+            setRotation(angle * MathUtils.radiansToDegrees);
 
-                if( Math.abs(position.x - path.get(waypoint).x*scala.x) <5  && Math.abs(position.y - path.get(waypoint).y*scala.y) < 5 ){
-                    waypoint++;
-                }
+            if( Math.abs(position.x - path.get(waypoint).x*scala.x) <5  && Math.abs(position.y - path.get(waypoint).y*scala.y) < 5 ){
+                waypoint++;
             }
-
         }
     }
     /**
