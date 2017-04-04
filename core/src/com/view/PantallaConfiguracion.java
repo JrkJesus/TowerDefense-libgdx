@@ -20,7 +20,6 @@ public class PantallaConfiguracion extends PantallaBase
     private final VerticalGroup vg;
     private TextButton music, home, easy, normal, hard;
     private final TextButton.TextButtonStyle style;
-    // TODO: 22/03/2017 Añadir styles (radioBtn y scroll) 
 
 
     public PantallaConfiguracion(MainTowerDeffense _mtd) {

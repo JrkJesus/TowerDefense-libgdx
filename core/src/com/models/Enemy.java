@@ -15,7 +15,7 @@ import java.util.Iterator;
 /**
  * Created by jesus on 16/03/2017.
  * 
- * Clase que recoge todo los datos sobre las unidades enemigas.
+ * Clase que recoge los datos sobre las unidades enemigas.
  */
 
 
@@ -125,7 +125,7 @@ public class Enemy extends Sprite {
      *  Metodo para calcular el daño entrante a la unidad. 
      *  Devuelve dicho daño.
      */
-    public int reciveDamage(int dmg){
+    public int receiveDamage(int dmg){
         int realDmg = dmg - defense;
         life -= realDmg>0 ? realDmg : 0;
         if( life <= 0 ){
