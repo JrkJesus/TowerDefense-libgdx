@@ -45,7 +45,6 @@ public class PantallaJuego extends PantallaBase {
         path = Constants.PATH_FASE1();
         lastTouch = new Vector2(-1, -1);
         initTextures(fase);
-        Random rnd = new Random(System.currentTimeMillis());
         newWave(0, 10);
         life = 10;
         Gdx.input.setInputProcessor(stage);
@@ -62,7 +61,7 @@ public class PantallaJuego extends PantallaBase {
             enemies.add(new Enemy(this, tank, path, 20 * (5 + (wave * 2 / 5)) + 70 * i, Constants.TANK));
         }
         for (int i = 0; i < 0 + wave / 5; i++) {
-            enemies.add(new Enemy(this, plane, Constants.PATH_PLANE(rnd), 20 * (5 + (wave * 2 / 5)) + 500 * i, Constants.PLANE));
+            enemies.add(new Enemy(this, plane, Constants.PATH_PLANE(), 20 * (5 + (wave * 2 / 5)) + 500 * i, Constants.PLANE));
         }
     }
 

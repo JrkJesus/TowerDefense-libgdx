@@ -11,13 +11,15 @@ import com.badlogic.gdx.utils.Array;
  */
 
 public final class Constants {
+    private static RandomXS128 rnd = new RandomXS128();
+
     public final static int FASE1 = 1;
     public final static int FASE2 = 2;
     public final static int FASE3 = 3;
 
-    public final static int BUTTONPRESS_X = 35;
-    public final static int BUTTONPRESS_Y = 55;
-    
+    public final static float ESCALA_X = 64;
+    public final static float ESCALA_Y = 64;
+
     public final static int PLANE = 1;
     public final static int TANK = 2;
     public final static int PEOPLE = 3;
@@ -26,7 +28,7 @@ public final class Constants {
     public final static int ANTITANK = 2;
     public final static int MACHINEGUN = 3;
 
-    public static Array<Vector2> PATH_PLANE(RandomXS128 rnd){
+    public static Array<Vector2> PATH_PLANE(){
         Array<Vector2> path = new Array<Vector2>();
         int initHeight = (rnd.nextInt(9))+3,
                 endHeigth = (rnd.nextInt(9))+3;

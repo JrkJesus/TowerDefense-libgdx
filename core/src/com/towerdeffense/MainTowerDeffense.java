@@ -2,11 +2,8 @@ package com.towerdeffense;
 
 import com.util.Constants;
 import com.view.PantallaJuego;
-import com.view.PantallaPrincipal;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class MainTowerDeffense extends Game {
 
@@ -17,7 +14,7 @@ public class MainTowerDeffense extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 //		this.setScreen(new PantallaPrincipal(this));
-		this.setScreen(new PantallaJuego(this, Constants.FASE1));
+		this.setScreen(new com.Limpieza.PantallaJuego(this));
 	}
 
 	@Override
