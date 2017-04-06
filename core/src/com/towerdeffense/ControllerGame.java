@@ -1,5 +1,6 @@
 package com.towerdeffense;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -127,6 +128,7 @@ public class ControllerGame {
         } else if (isUpgrading){
             batch.draw(btnLevelUp, (lastTouch.x-1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
             batch.draw(btnSell, (lastTouch.x+1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
+
         }
 
         batch.end();
@@ -136,63 +138,29 @@ public class ControllerGame {
     private void verifyTouch() {
         if (Gdx.input.justTouched()) {
             System.out.println("Tocando");
-            int x = Gdx.input.getX() / 64,
-                    y = (Gdx.graphics.getHeight() - Gdx.input.getY()) / 64;
-            if ((!isUpgrading || !isBuilding) && path.contains(new Vector2(x, y), false)) { // añadir || camino -1;
-                System.out.println("Camino");
-
-                isBuilding = false;
-                isUpgrading = false;
-                lastTouch = new Vector2();
-            } else if (isBuilding) {
-                System.out.println("Abierto construccion");
-                if (lastTouch.x - 1 == x && lastTouch.y == y) {
-                    System.out.println("Construir machine");
-                    turrets.add(new Turret(this, machineGun, Constants.MACHINEGUN, (int) lastTouch.x * 64, (int) lastTouch.y * 64));
-                    isBuilding = false;
-                    lastTouch = new Vector2();
-                } else if(lastTouch == new Vector2(x-1,y)){
-                    turrets.add(new Turret(this, missiles, Constants.ANTIAIR, (int)lastTouch.x, (int)lastTouch.y));
-                    isBuilding = false;
-                    lastTouch = new Vector2();
-                } else if(lastTouch == new Vector2(x,y-1)){
-                    turrets.add(new Turret(this, antiTank, Constants.ANTITANK, (int)lastTouch.x, (int)lastTouch.y));
-                    isBuilding = false;
-                    lastTouch = new Vector2();
-                } else if (lastTouch != new Vector2(x, y)) {
-                    System.out.println("Tocando en otro lado");
-                    isBuilding = false;
-                    lastTouch.set(x, y);
-                }
-            } else if (isUpgrading) {
-                System.out.println("Abierto mejorando");
-                Turret selectTurret = getTurret((int) lastTouch.x, (int) lastTouch.y);
-                isUpgrading = false;
-                if (lastTouch.x - 1 == x && lastTouch.y == y) {
-                    selectTurret.levelUp();
-                } else if (lastTouch.x + 1 == x && lastTouch.y == y) {
-                    money += ((int) selectTurret.getValue());
-                    turrets.removeValue(selectTurret, true);
-                    isUpgrading = false;
-                    lastTouch = new Vector2();
-
-                } else if (lastTouch != new Vector2(x, y)) {
-                    isUpgrading = false;
-                    lastTouch.set(x, y);
-                } else {
-                    isUpgrading = true;
-                }
-            } else if (getTurret(x, y) != null) {
-                System.out.println("Mejorando");
-                // TODO: 05/04/2017 Botones opciones torrets
-                isUpgrading = true;
-                lastTouch.set(x, y);
-            } else {
-                System.out.println("Construir");
-                isBuilding = true;
-                // TODO: 05/04/2017 Botones creacion torretas
-                lastTouch.set(x, y);
-            }
+            int x = (int) (Gdx.input.getX() / Constants.ESCALA_X),
+                    y = (int) ((Gdx.graphics.getHeight() - Gdx.input.getY()) / Constants.ESCALA_Y);
+           if( ! path.contains(new Vector2(x, y), false)){
+               lastTouch.set(x,y);
+               Turret turret = getTurret(x,y);
+               if(turret != null){
+                   isBuilding = true;
+                   if (lastTouch.x - 1 == x && lastTouch.y+1 == y) {
+                       System.out.println("Construir machine");
+                       turrets.add(new Turret(this, machineGun, Constants.MACHINEGUN, (int) lastTouch.x * 64, (int) lastTouch.y * 64));
+                       isBuilding = false;
+                       lastTouch = new Vector2();
+                   } else if(lastTouch.x  == x && lastTouch.y+1 == y){
+                       turrets.add(new Turret(this, missiles, Constants.ANTIAIR, (int)lastTouch.x, (int)lastTouch.y));
+                       isBuilding = false;
+                       lastTouch = new Vector2();
+                   } else if (lastTouch.x + 1 == x && lastTouch.y+1 == y){
+                       turrets.add(new Turret(this, antiTank, Constants.ANTITANK, (int)lastTouch.x, (int)lastTouch.y));
+                       isBuilding = false;
+                       lastTouch = new Vector2();
+                   }
+               }
+           }
         }
     }
 
@@ -205,6 +173,9 @@ public class ControllerGame {
     }
 
     public void dispose(){
+        for (Turret turret : turrets){
+            turret.dispose();
+        }
         for (int i = 0; i < 3; i++) {
             machineGun[i].dispose();
             missiles[i].dispose();

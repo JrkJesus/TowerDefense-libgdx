@@ -1,9 +1,11 @@
 package com.models;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.util.Constants;
 import com.towerdeffense.ControllerGame;
@@ -22,14 +24,17 @@ public class Turret extends Sprite {
             type;
     private float speedAttack, reload;
     private int[] upgradeCost;
+    private boolean isSelected;
     private Texture[] upgrades;
     private ControllerGame control;
+    private Pixmap pixmap;
 
     public Turret(com.towerdeffense.ControllerGame _control, Texture[] textures, int type, int x, int y ){
         super(textures[0]);
         control = _control;
         upgrades = textures;
         setPosition(x,y);
+        setRotation(0);
         level = 1;
         this.type = type;
         switch(type){
@@ -58,6 +63,8 @@ public class Turret extends Sprite {
                 upgradeCost = new int[]{25, 75};
                 break;
         }
+        isSelected = false;
+        pixmap = new Pixmap(radiusAttack*2, radiusAttack*2, Pixmap.Format.RGBA8888);
     }
 
     public void levelUp(){
@@ -83,6 +90,7 @@ public class Turret extends Sprite {
         if( i < n){
             enemy.loseLife(damage);
             reload = speedAttack;
+//            this.setRotation(Math.atan2());
         }
 
     }
@@ -92,6 +100,11 @@ public class Turret extends Sprite {
         if( reload < 0 ) attack();
         else reload -= Gdx.graphics.getDeltaTime();
 
+        if(isSelected){
+            pixmap.fill();
+            pixmap.setColor(0,1,0,0.5f);
+            pixmap.drawCircle((int) getX(), (int) getY(), radiusAttack);
+        }
 
         super.draw(batch);
     }
@@ -111,6 +124,14 @@ public class Turret extends Sprite {
         }
 
         return (int) (value/3.5f);
+    }
+
+    public void dispose(){
+        pixmap.dispose();
+    }
+
+    public void select(){
+        isSelected = true;
     }
 
     public int getType(){

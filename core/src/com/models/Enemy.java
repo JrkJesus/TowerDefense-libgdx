@@ -87,8 +87,6 @@ public class Enemy extends Sprite {
         if (life > 0) walk(delta);
         else deathTime += delta;
 
-        System.out.println(getX() + ", " + getY());
-
         super.draw(batch);
     }
 
