@@ -1,6 +1,7 @@
 package com.models;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -28,19 +29,20 @@ public class Turret extends Sprite {
     private Texture[] upgrades;
     private ControllerGame control;
     private Pixmap pixmap;
+    private Texture circle;
 
     public Turret(com.towerdeffense.ControllerGame _control, Texture[] textures, int type, int x, int y ){
         super(textures[0]);
+        setScale(Constants.ESCALA_X/64, Constants.ESCALA_Y/64);
         control = _control;
         upgrades = textures;
         setPosition(x,y);
-        setRotation(0);
         level = 1;
         this.type = type;
         switch(type){
             case Constants.ANTIAIR:
 //                radiusAttack = (float) (heigh * 0.25);
-                radiusAttack = (int) (720/3.0f * Constants.ESCALA_Y);
+                radiusAttack = (int) (720/3.0f * Constants.ESCALA_Y/64);
                 damage = 1;
                 speedAttack = 2;
                 initialCost = 75;
@@ -48,7 +50,7 @@ public class Turret extends Sprite {
                 break;
             case Constants.ANTITANK:
 //                radiusAttack = (float) (heigh * 0.14);
-                radiusAttack = (int) (200 * Constants.ESCALA_Y);
+                radiusAttack = (int) (200 * Constants.ESCALA_Y/64);
                 damage = 3;
                 speedAttack = 3;
                 initialCost = 100;
@@ -56,7 +58,7 @@ public class Turret extends Sprite {
                 break;
             case Constants.MACHINEGUN:
 //                radiusAttack = (float) (heigh * 0.18);
-                radiusAttack = (int) (150* Constants.ESCALA_Y);
+                radiusAttack = (int) (150* Constants.ESCALA_Y/64);
                 damage = 1;
                 speedAttack = 1;
                 initialCost = 50;
@@ -65,6 +67,9 @@ public class Turret extends Sprite {
         }
         isSelected = false;
         pixmap = new Pixmap(radiusAttack*2, radiusAttack*2, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK);
+        pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
+        circle = new Texture(pixmap);
     }
 
     public void levelUp(){
@@ -72,27 +77,41 @@ public class Turret extends Sprite {
             setTexture(upgrades[level]);
             level++;
             radiusAttack += radiusAttack*0.15;
-            speedAttack -= speedAttack*0.25;
+            speedAttack -= speedAttack*0.35;
+            System.out.println(speedAttack);
             damage += (type == Constants.ANTITANK) ? 3 : 1;
+            pixmap.dispose();
+            circle.dispose();
+            pixmap = new Pixmap(radiusAttack*2, radiusAttack*2, Pixmap.Format.RGBA8888);
+            pixmap.setColor(Color.BLACK);
+            pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
+            circle = new Texture(pixmap);
         }
     }
 
     public void attack(){
-
+        // TODO: 06/04/2017 Comprobar el caso de que solo haya un enemigo
         Array<Enemy> enemies = control.getEnemies();
         Enemy enemy = enemies.get(0);
         int i = 1,
                 n = enemies.size;
 
-        while( i < n && enemy.getType() % type != 0 )
+        while( i < n && ! isReachable(enemy) )
             enemy = enemies.get(i++);
 
-        if( i < n){
+        if( i < n || (n == 1 && isReachable(enemy))){
             enemy.loseLife(damage);
             reload = speedAttack;
-//            this.setRotation(Math.atan2());
+            this.setRotation((float)(Math.atan2(enemy.y() - y(), enemy.x() - x())) * MathUtils.radiansToDegrees - 90);
         }
 
+    }
+
+    private boolean isReachable(Enemy enemy) {
+
+        return enemy.getDeathTime() == 0
+                && enemy.getType() % type == 0
+                && Math.sqrt((enemy.getX() - getX())*(enemy.getX() - getX()) + (enemy.getY() - getY())*(enemy.getY() - getY()) ) < radiusAttack;
     }
 
     @Override
@@ -101,9 +120,7 @@ public class Turret extends Sprite {
         else reload -= Gdx.graphics.getDeltaTime();
 
         if(isSelected){
-            pixmap.fill();
-            pixmap.setColor(0,1,0,0.5f);
-            pixmap.drawCircle((int) getX(), (int) getY(), radiusAttack);
+            batch.draw(circle, getX() - radiusAttack + Constants.ESCALA_X/2, getY() - radiusAttack + Constants.ESCALA_Y/2);
         }
 
         super.draw(batch);
@@ -118,8 +135,10 @@ public class Turret extends Sprite {
     }
 
     public int getValue() {
-        int value = initialCost;
-        for(int i = 0; i < level; i++){
+        int value = initialCost,
+            max = level < 3 ? level : 2;
+
+        for(int i = 0; i < max; i++){
             value += upgradeCost[i];
         }
 
@@ -127,6 +146,7 @@ public class Turret extends Sprite {
     }
 
     public void dispose(){
+        circle.dispose();
         pixmap.dispose();
     }
 
@@ -136,5 +156,11 @@ public class Turret extends Sprite {
 
     public int getType(){
         return type;
+    }
+
+    public void unselect() { isSelected = false; }
+
+    public int getUpgradeCost() {
+        return level < 3 ? upgradeCost[level-1] : Integer.MAX_VALUE;
     }
 }

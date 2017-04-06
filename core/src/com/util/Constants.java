@@ -17,8 +17,8 @@ public final class Constants {
     public final static int FASE2 = 2;
     public final static int FASE3 = 3;
 
-    public final static float ESCALA_X = 64;
-    public final static float ESCALA_Y = 64;
+    public static float ESCALA_X = 64;
+    public static float ESCALA_Y = 64;
 
     public final static int PLANE = 3;
     public final static int TANK = 8;

@@ -2,6 +2,7 @@ package com.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,7 +32,8 @@ public class PantallaBase implements Screen
     {
         mtd = _mtd;
         background = new Texture(Gdx.files.internal("Buttons\\background.png"));
-        font = new BitmapFont(Gdx.files.internal("GUI\\font-export.fnt"));
+        font = new BitmapFont(Gdx.files.internal("GUI\\font-export.fnt"), Gdx.files.internal("GUI\\font-export.png"), false);
+        font.setColor(Color.BLACK);
         skin = new Skin(Gdx.files.internal("GUI\\quantum-horizon-ui.json"));
         atlas = new TextureAtlas(Gdx.files.internal("GUI\\quantum-horizon-ui.atlas"));
         skin.addRegions(atlas);

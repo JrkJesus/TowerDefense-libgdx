@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MainTowerDeffense extends Game {
 
-
 	public SpriteBatch batch;
 
 	@Override

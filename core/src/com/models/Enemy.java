@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.towerdeffense.ControllerGame;
 import com.util.Constants;
 
 /**
@@ -25,10 +26,13 @@ public class Enemy extends Sprite {
     private Array<Vector2> path;
     private Vector2 velocity;
     private float deathTime;
+    private ControllerGame control;
 
 
-    public Enemy(Texture[] textures, int type, Array<Vector2> _path, int startPosition){
+    public Enemy(ControllerGame controllerGame, Texture[] textures, int type, Array<Vector2> _path, int startPosition){
         super(textures[0]);
+        setScale(Constants.ESCALA_X/64, Constants.ESCALA_Y/64);
+        control = controllerGame;
         death = textures[1];
         setPosition(-startPosition , _path.get(0).y*Constants.ESCALA_Y);
         velocity = new Vector2();
@@ -77,7 +81,11 @@ public class Enemy extends Sprite {
 
     public void loseLife(int amount){
         life -= amount;
-        if ( life < 0 ) this.setTexture(death);
+        if ( life <= 0 ){
+            this.setTexture(death);
+            control.addMoney(type*10);
+            control.addScore(type*10);
+        }
     }
 
     @Override
@@ -96,6 +104,14 @@ public class Enemy extends Sprite {
 
     public float getDeathTime(){
         return deathTime;
+    }
+
+    public int x(){
+        return (int) (getX() / Constants.ESCALA_X);
+    }
+
+    public int y(){
+        return (int) (getY() / Constants.ESCALA_Y);
     }
 
 }
