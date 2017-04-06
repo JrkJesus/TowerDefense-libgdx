@@ -56,7 +56,7 @@ public class PantallaPrincipal extends PantallaBase
         play.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                mtd.setScreen(new PantallaSeleccion(mtd));
+                mtd.setScreen(new PantallaJuego(mtd));
             }
         });
         conf.addListener(new ClickListener(){

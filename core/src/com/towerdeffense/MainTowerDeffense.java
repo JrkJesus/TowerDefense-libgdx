@@ -14,7 +14,7 @@ public class MainTowerDeffense extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 //		this.setScreen(new PantallaPrincipal(this));
-		this.setScreen(new com.Limpieza.PantallaJuego(this));
+		this.setScreen(new PantallaJuego(this));
 	}
 
 	@Override

@@ -1,9 +1,9 @@
-package com.Limpieza;
+package com.towerdeffense;
 
+import com.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.util.Constants;
@@ -12,13 +12,13 @@ import com.util.Constants;
  * Created by jesus on 05/04/2017.
  */
 
-class ControllerGame {
+public class ControllerGame {
 
     private int wave,
+            dificulty,
             life,
             money;
-    private Array<Vector2> road,
-            path;
+    private Array<Vector2> path;
     private Array<Enemy> enemies;
     private Array<Turret> turrets;
     private Texture[] people,
@@ -37,19 +37,22 @@ class ControllerGame {
             isBuilding;
     private static float deathTime = 5;
 
-    public ControllerGame(int wave){
+    public ControllerGame(int wave, int dificulty){
+        path = Constants.PATH_FASE1();
+        initTextures();
+        this.dificulty = dificulty;
+        life = 25 - 5*(dificulty-1);
         lastTouch = new Vector2();
         enemies = new Array<Enemy>();
         turrets = new Array<Turret>();
-        newWave(wave);
+        newWave(wave, dificulty);
         this.wave = wave;
-        path = Constants.PATH_FASE1();
         isUpgrading = false;
         isBuilding = false;
     }
 
-    public ControllerGame(){
-        this(0);
+    public ControllerGame(int dificulty){
+        this(0, dificulty);
     }
 
     private void initTextures(){
@@ -71,9 +74,9 @@ class ControllerGame {
                 new Texture(Gdx.files.internal("Textures\\antiTankLv3.png"))
         };
         missiles = new Texture[]{
-                new Texture(Gdx.files.internal("Textures\\misilesLv1.png")),
-                new Texture(Gdx.files.internal("Textures\\misilesLv2.png")),
-                new Texture(Gdx.files.internal("Textures\\misilesLv3.png"))
+                new Texture(Gdx.files.internal("Textures\\missilesLv1.png")),
+                new Texture(Gdx.files.internal("Textures\\missilesLv2.png")),
+                new Texture(Gdx.files.internal("Textures\\missilesLv3.png"))
         };
         machineGun = new Texture[]{
                 new Texture(Gdx.files.internal("Textures\\machineGunLv1.png")),
@@ -87,16 +90,15 @@ class ControllerGame {
         btnLevelUp = new Texture(Gdx.files.internal("Textures\\levelUp.png"));
     }
 
-    private void newWave(int wave) {
-        RandomXS128 rnd = new RandomXS128();
-        for (int i = 0; i < 5 + (wave * 2 / 5); i++) {
+    private void newWave(int wave, int dificulty) {
+        for (int i = 0; i < 5 + (wave * 2 / 5)*dificulty; i++) {
             enemies.add(new Enemy(people, Constants.PEOPLE, path, 30 * i));
         }
-        for (int i = 0; i < 0 + wave / 4; i++) {
-            enemies.add(new Enemy(tank, Constants.TANK, path, 20 * (5 + (wave * 2 / 5)) + 70 * i));
+        for (int i = 0; i < 0 + wave * dificulty / 4; i++) {
+            enemies.add(new Enemy(tank, Constants.TANK, path, 20 * (5 + (wave * 2 / 5)*dificulty) + 70 * i));
         }
-        for (int i = 0; i < 0 + wave / 5; i++) {
-            enemies.add(new Enemy(plane, Constants.PLANE, Constants.PATH_PLANE(), 20 * (5 + (wave * 2 / 5)) + 500 * i));
+        for (int i = 0; i < 0 + wave * dificulty / 5; i++) {
+            enemies.add(new Enemy(plane, Constants.PLANE, Constants.PATH_PLANE(), 20 * (5 + (wave * 2 / 5)*dificulty) + 500 * i));
         }
     }
 
@@ -107,6 +109,7 @@ class ControllerGame {
     public void draw(Batch batch){
         verifyTouch();
 
+        batch.begin();
         for(Turret turret : turrets){
             turret.draw(batch);
         }
@@ -118,17 +121,15 @@ class ControllerGame {
 
 
         if (isBuilding){
-            batch.begin();
             batch.draw(btnMachineGun, (lastTouch.x-1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
             batch.draw(btnMissile, (lastTouch.x)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
             batch.draw(btnMissile, (lastTouch.x+1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
-            batch.end();
         } else if (isUpgrading){
-            batch.begin();
             batch.draw(btnLevelUp, (lastTouch.x-1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
             batch.draw(btnSell, (lastTouch.x+1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
-            batch.end();
         }
+
+        batch.end();
 
     }
 
@@ -137,7 +138,7 @@ class ControllerGame {
             System.out.println("Tocando");
             int x = Gdx.input.getX() / 64,
                     y = (Gdx.graphics.getHeight() - Gdx.input.getY()) / 64;
-            if ((!isUpgrading || !isBuilding) && road.contains(new Vector2(x, y), false)) { // añadir || camino -1;
+            if ((!isUpgrading || !isBuilding) && path.contains(new Vector2(x, y), false)) { // añadir || camino -1;
                 System.out.println("Camino");
 
                 isBuilding = false;
@@ -147,15 +148,15 @@ class ControllerGame {
                 System.out.println("Abierto construccion");
                 if (lastTouch.x - 1 == x && lastTouch.y == y) {
                     System.out.println("Construir machine");
-                    turrets.add(new Turret(machineGun, Constants.MACHINEGUN, (int) lastTouch.x * 64, (int) lastTouch.y * 64));
+                    turrets.add(new Turret(this, machineGun, Constants.MACHINEGUN, (int) lastTouch.x * 64, (int) lastTouch.y * 64));
                     isBuilding = false;
                     lastTouch = new Vector2();
                 } else if(lastTouch == new Vector2(x-1,y)){
-                    turrets.add(new Turret(missiles, Constants.ANTIAIR, (int)lastTouch.x, (int)lastTouch.y));
+                    turrets.add(new Turret(this, missiles, Constants.ANTIAIR, (int)lastTouch.x, (int)lastTouch.y));
                     isBuilding = false;
                     lastTouch = new Vector2();
                 } else if(lastTouch == new Vector2(x,y-1)){
-                    turrets.add(new Turret(antiTank, Constants.ANTITANK, (int)lastTouch.x, (int)lastTouch.y));
+                    turrets.add(new Turret(this, antiTank, Constants.ANTITANK, (int)lastTouch.x, (int)lastTouch.y));
                     isBuilding = false;
                     lastTouch = new Vector2();
                 } else if (lastTouch != new Vector2(x, y)) {

@@ -4,14 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.utils.Array;
 import com.util.Constants;
-
+import com.towerdeffense.ControllerGame;
 /**
  * Created by jesus on 16/03/2017.
  * <p>
@@ -20,41 +15,44 @@ import com.util.Constants;
 
 public class Turret extends Sprite {
 
-    private float radiusAttack, speedAttack, reload;
-    private int dmg, initialCost, level;
+    private int radiusAttack,
+            initialCost,
+            level,
+            damage,
+            type;
+    private float speedAttack, reload;
     private int[] upgradeCost;
-    private boolean reachFlying, optionsReveal = false;
-    private Vector2 position, enemy;
-    private Texture[] turret;
-    private ShapeRenderer sr;
+    private Texture[] upgrades;
+    private ControllerGame control;
 
-    public Turret(Texture[] upgrade, int type, int x, int y) {
-        super(upgrade[0]);
-        setPosition(x, y);
-        sr = new ShapeRenderer();
-        position = new Vector2(x/64, y/64);
-        enemy = position;
-        turret = upgrade;
+    public Turret(com.towerdeffense.ControllerGame _control, Texture[] textures, int type, int x, int y ){
+        super(textures[0]);
+        control = _control;
+        upgrades = textures;
+        setPosition(x,y);
         level = 1;
-        int heigh = Gdx.graphics.getHeight();
-        switch (type) {
+        this.type = type;
+        switch(type){
             case Constants.ANTIAIR:
-                radiusAttack = (float) (heigh * 0.25);
-                dmg = 7;
+//                radiusAttack = (float) (heigh * 0.25);
+                radiusAttack = (int) (720/3.0f * Constants.ESCALA_Y);
+                damage = 1;
                 speedAttack = 2;
                 initialCost = 75;
                 upgradeCost = new int[]{50, 100};
                 break;
             case Constants.ANTITANK:
-                radiusAttack = (float) (heigh * 0.14);
-                dmg = 6;
+//                radiusAttack = (float) (heigh * 0.14);
+                radiusAttack = (int) (200 * Constants.ESCALA_Y);
+                damage = 3;
                 speedAttack = 3;
                 initialCost = 100;
                 upgradeCost = new int[]{75, 150};
                 break;
             case Constants.MACHINEGUN:
-                radiusAttack = (float) (heigh * 0.18);
-                dmg = 100; // TODO: 04/04/2017 Cambiar daño (esta para testear) a 2
+//                radiusAttack = (float) (heigh * 0.18);
+                radiusAttack = (int) (150* Constants.ESCALA_Y);
+                damage = 1;
                 speedAttack = 1;
                 initialCost = 50;
                 upgradeCost = new int[]{25, 75};
@@ -62,86 +60,60 @@ public class Turret extends Sprite {
         }
     }
 
-    /**
-     * Metodo
-     */
-    public int getAttack() {
-        return dmg;
-    }
-
-    /**
-     * Metodo
-     */
-    public void attack(int x, int y) {
-        position.set(x,y);
-        reload = speedAttack;
-        double angle = Math.atan2(getY() - y*64, getX() - x*64)+90;
-        this.setRotation((float) (MathUtils.radiansToDegrees*angle));
-    }
-// TODO: 04/04/2017 overide equals
-
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if(o == null) return false;
-//        else if ( ! (o instanceof Turret) ) return false;
-//        else{
-//            Turret turret = (Turret) o;
-//            return turret.getX() == getX() && turret.getY() == getY();
-//        }
-//    }
-
-    /**
-     * Metodo para comprobar si un enemigo esta al alcance
-     */
-    public boolean isReachable(Vector2 enemy) {
-        System.out.println(radiusAttack);
-        System.out.println(Math.sqrt((enemy.x - position.x) * (enemy.x - position.x) + (enemy.y - position.y) * (enemy.y - position.y)));
-        System.out.println(Math.sqrt((enemy.x - position.x) * (enemy.x - position.x) + (enemy.y - position.y) * (enemy.y - position.y)) <= radiusAttack);
-        return Math.sqrt((enemy.x - position.x) * (enemy.x - position.x) + (enemy.y - position.y) * (enemy.y - position.y)) <= radiusAttack;
-    }
-
-    /**
-     * Metodo para comprobar si un enemigo esta al alcance
-     */
-    public boolean isReloading() {
-        return reload > 0;
-    }
-
-    /**
-     * Metodo para upgradear una torreta
-     */
-    public void levelUp() {
-        if (level < 3) { // si lo controlamos desde el panel se puede obviar.
-            radiusAttack += radiusAttack * 0.1;
-            speedAttack -= speedAttack * 0.05;
-            dmg += dmg * 0.1 > 0 ? dmg * 0.1 : 1;
-            setTexture(turret[level]);
+    public void levelUp(){
+        if( level < 3) {
+            setTexture(upgrades[level]);
             level++;
+            radiusAttack += radiusAttack*0.15;
+            speedAttack -= speedAttack*0.25;
+            damage += (type == Constants.ANTITANK) ? 3 : 1;
         }
+    }
+
+    public void attack(){
+
+        Array<Enemy> enemies = control.getEnemies();
+        Enemy enemy = enemies.get(0);
+        int i = 1,
+                n = enemies.size;
+
+        while( i < n && enemy.getType() % type != 0 )
+            enemy = enemies.get(i++);
+
+        if( i < n){
+            enemy.loseLife(damage);
+            reload = speedAttack;
+        }
+
     }
 
     @Override
     public void draw(Batch batch) {
-        act(Gdx.graphics.getDeltaTime());
+        if( reload < 0 ) attack();
+        else reload -= Gdx.graphics.getDeltaTime();
+
+
         super.draw(batch);
-//        sr.begin(ShapeRenderer.ShapeType.Line);
-//        sr.line(getX()+getWidth()/2, getY()+getHeight()/2, (enemy.x)*64+32, (enemy.y)*64+32);
-//        sr.end();
     }
 
-    public void act(float deltaTime) {
-        if (reload > 0) {
-            reload -= deltaTime;
+    public float x() {
+        return getX()/Constants.ESCALA_X;
+    }
+
+    public float y(){
+        return getY()/Constants.ESCALA_Y;
+    }
+
+    public int getValue() {
+        int value = initialCost;
+        for(int i = 0; i < level; i++){
+            value += upgradeCost[i];
         }
+
+        return (int) (value/3.5f);
     }
 
-
-    public double getValue() {
-        return initialCost;
-    }
-
-    public boolean position(int x, int y){
-        return x == position.x && y == position.y;
+    public int getType(){
+        return type;
     }
 }
