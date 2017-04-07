@@ -26,6 +26,7 @@ public class PantallaJuego extends PantallaBase {
         loser = new Texture(Gdx.files.internal("Textures\\loser.png"));
         Constants.ESCALA_X = width/20;
         Constants.ESCALA_Y = height/11;
+        font.getData().setScale(Constants.ESCALA_X/64,Constants.ESCALA_Y/64);
     }
 
     @Override
