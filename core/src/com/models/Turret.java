@@ -33,7 +33,7 @@ public class Turret extends Sprite {
 
     public Turret(com.towerdeffense.ControllerGame _control, Texture[] textures, int type, int x, int y ){
         super(textures[0]);
-        setScale(Constants.ESCALA_X/64, Constants.ESCALA_Y/64);
+        setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
         control = _control;
         upgrades = textures;
         setPosition(x,y);
@@ -42,7 +42,7 @@ public class Turret extends Sprite {
         switch(type){
             case Constants.ANTIAIR:
 //                radiusAttack = (float) (heigh * 0.25);
-                radiusAttack = (int) (720/3.0f * Constants.ESCALA_Y/64);
+                radiusAttack = (int) (720/3.0f * Constants.GRID_RESIZE_Y);
                 damage = 1;
                 speedAttack = 2;
                 initialCost = 75;
@@ -50,7 +50,7 @@ public class Turret extends Sprite {
                 break;
             case Constants.ANTITANK:
 //                radiusAttack = (float) (heigh * 0.14);
-                radiusAttack = (int) (200 * Constants.ESCALA_Y/64);
+                radiusAttack = (int) (200 * Constants.GRID_RESIZE_Y);
                 damage = 3;
                 speedAttack = 3;
                 initialCost = 100;
@@ -58,7 +58,7 @@ public class Turret extends Sprite {
                 break;
             case Constants.MACHINEGUN:
 //                radiusAttack = (float) (heigh * 0.18);
-                radiusAttack = (int) (150* Constants.ESCALA_Y/64);
+                radiusAttack = (int) (150* Constants.GRID_RESIZE_Y);
                 damage = 1;
                 speedAttack = 1;
                 initialCost = 50;
@@ -120,18 +120,18 @@ public class Turret extends Sprite {
         else reload -= Gdx.graphics.getDeltaTime();
 
         if(isSelected){
-            batch.draw(circle, getX() - radiusAttack + Constants.ESCALA_X/2, getY() - radiusAttack + Constants.ESCALA_Y/2);
+            batch.draw(circle, getX() - radiusAttack + Constants.GRID_RESIZE_X/2, getY() - radiusAttack + Constants.GRID_RESIZE_X/2);
         }
 
         super.draw(batch);
     }
 
     public float x() {
-        return getX()/Constants.ESCALA_X;
+        return getX()/Constants.GRID_RESIZE_X;
     }
 
     public float y(){
-        return getY()/Constants.ESCALA_Y;
+        return getY()/Constants.GRID_RESIZE_Y;
     }
 
     public int getValue() {

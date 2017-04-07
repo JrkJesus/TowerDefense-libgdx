@@ -1,5 +1,7 @@
 package com.towerdeffense;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -60,7 +62,7 @@ public class ControllerGame {
 
     private void initTextures(){
         people = new Texture[]{
-                new Texture(Gdx.files.internal("Textures\\people.png")),
+                new Texture(Gdx.files.internal("Textures\\people (" + (Constants.rnd.nextInt(4)+1) +").png")),
                 new Texture(Gdx.files.internal("Textures\\peopleDead.png"))
         };
         tank = new Texture[]{
@@ -144,29 +146,38 @@ public class ControllerGame {
         if (isBuilding){
             drawCreateButtons(batch);
         } else if (isUpgrading > 0){
-            if(isUpgrading < money) batch.draw(btnLevelUp[0], (lastTouch.x-1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
-            else batch.draw(btnLevelUp[1], (lastTouch.x-1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
-            batch.draw(btnSell, (lastTouch.x+1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
+            if(isUpgrading < money) batch.draw(btnLevelUp[0], (lastTouch.x-1)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
+            else batch.draw(btnLevelUp[1], (lastTouch.x-1)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
+            batch.draw(btnSell, (lastTouch.x+1)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
         }
-
+        // TODO: 07/04/2017 Quitar cuando todo funcione bien
+//        Pixmap pixmap = new Pixmap(50*2, 50*2, Pixmap.Format.RGBA8888);
+//        pixmap.setColor(1,1,1,0.75f);
+//        pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
+//        Texture circle = new Texture(pixmap);
+//        for(Vector2 waypoint : path){
+//            batch.draw(circle, waypoint.x*Constants.GRID_RESIZE_X, waypoint.y*Constants.GRID_RESIZE_Y + enemies.get(0).getHeight()/2);
+//        }
+//        pixmap.dispose();
+//        circle.dispose();
     }
 
     private void drawCreateButtons(Batch batch) {
 
-        if(money > 50 ) batch.draw(btnMachineGun[0], (lastTouch.x-1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
-        else batch.draw(btnMachineGun[1], (lastTouch.x-1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
+        if(money > 50 ) batch.draw(btnMachineGun[0], (lastTouch.x-1)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
+        else batch.draw(btnMachineGun[1], (lastTouch.x-1)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
 
-        if(money > 100 ) batch.draw(btnAntiTank[0], (lastTouch.x)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
-        else batch.draw(btnAntiTank[1], (lastTouch.x)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
+        if(money > 100 ) batch.draw(btnAntiTank[0], (lastTouch.x)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
+        else batch.draw(btnAntiTank[1], (lastTouch.x)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
 
-        if(money > 75 ) batch.draw(btnMissile[0], (lastTouch.x+1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
-        else batch.draw(btnMissile[1], (lastTouch.x+1)*Constants.ESCALA_X, (lastTouch.y+1)*Constants.ESCALA_Y);
+        if(money > 75 ) batch.draw(btnMissile[0], (lastTouch.x+1)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
+        else batch.draw(btnMissile[1], (lastTouch.x+1)*Constants.GRID_RESIZE_X, (lastTouch.y+1)*Constants.GRID_RESIZE_Y);
     }
 
     private void verifyTouch() {
         if (Gdx.input.justTouched()) {
-            int x = (int) (Gdx.input.getX() / Constants.ESCALA_X),
-                    y = (int) ((Gdx.graphics.getHeight() - Gdx.input.getY()) / Constants.ESCALA_Y);
+            int x = (int) (Gdx.input.getX() / Constants.GRID_RESIZE_X),
+                    y = (int) ((Gdx.graphics.getHeight() - Gdx.input.getY()) / Constants.GRID_RESIZE_Y);
            if( isUpgrading > 0 || isBuilding || ! path.contains(new Vector2(x, y), false)){
                Turret turret = isUpgrading > 0 ? getTurret((int)lastTouch.x, (int)lastTouch.y) : getTurret(x, y) ;
 
@@ -175,19 +186,22 @@ public class ControllerGame {
                        isBuilding = false;
                        if (lastTouch.x - 1 == x && lastTouch.y + 1 == y) {
                            if( money >= 50 ){
-                               turrets.add(new Turret(this, machineGun, Constants.MACHINEGUN, (int) (lastTouch.x * Constants.ESCALA_X), (int) (lastTouch.y * Constants.ESCALA_Y)));
+                               turrets.add(new Turret(this, machineGun, Constants.MACHINEGUN, (int) (lastTouch.x * Constants.GRID_RESIZE_X),
+                                                        (int) (lastTouch.y * Constants.GRID_RESIZE_Y)));
                                money -= 50;
                            }
                            lastTouch.set(-1, -1);
                        } else if (lastTouch.x + 1 == x && lastTouch.y + 1 == y) {
                            if(money >= 75) {
-                               turrets.add(new Turret(this, missiles, Constants.ANTIAIR, (int) (lastTouch.x * Constants.ESCALA_X), (int) (lastTouch.y * Constants.ESCALA_Y)));
+                               turrets.add(new Turret(this, missiles, Constants.ANTIAIR, (int) (lastTouch.x * Constants.GRID_RESIZE_X),
+                                                        (int) (lastTouch.y * Constants.GRID_RESIZE_Y)));
                                money -= 75;
                            }
                            lastTouch.set(-1, -1);
                        } else if (lastTouch.x == x && lastTouch.y + 1 == y) {
                            if(money >= 100) {
-                               turrets.add(new Turret(this, antiTank, Constants.ANTITANK, (int) (lastTouch.x * Constants.ESCALA_X), (int) (lastTouch.y * Constants.ESCALA_Y)));
+                               turrets.add(new Turret(this, antiTank, Constants.ANTITANK, (int) (lastTouch.x * Constants.GRID_RESIZE_X),
+                                                        (int) (lastTouch.y * Constants.GRID_RESIZE_Y)));
                                 money -= 100;
                            }
                            lastTouch.set(-1, -1);

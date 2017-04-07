@@ -21,12 +21,14 @@ public class PantallaJuego extends PantallaBase {
         super(_mtd);
         dificulty = 1;
         player = new ControllerGame(dificulty);
-        background = new Texture(Gdx.files.internal("Paths\\path_stage2.png"));
+        background = new Texture(Gdx.files.internal("Paths\\path_survival.png"));
         winner = new Texture(Gdx.files.internal("Textures\\winner.png"));
         loser = new Texture(Gdx.files.internal("Textures\\loser.png"));
-        Constants.ESCALA_X = width/20;
-        Constants.ESCALA_Y = height/11;
-        font.getData().setScale(Constants.ESCALA_X/64,Constants.ESCALA_Y/64);
+        Constants.ESCALA_X = (float) ( width/Constants.GRID_WIDTH ) / (float) Constants.GRID_SIZE;
+        Constants.ESCALA_Y = (float) ( height/Constants.GRID_HEIGH ) / (float) Constants.GRID_SIZE;
+        Constants.GRID_RESIZE_X *=  Constants.ESCALA_X;
+        Constants.GRID_RESIZE_Y *=  Constants.ESCALA_Y;
+        font.getData().setScale(Constants.ESCALA_X,Constants.ESCALA_Y);
     }
 
     @Override

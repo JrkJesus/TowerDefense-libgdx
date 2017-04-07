@@ -31,10 +31,10 @@ public class Enemy extends Sprite {
 
     public Enemy(ControllerGame controllerGame, Texture[] textures, int type, Array<Vector2> _path, int startPosition){
         super(textures[0]);
-        setScale(Constants.ESCALA_X/64, Constants.ESCALA_Y/64);
+        setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
         control = controllerGame;
         death = textures[1];
-        setPosition(-startPosition , _path.get(0).y*Constants.ESCALA_Y);
+        setPosition(-startPosition , _path.get(0).y*Constants.GRID_RESIZE_Y);
         velocity = new Vector2();
         this.type = type;
         switch (type){
@@ -57,8 +57,8 @@ public class Enemy extends Sprite {
     }
 
     private void walk(float deltaTime){
-        float angle = (float) Math.atan2(path.get(waypoint).y*Constants.ESCALA_Y - getY(),
-                path.get(waypoint).x*Constants.ESCALA_X  - getX());
+        float angle = (float) Math.atan2(path.get(waypoint).y*Constants.GRID_RESIZE_Y - getY(),
+                path.get(waypoint).x*Constants.GRID_RESIZE_X  - getX());
         velocity.set((float) Math.cos(angle)*speed, (float) Math.sin(angle)*speed);
 
         float x = getX() + + velocity.x * deltaTime,
@@ -74,8 +74,8 @@ public class Enemy extends Sprite {
 
     private boolean isReachWaypoint(){
         int tolerance = 5;
-        return Math.abs(getX() - path.get(waypoint).x * Constants.ESCALA_X) < tolerance &&
-                Math.abs(getY() - path.get(waypoint).y * Constants.ESCALA_Y) < tolerance;
+        return Math.abs(getX() - path.get(waypoint).x * Constants.GRID_RESIZE_X) < tolerance &&
+                Math.abs(getY() - path.get(waypoint).y * Constants.GRID_RESIZE_Y) < tolerance;
 
     }
 
@@ -107,11 +107,11 @@ public class Enemy extends Sprite {
     }
 
     public int x(){
-        return (int) (getX() / Constants.ESCALA_X);
+        return (int) (getX() / Constants.GRID_RESIZE_X);
     }
 
     public int y(){
-        return (int) (getY() / Constants.ESCALA_Y);
+        return (int) (getY() / Constants.GRID_RESIZE_Y);
     }
 
 }

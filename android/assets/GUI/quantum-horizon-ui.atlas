@@ -327,13 +327,6 @@ touchpad
   orig: 68, 68
   offset: 0, 0
   index: -1
-touchpad-pressed
-  rotate: 180
-  xy: 777, 900
-  size: 68, 68
-  orig: 68, 68
-  offset: 0, 0
-  index: -1
 touchpad-knob
   rotate: false
   xy: 454, 652
