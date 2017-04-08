@@ -15,16 +15,16 @@ import com.util.Constants;
 public class Projectile extends Sprite{
 
     Vector2 target, velocity;
-    float angle, speed = 100;
+    float angle, speed = 150;
 
     public Projectile(int type, Vector2 initial, Vector2 target){
         super();
         switch (type){
             case Constants.ANTIAIR:
-                setTexture(new Texture(Gdx.files.internal("Path\\missile.png")));
+                setTexture(new Texture(Gdx.files.internal("Textures\\missile.png")));
                 break;
             case Constants.ANTITANK:
-                setTexture(new Texture(Gdx.files.internal("Path\\bomb.png")));
+                setTexture(new Texture(Gdx.files.internal("Textures\\bomb.png")));
                 break;
             case Constants.MACHINEGUN:
                 Pixmap pixmap = new Pixmap((int) (50*Constants.ESCALA_X), (int)(50*Constants.ESCALA_Y), Pixmap.Format.RGBA8888);
@@ -45,10 +45,11 @@ public class Projectile extends Sprite{
 
         float x = getX() + + velocity.x * deltaTime,
                 y =  getY() + velocity.y * deltaTime;
+        System.out.println(x + ", " + y);
         setPosition( x , y );
     }
 
-    private boolean impact(){
+    private boolean impact(){       
         int tolerance = 5;
         return Math.abs(getX() - target.x) < tolerance &&
                 Math.abs(getY() - target.y ) < tolerance;
@@ -57,9 +58,9 @@ public class Projectile extends Sprite{
 
     @Override
     public void draw(Batch batch) {
-        if(!impact()) {
+//        if(!impact()) {
             walk(Gdx.graphics.getDeltaTime());
             super.draw(batch);
-        }
+//        }
     }
 }

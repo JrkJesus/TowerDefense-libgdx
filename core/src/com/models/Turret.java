@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.util.Constants;
 import com.towerdeffense.ControllerGame;
@@ -30,6 +31,7 @@ public class Turret extends Sprite {
     private ControllerGame control;
     private Pixmap pixmap;
     private Texture circle;
+    private Projectile bullet;
 
     public Turret(com.towerdeffense.ControllerGame _control, Texture[] textures, int type, int x, int y ){
         super(textures[0]);
@@ -42,7 +44,7 @@ public class Turret extends Sprite {
         switch(type){
             case Constants.ANTIAIR:
 //                radiusAttack = (float) (heigh * 0.25);
-                radiusAttack = (int) (720/3.0f * Constants.GRID_RESIZE_Y);
+                radiusAttack = (int) (1080/3.0f * Constants.ESCALA_Y);
                 damage = 1;
                 speedAttack = 2;
                 initialCost = 75;
@@ -50,7 +52,7 @@ public class Turret extends Sprite {
                 break;
             case Constants.ANTITANK:
 //                radiusAttack = (float) (heigh * 0.14);
-                radiusAttack = (int) (200 * Constants.GRID_RESIZE_Y);
+                radiusAttack = (int) (300 * Constants.ESCALA_Y);
                 damage = 3;
                 speedAttack = 3;
                 initialCost = 100;
@@ -58,7 +60,7 @@ public class Turret extends Sprite {
                 break;
             case Constants.MACHINEGUN:
 //                radiusAttack = (float) (heigh * 0.18);
-                radiusAttack = (int) (150* Constants.GRID_RESIZE_Y);
+                radiusAttack = (int) (250* Constants.ESCALA_Y);
                 damage = 1;
                 speedAttack = 1;
                 initialCost = 50;
@@ -78,7 +80,6 @@ public class Turret extends Sprite {
             level++;
             radiusAttack += radiusAttack*0.15;
             speedAttack -= speedAttack*0.35;
-            System.out.println(speedAttack);
             damage += (type == Constants.ANTITANK) ? 3 : 1;
             pixmap.dispose();
             circle.dispose();
@@ -102,7 +103,8 @@ public class Turret extends Sprite {
         if( i < n || (n == 1 && isReachable(enemy))){
             enemy.loseLife(damage);
             reload = speedAttack;
-            this.setRotation((float)(Math.atan2(enemy.y() - y(), enemy.x() - x())) * MathUtils.radiansToDegrees - 90);
+            this.setRotation((float)(Math.atan2(enemy.y() - y(), enemy.x() - x())) * MathUtils.radiansToDegrees);
+            bullet = new Projectile(type, new Vector2(getX(), getY()), new Vector2(enemy.getX(), enemy.getY()));
         }
 
     }
@@ -121,6 +123,10 @@ public class Turret extends Sprite {
 
         if(isSelected){
             batch.draw(circle, getX() - radiusAttack + Constants.GRID_RESIZE_X/2, getY() - radiusAttack + Constants.GRID_RESIZE_X/2);
+        }
+
+        if(bullet != null){
+            bullet.draw(batch);
         }
 
         super.draw(batch);
