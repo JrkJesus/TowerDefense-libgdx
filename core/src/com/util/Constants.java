@@ -36,8 +36,8 @@ public final class Constants {
 
     public static Array<Vector2> PATH_PLANE(){
         Array<Vector2> path = new Array<Vector2>();
-        int initHeight = (rnd.nextInt(9))+3,
-                endHeigth = (rnd.nextInt(9))+3;
+        int initHeight = (rnd.nextInt(6)),
+            endHeigth  = (rnd.nextInt(6));
         path.add(new Vector2(0, initHeight));
         path.add(new Vector2(20, endHeigth));
 
