@@ -16,7 +16,6 @@ import com.util.Constants;
  * Clase que recoge los datos sobre las unidades enemigas.
  */
 
-
 public class Enemy extends Sprite {
     private int life,
             speed,
@@ -61,7 +60,7 @@ public class Enemy extends Sprite {
                 path.get(waypoint).x*Constants.GRID_RESIZE_X  - getX());
         velocity.set((float) Math.cos(angle)*speed, (float) Math.sin(angle)*speed);
 
-        float x = getX() + + velocity.x * deltaTime,
+        float x = getX() + velocity.x * deltaTime,
                 y =  getY() + velocity.y * deltaTime;
         setPosition( x , y );
 

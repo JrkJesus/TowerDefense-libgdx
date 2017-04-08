@@ -1,6 +1,8 @@
 package com.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.towerdeffense.*;
 import com.util.Constants;
@@ -15,7 +17,7 @@ import java.util.concurrent.Callable;
 public class PantallaJuego extends PantallaBase {
     private int dificulty;
     private ControllerGame player;
-    private Texture background, winner, loser;
+    private Texture background, winner, loser, circle;
 
     public PantallaJuego(MainTowerDeffense _mtd) {
         super(_mtd);
@@ -29,6 +31,18 @@ public class PantallaJuego extends PantallaBase {
         Constants.GRID_RESIZE_X *=  Constants.ESCALA_X;
         Constants.GRID_RESIZE_Y *=  Constants.ESCALA_Y;
         font.getData().setScale(Constants.ESCALA_X,Constants.ESCALA_Y);
+
+        // TODO: 08/04/2017 Quitar el el pintar circulo
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK);
+        for (int i = 0; i < Constants.GRID_HEIGH; i++) {
+            pixmap.drawLine(0, Constants.GRID_SIZE*i, width, Constants.GRID_SIZE*i);
+        }
+        for (int i = 0; i < Constants.GRID_WIDTH; i++) {
+            pixmap.drawLine(Constants.GRID_SIZE*i, 0, Constants.GRID_SIZE*i, height);
+        }
+        circle = new Texture(pixmap);
+
     }
 
     @Override
@@ -48,7 +62,7 @@ public class PantallaJuego extends PantallaBase {
         } else {
             player.draw(mtd.batch);
         }
-
+        mtd.batch.draw(circle, 0, 0);
         mtd.batch.end();
     }
 

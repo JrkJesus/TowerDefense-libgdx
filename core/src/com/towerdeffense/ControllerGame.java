@@ -142,7 +142,6 @@ public class ControllerGame {
             }
         }
 
-
         if (isBuilding){
             drawCreateButtons(batch);
         } else if (isUpgrading > 0){
@@ -206,11 +205,12 @@ public class ControllerGame {
                            }
                            lastTouch.set(-1, -1);
                        }
-                   } else {
+                   }
+                   else {
                        lastTouch.set(x,y);
                        isBuilding = true;
                    }
-               } else{
+               } else if(! isBuilding){
                    turret.select();
                    if(isUpgrading > 0){
                        isUpgrading = 0;
@@ -227,6 +227,10 @@ public class ControllerGame {
                        isUpgrading = turret.getUpgradeCost();
                        lastTouch.set(x,y);
                    }
+               }
+               else{
+                   isBuilding=false;
+                   isUpgrading=0;
                }
            } else {
                isBuilding = false;

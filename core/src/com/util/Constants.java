@@ -44,6 +44,7 @@ public final class Constants {
         return path;
     }
 
+    //Camino Survival
     public static Array<Vector2> PATH_FASE1() {
         Array<Vector2> path = new Array<Vector2>();
         path.add(new Vector2(0,1));
@@ -72,7 +73,6 @@ public final class Constants {
         path.add(new Vector2(7,1));
         path.add(new Vector2(7,0));
         path.add(new Vector2(8,0));
-
         return path;
     }
 

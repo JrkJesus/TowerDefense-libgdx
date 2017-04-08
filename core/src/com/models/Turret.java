@@ -91,7 +91,6 @@ public class Turret extends Sprite {
     }
 
     public void attack(){
-        // TODO: 06/04/2017 Comprobar el caso de que solo haya un enemigo
         Array<Enemy> enemies = control.getEnemies();
         Enemy enemy = enemies.get(0);
         int i = 1,
@@ -113,6 +112,8 @@ public class Turret extends Sprite {
 
         return enemy.getDeathTime() == 0
                 && enemy.getType() % type == 0
+                && enemy.getX()>= 0
+                && enemy.getX()< Gdx.graphics.getWidth()
                 && Math.sqrt((enemy.getX() - getX())*(enemy.getX() - getX()) + (enemy.getY() - getY())*(enemy.getY() - getY()) ) < radiusAttack;
     }
 
