@@ -21,25 +21,25 @@ public class PantallaJuego extends PantallaBase {
 
     public PantallaJuego(MainTowerDeffense _mtd) {
         super(_mtd);
+        Constants.ESCALA_X = (float) ( width/Constants.GRID_WIDTH ) / (float) Constants.GRID_SIZE;
+        Constants.ESCALA_Y = (float) ( height/Constants.GRID_HEIGH ) / (float) Constants.GRID_SIZE;
+        Constants.GRID_RESIZE_X *=  Constants.ESCALA_X;
+        Constants.GRID_RESIZE_Y *=  Constants.ESCALA_Y;
         dificulty = 1;
         player = new ControllerGame(dificulty);
         background = new Texture(Gdx.files.internal("Paths\\path_survival.png"));
         winner = new Texture(Gdx.files.internal("Textures\\winner.png"));
         loser = new Texture(Gdx.files.internal("Textures\\loser.png"));
-        Constants.ESCALA_X = (float) ( width/Constants.GRID_WIDTH ) / (float) Constants.GRID_SIZE;
-        Constants.ESCALA_Y = (float) ( height/Constants.GRID_HEIGH ) / (float) Constants.GRID_SIZE;
-        Constants.GRID_RESIZE_X *=  Constants.ESCALA_X;
-        Constants.GRID_RESIZE_Y *=  Constants.ESCALA_Y;
         font.getData().setScale(Constants.ESCALA_X,Constants.ESCALA_Y);
 
         // TODO: 08/04/2017 Quitar el el pintar circulo
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.BLACK);
         for (int i = 0; i < Constants.GRID_HEIGH; i++) {
-            pixmap.drawLine(0, Constants.GRID_SIZE*i, width, Constants.GRID_SIZE*i);
+            pixmap.drawLine(0, Constants.GRID_RESIZE_Y*i, width, Constants.GRID_RESIZE_Y*i);
         }
         for (int i = 0; i < Constants.GRID_WIDTH; i++) {
-            pixmap.drawLine(Constants.GRID_SIZE*i, 0, Constants.GRID_SIZE*i, height);
+            pixmap.drawLine(Constants.GRID_RESIZE_X*i, 0, Constants.GRID_RESIZE_X*i, height);
         }
         circle = new Texture(pixmap);
 

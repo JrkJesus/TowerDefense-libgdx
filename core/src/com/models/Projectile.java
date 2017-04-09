@@ -45,7 +45,6 @@ public class Projectile extends Sprite{
 
         float x = getX() + + velocity.x * deltaTime,
                 y =  getY() + velocity.y * deltaTime;
-        System.out.println(x + ", " + y);
         setPosition( x , y );
     }
 

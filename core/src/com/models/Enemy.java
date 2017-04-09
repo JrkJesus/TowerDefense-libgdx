@@ -30,6 +30,7 @@ public class Enemy extends Sprite {
 
     public Enemy(ControllerGame controllerGame, Texture[] textures, int type, Array<Vector2> _path, int startPosition){
         super(textures[0]);
+        System.out.println(Constants.ESCALA_X);
         setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
         control = controllerGame;
         death = textures[1];
