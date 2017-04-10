@@ -1,65 +1,54 @@
 package com.models;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.util.Constants;
 
 /**
  * Created by Antonio Ruz on 07/04/2017.
  */
-public class Projectile extends Sprite{
+public class Projectile extends Sprite {
 
-    Vector2 target, velocity;
-    float angle, speed = 150;
+    private Vector2 target,
+            speed;
+    private float angle, movSpeed;
+    private boolean hundido;
 
-    public Projectile(int type, Vector2 initial, Vector2 target){
-        super();
-        switch (type){
-            case Constants.ANTIAIR:
-                setTexture(new Texture(Gdx.files.internal("Textures\\missile.png")));
-                break;
-            case Constants.ANTITANK:
-                setTexture(new Texture(Gdx.files.internal("Textures\\bomb.png")));
-                break;
-            case Constants.MACHINEGUN:
-                Pixmap pixmap = new Pixmap((int) (50*Constants.ESCALA_X), (int)(50*Constants.ESCALA_Y), Pixmap.Format.RGBA8888);
-                pixmap.drawLine(pixmap.getWidth()/2, 0, pixmap.getWidth()/2, pixmap.getHeight());
-                setTexture(new Texture(pixmap));
-                pixmap.dispose();
-                break;
-        }
-        setPosition(initial.x, initial.y);
+    public Projectile(Texture t, Vector2 initialPos, Vector2 target) {
+        super(t);
+        setPosition(initialPos.x, initialPos.y);
         this.target = target;
-        angle = (int) Math.atan2(target.y - initial.y, target.x - initial.x) * MathUtils.radiansToDegrees;
-        setRotation( angle );
-        velocity = new Vector2();
+        angle = (float) (Math.atan2(target.y - initialPos.y, target.x - initialPos.x) * MathUtils.radiansToDegrees);
+        setRotation(angle);
+        hundido = false;
     }
 
-    private void walk(float deltaTime){
-        velocity.set((float) Math.cos(angle)*speed, (float) Math.sin(angle)*speed);
-
-        float x = getX() + + velocity.x * deltaTime,
-                y =  getY() + velocity.y * deltaTime;
-        setPosition( x , y );
+    public boolean isHundido() {
+        return hundido;
     }
 
-    private boolean impact(){       
-        int tolerance = 5;
-        return Math.abs(getX() - target.x) < tolerance &&
-                Math.abs(getY() - target.y ) < tolerance;
-
+    public void nextStep(float deltaTime) {
+        speed.set(movSpeed * (float) Math.cos(angle), movSpeed * (float) Math.sin(angle));
+        setRotation(angle * MathUtils.degreesToRadians);
+        setPosition(getX() + speed.x * deltaTime, getY() + speed.y * deltaTime);
+        if (Math.abs(getX() - target.x) < 0 && Math.abs(getX() - target.x) < 0) {
+            hundido = true;
+        }
     }
 
     @Override
     public void draw(Batch batch) {
-//        if(!impact()) {
-            walk(Gdx.graphics.getDeltaTime());
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        if (!hundido) {
+            nextStep(deltaTime);
             super.draw(batch);
-//        }
+        }
+    }
+
+    public void dispose(){
+        getTexture().dispose();
     }
 }

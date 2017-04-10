@@ -3,6 +3,7 @@ package com.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -56,7 +57,7 @@ public class PantallaBase implements Screen
     }
     @Override
     public void show() {
-
+        Gdx.gl.glClearColor(0,1,0,1);
     }
 
     @Override

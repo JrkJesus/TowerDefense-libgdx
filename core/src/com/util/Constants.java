@@ -2,7 +2,6 @@ package com.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -28,8 +27,8 @@ public final class Constants {
     public final static int GRID_WIDTH = 15;
     public final static int GRID_HEIGH = 8;
 
-    public static float ESCALA_X = 2;
-    public static float ESCALA_Y = 2;
+    public static float ESCALA_X = 1;
+    public static float ESCALA_Y = 1;
     public static int GRID_RESIZE_X = 128;
     public static int GRID_RESIZE_Y = 128;
 

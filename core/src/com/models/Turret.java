@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.util.Constants;
 import com.towerdeffense.ControllerGame;
+
 /**
  * Created by jesus on 16/03/2017.
  * <p>
@@ -18,156 +19,135 @@ import com.towerdeffense.ControllerGame;
  */
 
 public class Turret extends Sprite {
-
-    private int radiusAttack,
-            initialCost,
-            level,
+    private Texture[] texturas;
+    private int rango,
+            buildCost,
+            upgradeCost,
+            nivel,
             damage,
             type;
-    private float speedAttack, reload;
-    private int[] upgradeCost;
+    private float attackSpeed,
+            reload;
     private boolean isSelected;
-    private Texture[] upgrades;
-    private ControllerGame control;
     private Pixmap pixmap;
-    private Texture circle;
+    private Texture circuloRango;
     private Projectile bullet;
 
-    public Turret(com.towerdeffense.ControllerGame _control, Texture[] textures, int type, int x, int y ){
-        super(textures[0]);
+    public Turret(Texture[] t, int tipo, int x, int y) {
+        super(t[0]);
+        setPosition(x, y);
         setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
-        control = _control;
-        upgrades = textures;
-        setPosition(x,y);
-        level = 1;
-        this.type = type;
-        switch(type){
+        nivel=1;
+        texturas = t;
+        int altura = Gdx.graphics.getHeight();
+        switch (tipo) {
             case Constants.ANTIAIR:
-//                radiusAttack = (float) (heigh * 0.25);
-                radiusAttack = (int) (1080/3.0f * Constants.ESCALA_Y);
+                rango = altura / 6;
                 damage = 1;
-                speedAttack = 2;
-                initialCost = 75;
-                upgradeCost = new int[]{50, 100};
+                attackSpeed = 2;
+                buildCost = 75;
+                upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.ANTITANK:
-//                radiusAttack = (float) (heigh * 0.14);
-                radiusAttack = (int) (300 * Constants.ESCALA_Y);
+                rango = altura / 12;
                 damage = 3;
-                speedAttack = 3;
-                initialCost = 100;
-                upgradeCost = new int[]{75, 150};
+                attackSpeed = 4;
+                buildCost = 100;
+                upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.MACHINEGUN:
-//                radiusAttack = (float) (heigh * 0.18);
-                radiusAttack = (int) (250* Constants.ESCALA_Y);
+                rango = altura / 10;
                 damage = 1;
-                speedAttack = 1;
-                initialCost = 50;
-                upgradeCost = new int[]{25, 75};
+                attackSpeed = 2;
+                buildCost = 50;
+                upgradeCost = (int) (buildCost * .75);
                 break;
         }
         isSelected = false;
-        pixmap = new Pixmap(radiusAttack*2, radiusAttack*2, Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(rango * 2, rango * 2, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.BLACK);
-        pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
-        circle = new Texture(pixmap);
+        pixmap.drawCircle(pixmap.getWidth() / 2, pixmap.getHeight() / 2, pixmap.getHeight() / 2 - 1);
+        circuloRango = new Texture(pixmap);
     }
 
-    public void levelUp(){
-        if( level < 3) {
-            setTexture(upgrades[level]);
-            level++;
-            radiusAttack += radiusAttack*0.15;
-            speedAttack -= speedAttack*0.35;
-            damage += (type == Constants.ANTITANK) ? 3 : 1;
-            pixmap.dispose();
-            circle.dispose();
-            pixmap = new Pixmap(radiusAttack*2, radiusAttack*2, Pixmap.Format.RGBA8888);
-            pixmap.setColor(Color.BLACK);
-            pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
-            circle = new Texture(pixmap);
-        }
-    }
-
-    public void attack(){
+    public void shoot(ControllerGame control) {
         Array<Enemy> enemies = control.getEnemies();
-        Enemy enemy = enemies.get(0);
-        int i = 1,
-                n = enemies.size;
+        int n = enemies.size;
+        int i = 0;
+        while (i < n && reachable(enemies.get(i++))) ;
 
-        while( i < n && ! isReachable(enemy) )
-            enemy = enemies.get(i++);
-
-        if( i < n || (n == 1 && isReachable(enemy))){
-            enemy.loseLife(damage);
-            reload = speedAttack;
-            this.setRotation((float)(Math.atan2(enemy.y() - y(), enemy.x() - x())) * MathUtils.radiansToDegrees);
-            bullet = new Projectile(type, new Vector2(getX(), getY()), new Vector2(enemy.getX(), enemy.getY()));
+        if (i < n) {
+            enemies.get(i).receiveDamage(control,damage);
+            reload = attackSpeed;
+            this.setRotation((float) (Math.atan2(enemies.get(i).y() - y(), enemies.get(i).x() - x())) * MathUtils.radiansToDegrees);
+            bullet = new Projectile(new Texture(Gdx.files.internal("Textures\\proyectil" + type + ".png")), new Vector2(getX(), getY()), new Vector2(enemies.get(i).getX(), enemies.get(i).getY()));
         }
-
     }
 
-    private boolean isReachable(Enemy enemy) {
+    public int x() {
+        return (int) getX() / (int) Constants.GRID_RESIZE_X;
+    }
 
-        return enemy.getDeathTime() == 0
+    public int y() {
+        return (int) getY() / (int) Constants.GRID_RESIZE_Y;
+    }
+
+    private boolean reachable(Enemy enemy) {
+        return enemy.getDeadTime() == 0
                 && enemy.getType() % type == 0
-                && enemy.getX()>= 0
-                && enemy.getX()< Gdx.graphics.getWidth()
-                && Math.sqrt((enemy.getX() - getX())*(enemy.getX() - getX()) + (enemy.getY() - getY())*(enemy.getY() - getY()) ) < radiusAttack;
+                && enemy.getX() >= 0
+                && enemy.getX() < Gdx.graphics.getWidth()
+                && Math.sqrt((enemy.getX() - getX()) * (enemy.getX() - getX()) + (enemy.getY() - getY()) * (enemy.getY() - getY())) < rango;
+    }
+
+    public boolean shootable()  {
+        return (bullet != null && !bullet.isHundido());
     }
 
     @Override
     public void draw(Batch batch) {
-        if( reload < 0 ) attack();
-        else reload -= Gdx.graphics.getDeltaTime();
-
-        if(isSelected){
-            batch.draw(circle, getX() - radiusAttack + Constants.GRID_RESIZE_X/2, getY() - radiusAttack + Constants.GRID_RESIZE_X/2);
-        }
-
-        if(bullet != null){
-            bullet.draw(batch);
-        }
 
         super.draw(batch);
+        if (isSelected) {
+            batch.draw(circuloRango, getX() - rango + (Constants.GRID_RESIZE_X / 2), getY() - rango + (Constants.GRID_RESIZE_Y / 2));
+        }
     }
 
-    public float x() {
-        return getX()/Constants.GRID_RESIZE_X;
+    public void dispose() {
+        getTexture().dispose();
+        pixmap.dispose();
+        circuloRango.dispose();
+        if (bullet != null)
+            bullet.dispose();
     }
 
-    public float y(){
-        return getY()/Constants.GRID_RESIZE_Y;
+    public int lvlUp(){
+        setTexture(texturas[nivel++]);
+        rango+=rango*0.1;
+        attackSpeed-=attackSpeed*0.15;
+        damage += (type == Constants.ANTITANK) ? 3 : 1;
+        pixmap.dispose();
+        circuloRango.dispose();
+        pixmap = new Pixmap(rango*2, rango*2, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK);
+        pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
+        circuloRango = new Texture(pixmap);
+
+        return upgradeCost + buildCost*(nivel-2);
+    }
+
+    public int getLvl() {
+        return nivel;
     }
 
     public int getValue() {
-        int value = initialCost,
-            max = level < 3 ? level : 2;
-
-        for(int i = 0; i < max; i++){
-            value += upgradeCost[i];
+        int value = buildCost;
+        if(nivel<3){
+            value += upgradeCost + buildCost*(nivel-2);
         }
-
+        if(nivel<2) {
+            value += upgradeCost;
+        }
         return (int) (value/3.5f);
-    }
-
-    public void dispose(){
-        circle.dispose();
-        pixmap.dispose();
-    }
-
-    public void select(){
-        isSelected = true;
-    }
-
-    public int getType(){
-        return type;
-    }
-
-    public void unselect() { isSelected = false; }
-
-    public int getUpgradeCost() {
-        return level < 3 ? upgradeCost[level-1] : Integer.MAX_VALUE;
     }
 }
