@@ -17,21 +17,34 @@ public class Tile extends Sprite {
 
     public Tile(Texture texture, int gridX, int gridY, boolean road) {
         super(texture);
-        setPosition(gridX * Constants.GRID_RESIZE_X, gridY * Constants.GRID_SIZE);
-        System.out.println("GetX:"+getX()+"   GetY"+getY());
+        setPosition(gridX * Constants.GRID_RESIZE_X, gridY * Constants.GRID_RESIZE_Y);
+        setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
         this.road = road;
     }
 
-    public boolean isBuildeable() {
-        return road && turret == null;
+    @Override
+    public void setRotation(float degrees) {
+        super.setRotation(degrees);
+        if (degrees == 90 || degrees == 270) {
+            setScale(Constants.ESCALA_Y, Constants.ESCALA_X);
+        }
+
     }
 
-    public void buildTurret(Texture[] t, int type, ControllerGame control){
-        turret=new Turret(t,type,(int)getX(),(int)getY());
+    public boolean isBuildeable() {
+        return !road;
+    }
+
+    public boolean isUpgreadable() {
+        return turret != null;
+    }
+
+    public void buildTurret(Texture[] t, int type) {
+        turret = new Turret(t, type, (int) getX(), (int) getY());
     }
 
     public void update(ControllerGame control) {
-        if(turret!=null && turret.shootable())
+        if (turret != null && turret.shootable())
             turret.shoot(control);
     }
 
@@ -48,16 +61,20 @@ public class Tile extends Sprite {
             turret.dispose();
     }
 
-    public void lvlUp(ControllerGame control){
-        if(turret.getLvl()<3) {
+    public void lvlUp(ControllerGame control) {
+        if (turret.getLvl() < 3) {
             control.addMoney(-turret.lvlUp());
         }
     }
 
-    public void sell(ControllerGame control){
+    public void sell(ControllerGame control) {
         control.addMoney(turret.getValue());
         turret.dispose();
-        turret=null;
+        turret = null;
+    }
+
+    public int upgradeCost() {
+        return turret.getUpgradeCost();
     }
 
 }

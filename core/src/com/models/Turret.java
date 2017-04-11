@@ -45,21 +45,21 @@ public class Turret extends Sprite {
                 rango = altura / 6;
                 damage = 1;
                 attackSpeed = 2;
-                buildCost = 75;
+                buildCost = Constants.PLANE_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.ANTITANK:
                 rango = altura / 12;
                 damage = 3;
                 attackSpeed = 4;
-                buildCost = 100;
+                buildCost = Constants.TANK_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.MACHINEGUN:
                 rango = altura / 10;
                 damage = 1;
                 attackSpeed = 2;
-                buildCost = 50;
+                buildCost = Constants.MACHINE_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
         }
@@ -150,4 +150,9 @@ public class Turret extends Sprite {
         }
         return (int) (value/3.5f);
     }
+
+    public int getUpgradeCost() {
+        return upgradeCost + buildCost*(nivel-2);
+    }
+
 }

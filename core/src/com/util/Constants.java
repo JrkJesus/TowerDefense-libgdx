@@ -27,6 +27,10 @@ public final class Constants {
     public final static int GRID_WIDTH = 15;
     public final static int GRID_HEIGH = 8;
 
+    public final static int MACHINE_COST=50;
+    public final static int PLANE_COST=75;
+    public final static int TANK_COST=100;
+
     public static float ESCALA_X = 1;
     public static float ESCALA_Y = 1;
     public static int GRID_RESIZE_X = 128;

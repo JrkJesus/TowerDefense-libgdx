@@ -1,7 +1,6 @@
 package com.towerdeffense;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
+
 import com.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.util.Constants;
+import com.util.Tuple;
 
 /**
  * Created by jesus on 05/04/2017.
@@ -22,9 +22,9 @@ public class ControllerGame {
             money,
             life,
             wave,
-            isUpgrading;
+            lastTouchPosition,
+            deltaTime;
     private Vector2 lastTouch;
-    private boolean isBuilding;
     private Map mapa;
     private Array<Enemy> enemies;
     private Texture[] people,
@@ -32,12 +32,8 @@ public class ControllerGame {
             plane,
             antiTank,
             missiles,
-            machineGun,
-            btnMissile,
-            btnMachineGun,
-            btnAntiTank,
-            btnLevelUp;
-    private Texture btnSell;
+            machineGun;
+    private Texture btn1, btn2, btn3;
 
     public ControllerGame(int wave, int dificulty) {
         path = Constants.PATH_FASE1();
@@ -46,13 +42,13 @@ public class ControllerGame {
         score = 0;
         money = 150;
         life = 25 - 5 * (dificulty - 1);
-        lastTouch = new Vector2();
+        lastTouch = null;
         enemies = new Array<Enemy>();
         mapa = new Map();
         this.wave = wave;
         newWave(dificulty);
-        isUpgrading = 0;
-        isBuilding = false;
+        lastTouchPosition = -1;
+        deltaTime=0;
     }
 
     public ControllerGame(int dificulty) {
@@ -87,23 +83,6 @@ public class ControllerGame {
                 new Texture(Gdx.files.internal("Textures\\machineGunLv2.png")),
                 new Texture(Gdx.files.internal("Textures\\machineGunLv3.png"))
         };
-        btnMissile = new Texture[]{
-                new Texture(Gdx.files.internal("Buttons\\btnMissile.png")),
-                new Texture(Gdx.files.internal("Buttons\\btnMissile.png"))
-        };
-        btnMachineGun = new Texture[]{
-                new Texture(Gdx.files.internal("Buttons\\btnMachineGun.png")),
-                new Texture(Gdx.files.internal("Buttons\\btnMachineGun.png"))
-        };
-        btnAntiTank = new Texture[]{
-                new Texture(Gdx.files.internal("Buttons\\btnAntiTank.png")),
-                new Texture(Gdx.files.internal("Buttons\\btnAntiTank.png"))
-        };
-        btnLevelUp = new Texture[]{
-                new Texture(Gdx.files.internal("Buttons\\levelUp.png")),
-                new Texture(Gdx.files.internal("Buttons\\levelUp.png"))
-        };
-        btnSell = new Texture(Gdx.files.internal("Buttons\\sell.png"));
 
     }
 
@@ -120,23 +99,110 @@ public class ControllerGame {
         wave++;
     }
 
-    public void draw(Batch batch) {
 
+    public void verifyButtonPress(int deltaTime) {
+        if (Gdx.input.justTouched() && deltaTime > 100) {
+            System.out.println("Acaba de tocar");
+            int posX = Gdx.input.getX() / Constants.GRID_RESIZE_X,
+                    posY = Gdx.input.getY() / Constants.GRID_RESIZE_Y;
+            if (btn2 == null) { //Estamos mejorando torre
+                if (posX - 1 == lastTouch.x && posY + 1 == lastTouch.y) {
+                    if (mapa.upgradeCost(lastTouchPosition) <= money) {
+                        mapa.lvlUpTurret(this, lastTouchPosition);
+                    }
+                } else if (posX + 1 == lastTouch.x && posY + 1 == lastTouch.y) {
+                    mapa.sellTurret(this, lastTouchPosition);
+                }
+            } else { //Estamos construyendo torre
+                if (posX - 1 == lastTouch.x && posY + 1 == lastTouch.y) {
+                    if (Constants.MACHINE_COST <= money) {
+                        mapa.buildTurret(machineGun, lastTouchPosition, Constants.MACHINEGUN);
+                    }
+                } else if (posX == lastTouch.x && posY + 1 == lastTouch.y) {
+                    if (Constants.PLANE_COST <= money) {
+                        mapa.buildTurret(missiles, lastTouchPosition, Constants.ANTIAIR);
+                    }
+                } else if (posX == lastTouch.x && posY + 1 == lastTouch.y) {
+                    if (Constants.TANK_COST <= money) {
+                        mapa.buildTurret(antiTank, lastTouchPosition, Constants.ANTITANK);
+                    }
+                }
+            }
+            deleteBtns();
+        }
+    }
+
+    public void deleteBtns() {
+        lastTouch = null;
+        lastTouchPosition = -1;
+        btn1.dispose();
+        btn2.dispose();
+        btn3.dispose();
+        btn1 = null;
+        btn2 = null;
+        btn3 = null;
+        deltaTime=0;
+    }
+
+    public void verifyTouch() {
+        Tuple<Vector2, Boolean, Integer> posicionBotones = mapa.verifyTouch();
+        if (posicionBotones != null) {
+            lastTouch = posicionBotones.item1;
+            lastTouchPosition = posicionBotones.item3;
+            if (posicionBotones.item2) {    //Mejora
+                System.out.println("Mejorando");
+                if (mapa.upgradeCost(posicionBotones.item3) < money) {
+                    btn1 = new Texture(Gdx.files.internal("Buttons\\levelUp.png"));
+                } else {
+                    btn1 = new Texture(Gdx.files.internal("Buttons\\noLevelUp.png"));
+                }
+                btn2 = null;
+                btn3 = new Texture(Gdx.files.internal("Buttons\\sell.png"));
+            } else {                        //Construccion
+                System.out.println("Construyendo");
+                if (Constants.MACHINE_COST <= money) {
+                    btn1 = new Texture(Gdx.files.internal("Buttons\\btnMachineGun.png"));
+                } else {
+                    btn1 = new Texture(Gdx.files.internal("Buttons\\noBtnMachineGun.png"));
+                }
+                if (Constants.PLANE_COST <= money) {
+                    btn2 = new Texture(Gdx.files.internal("Buttons\\btnMissile.png"));
+                } else {
+                    btn2 = new Texture(Gdx.files.internal("Buttons\\noBtnMissile.png"));
+                }
+                if (Constants.TANK_COST < money) {
+                    btn3 = new Texture(Gdx.files.internal("Buttons\\btnAntiTank.png"));
+                } else {
+                    btn3 = new Texture(Gdx.files.internal("Buttons\\noBtnAntiTank.png"));
+                }
+            }
+        }
+    }
+
+    public void draw(Batch batch) {
         mapa.update(this);
         mapa.draw(batch);
+        if (lastTouch == null) {
+            verifyTouch();
+            if (btn1 != null) {
+                batch.draw(btn1, (lastTouch.x - 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
+            }
+            if (btn2 != null) {
+                batch.draw(btn2, (lastTouch.x) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
+            }
+            if (btn3 != null) {
+                batch.draw(btn3, (lastTouch.x + 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
+            }
+        } else {
+            deltaTime+=Gdx.graphics.getDeltaTime();
+            verifyButtonPress(deltaTime);
+        }
+        if (lastTouch != null)
+            System.out.println("LastTouch.X:" + (lastTouch.x) * Constants.GRID_RESIZE_X + "  LastTouch.Y:" + (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
         for (Enemy enemy : enemies) {
             enemy.draw(batch);
         }
-//        Pixmap pm=new Pixmap(50,50, Pixmap.Format.RGBA8888);
-//        pm.setColor(Color.BLUE);
-//        pm.drawCircle(pm.getWidth()/2,pm.getHeight()/2,pm.getHeight()/5);
-//        Texture textura=new Texture(pm);
-//        for(Vector2 point:path)
-//        {
-//            batch.draw(textura,point.x*Constants.GRID_RESIZE_X+Constants.GRID_RESIZE_X/2-25,point.y*Constants.GRID_RESIZE_Y+Constants.GRID_RESIZE_Y/2-25);
-//        }
-//        textura.dispose();
-//        pm.dispose();
+        update();
     }
 
     public void addScore() {
@@ -178,11 +244,10 @@ public class ControllerGame {
 
     public void update() {
         for (Enemy enemy : enemies) {
-            if(enemy.getX()>Gdx.graphics.getWidth())
-            {
+            if (enemy.getX() > Gdx.graphics.getWidth()) {
                 life--;
                 enemy.dispose();
-                enemies.removeValue(enemy,false);
+                enemies.removeValue(enemy, false);
             }
         }
     }

@@ -49,15 +49,10 @@ public class PantallaBase implements Screen
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         font.getData().setScale(scale);
     }
-    
-    protected void addButton(Button btn, int x, int y, int width, int height){
-        btn.setWidth(width);
-        btn.setHeight(height);
-        btn.setPosition(x, y);
-    }
+
     @Override
     public void show() {
-        Gdx.gl.glClearColor(0,1,0,1);
+        Gdx.gl.glClearColor(0,0,0,1);
     }
 
     @Override

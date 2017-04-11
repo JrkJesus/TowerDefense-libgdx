@@ -3,7 +3,10 @@ package com.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.towerdeffense.ControllerGame;
+import com.util.Constants;
+import com.util.Tuple;
 
 
 /**
@@ -14,8 +17,8 @@ public class Map {
 
     private Tile[] map;
 
-    public Map(){
-        map=GENERATEMAP();
+    public Map() {
+        map = GENERATEMAP();
     }
 
     public void update(ControllerGame control) {
@@ -180,10 +183,52 @@ public class Map {
         return map;
     }
 
+
+    public int upgradeCost(int position) {
+        return map[position].upgradeCost();
+    }
+
+    public Tuple<Vector2, Boolean, Integer> verifyTouch() {
+        Tuple<Vector2, Boolean, Integer> posicionBotones = null;
+        if (Gdx.input.justTouched()) {
+            int posX = Gdx.input.getX() / Constants.GRID_RESIZE_X,
+                    posY = (Gdx.graphics.getHeight()-Gdx.input.getY()) / Constants.GRID_RESIZE_Y,
+                    x = posX,
+                    y = posY;
+            int position = ((Gdx.input.getX() / Constants.GRID_RESIZE_X) * Constants.GRID_HEIGH) + (Gdx.input.getY() / Constants.GRID_RESIZE_Y);
+            if (map[position].isBuildeable()) {
+                if (posX == 0) {
+                    x++;
+                } else if (posX == Constants.GRID_WIDTH-1) {
+                    x--;
+                }
+                if (posY == Constants.GRID_HEIGH-1) {
+                    y -= 2;
+                }
+                posicionBotones = new Tuple<Vector2, Boolean, Integer>(new Vector2(x, y), map[position].isUpgreadable(), position);
+            }
+        }
+
+
+        return posicionBotones;
+    }
+
+
     public void dispose() {
-        for (Tile tile: map)
-        {
+        for (Tile tile : map) {
             tile.dispose();
         }
+    }
+
+    public void lvlUpTurret(ControllerGame c, int lastTouchPosition) {
+        map[lastTouchPosition].lvlUp(c);
+    }
+
+    public void sellTurret(ControllerGame c, int lastTouchPosition) {
+        map[lastTouchPosition].sell(c);
+    }
+
+    public void buildTurret(Texture[] t,int lastTouchPosition, int type) {
+        map[lastTouchPosition].buildTurret(t,type);
     }
 }
