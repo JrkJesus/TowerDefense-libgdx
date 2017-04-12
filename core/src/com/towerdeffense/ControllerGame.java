@@ -33,7 +33,9 @@ public class ControllerGame {
             antiTank,
             missiles,
             machineGun;
-    private Texture btn1, btn2, btn3;
+    private Texture btn1,
+            btn2,
+            btn3;
 
     public ControllerGame(int wave, int dificulty) {
         path = Constants.PATH_FASE1();
@@ -265,5 +267,16 @@ public class ControllerGame {
             enemy.dispose();
         }
         mapa.dispose();
+        for (int i = 0; i < 2; i++) {
+            people[i].dispose();
+            tank[i].dispose();
+            plane[i].dispose();
+        }
+        for (int i = 0; i < 3; i++) {
+            antiTank[i].dispose();
+            missiles[i].dispose();
+            machineGun[i].dispose();
+        }
+        deleteBtns();
     }
 }
