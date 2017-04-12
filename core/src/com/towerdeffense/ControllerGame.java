@@ -40,7 +40,7 @@ public class ControllerGame {
         initTextures();
         this.dificulty = dificulty;
         score = 0;
-        money = 150;
+        money = 50;
         life = 25 - 5 * (dificulty - 1);
         lastTouch = null;
         enemies = new Array<Enemy>();
@@ -100,31 +100,33 @@ public class ControllerGame {
     }
 
 
-    public void verifyButtonPress(int deltaTime) {
-        if (Gdx.input.justTouched() && deltaTime > 100) {
-            System.out.println("Acaba de tocar");
+    public void verifyButtonPress() {
+        if (Gdx.input.justTouched()) {
             int posX = Gdx.input.getX() / Constants.GRID_RESIZE_X,
                     posY = Gdx.input.getY() / Constants.GRID_RESIZE_Y;
             if (btn2 == null) { //Estamos mejorando torre
-                if (posX - 1 == lastTouch.x && posY + 1 == lastTouch.y) {
+                if (posX== lastTouch.x - 1  && posY == lastTouch.y + 1) {
                     if (mapa.upgradeCost(lastTouchPosition) <= money) {
                         mapa.lvlUpTurret(this, lastTouchPosition);
                     }
-                } else if (posX + 1 == lastTouch.x && posY + 1 == lastTouch.y) {
+                } else if (posX == lastTouch.x + 1 && posY == lastTouch.y + 1 ) {
                     mapa.sellTurret(this, lastTouchPosition);
                 }
             } else { //Estamos construyendo torre
-                if (posX - 1 == lastTouch.x && posY + 1 == lastTouch.y) {
+                if (posX == lastTouch.x - 1 && posY == lastTouch.y + 1) {
                     if (Constants.MACHINE_COST <= money) {
                         mapa.buildTurret(machineGun, lastTouchPosition, Constants.MACHINEGUN);
+                        money -= Constants.MACHINE_COST;
                     }
-                } else if (posX == lastTouch.x && posY + 1 == lastTouch.y) {
+                } else if (posX == lastTouch.x && posY == lastTouch.y + 1 ) {
                     if (Constants.PLANE_COST <= money) {
                         mapa.buildTurret(missiles, lastTouchPosition, Constants.ANTIAIR);
+                        money -= Constants.PLANE_COST;
                     }
-                } else if (posX == lastTouch.x && posY + 1 == lastTouch.y) {
+                } else if (posX == lastTouch.x + 1 && posY == lastTouch.y + 1 ) {
                     if (Constants.TANK_COST <= money) {
                         mapa.buildTurret(antiTank, lastTouchPosition, Constants.ANTITANK);
+                        money -= Constants.TANK_COST;
                     }
                 }
             }
@@ -135,12 +137,19 @@ public class ControllerGame {
     public void deleteBtns() {
         lastTouch = null;
         lastTouchPosition = -1;
-        btn1.dispose();
-        btn2.dispose();
-        btn3.dispose();
-        btn1 = null;
-        btn2 = null;
-        btn3 = null;
+        if(btn1 != null){
+            btn1.dispose();
+            btn1 = null;
+        }
+        if(btn2 != null){
+            btn2.dispose();
+            btn2 = null;
+        }
+        if(btn3 != null){
+            btn3.dispose();
+            btn3 = null;
+        }
+
         deltaTime=0;
     }
 
@@ -150,7 +159,6 @@ public class ControllerGame {
             lastTouch = posicionBotones.item1;
             lastTouchPosition = posicionBotones.item3;
             if (posicionBotones.item2) {    //Mejora
-                System.out.println("Mejorando");
                 if (mapa.upgradeCost(posicionBotones.item3) < money) {
                     btn1 = new Texture(Gdx.files.internal("Buttons\\levelUp.png"));
                 } else {
@@ -159,7 +167,6 @@ public class ControllerGame {
                 btn2 = null;
                 btn3 = new Texture(Gdx.files.internal("Buttons\\sell.png"));
             } else {                        //Construccion
-                System.out.println("Construyendo");
                 if (Constants.MACHINE_COST <= money) {
                     btn1 = new Texture(Gdx.files.internal("Buttons\\btnMachineGun.png"));
                 } else {
@@ -184,25 +191,26 @@ public class ControllerGame {
         mapa.draw(batch);
         if (lastTouch == null) {
             verifyTouch();
-            if (btn1 != null) {
-                batch.draw(btn1, (lastTouch.x - 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
-            }
-            if (btn2 != null) {
-                batch.draw(btn2, (lastTouch.x) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
-            }
-            if (btn3 != null) {
-                batch.draw(btn3, (lastTouch.x + 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
-            }
         } else {
-            deltaTime+=Gdx.graphics.getDeltaTime();
-            verifyButtonPress(deltaTime);
+            verifyButtonPress();
         }
-        if (lastTouch != null)
-            System.out.println("LastTouch.X:" + (lastTouch.x) * Constants.GRID_RESIZE_X + "  LastTouch.Y:" + (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
+
         for (Enemy enemy : enemies) {
             enemy.draw(batch);
         }
         update();
+
+        if (btn1 != null) {
+            batch.draw(btn1, (lastTouch.x - 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
+        }
+        if (btn2 != null) {
+            batch.draw(btn2, (lastTouch.x) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
+        }
+        if (btn3 != null) {
+            batch.draw(btn3, (lastTouch.x + 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
+        }
+
+
     }
 
     public void addScore() {

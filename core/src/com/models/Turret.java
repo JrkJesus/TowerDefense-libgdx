@@ -42,21 +42,21 @@ public class Turret extends Sprite {
         int altura = Gdx.graphics.getHeight();
         switch (tipo) {
             case Constants.ANTIAIR:
-                rango = altura / 6;
+                rango = 3;
                 damage = 1;
                 attackSpeed = 2;
                 buildCost = Constants.PLANE_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.ANTITANK:
-                rango = altura / 12;
+                rango = 1;
                 damage = 3;
                 attackSpeed = 4;
                 buildCost = Constants.TANK_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.MACHINEGUN:
-                rango = altura / 10;
+                rango = 2;
                 damage = 1;
                 attackSpeed = 2;
                 buildCost = Constants.MACHINE_COST;
@@ -64,7 +64,7 @@ public class Turret extends Sprite {
                 break;
         }
         isSelected = false;
-        pixmap = new Pixmap(rango * 2, rango * 2, Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(rango * Constants.GRID_RESIZE_X * 2, rango * Constants.GRID_RESIZE_Y * 2, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.BLACK);
         pixmap.drawCircle(pixmap.getWidth() / 2, pixmap.getHeight() / 2, pixmap.getHeight() / 2 - 1);
         circuloRango = new Texture(pixmap);
@@ -85,11 +85,11 @@ public class Turret extends Sprite {
     }
 
     public int x() {
-        return (int) getX() / (int) Constants.GRID_RESIZE_X;
+        return (int) getX() / Constants.GRID_RESIZE_X;
     }
 
     public int y() {
-        return (int) getY() / (int) Constants.GRID_RESIZE_Y;
+        return (int) getY() / Constants.GRID_RESIZE_Y;
     }
 
     private boolean reachable(Enemy enemy) {
@@ -97,7 +97,8 @@ public class Turret extends Sprite {
                 && enemy.getType() % type == 0
                 && enemy.getX() >= 0
                 && enemy.getX() < Gdx.graphics.getWidth()
-                && Math.sqrt((enemy.getX() - getX()) * (enemy.getX() - getX()) + (enemy.getY() - getY()) * (enemy.getY() - getY())) < rango;
+                && (enemy.getX() - getX())/Constants.GRID_RESIZE_X == rango
+                && (enemy.getY() - getY())/Constants.GRID_RESIZE_Y == rango;
     }
 
     public boolean shootable()  {
@@ -108,9 +109,9 @@ public class Turret extends Sprite {
     public void draw(Batch batch) {
 
         super.draw(batch);
-        if (isSelected) {
+//        if (isSelected) {
             batch.draw(circuloRango, getX() - rango + (Constants.GRID_RESIZE_X / 2), getY() - rango + (Constants.GRID_RESIZE_Y / 2));
-        }
+//        }
     }
 
     public void dispose() {

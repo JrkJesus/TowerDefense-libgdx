@@ -19,6 +19,7 @@ public class PantallaJuego extends PantallaBase {
     private ControllerGame player;
     private Texture winner, loser, circle;
     private Map map;
+    private Pixmap pixmap;
 
     public PantallaJuego(MainTowerDeffense _mtd) {
         super(_mtd);
@@ -29,7 +30,15 @@ public class PantallaJuego extends PantallaBase {
         winner = new Texture(Gdx.files.internal("Textures\\winner.png"));
         loser = new Texture(Gdx.files.internal("Textures\\loser.png"));
         font.getData().setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
-
+        pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK);
+        for (int i = 0; i < Constants.GRID_WIDTH; i++) {
+            pixmap.drawLine(Constants.GRID_RESIZE_X*i, 0, Constants.GRID_RESIZE_X*i, height);
+        }
+        for (int i = 0; i < Constants.GRID_HEIGH; i++) {
+            pixmap.drawLine(0, height-Constants.GRID_RESIZE_Y*i, width, height-Constants.GRID_RESIZE_Y*i);
+        }
+        circle = new Texture(pixmap);
     }
 
     @Override
@@ -49,6 +58,7 @@ public class PantallaJuego extends PantallaBase {
         } else {
             player.draw(mtd.batch);
         }
+        mtd.batch.draw(circle, 0, 0);
         mtd.batch.end();
     }
 

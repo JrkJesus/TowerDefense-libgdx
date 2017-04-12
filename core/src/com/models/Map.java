@@ -80,7 +80,7 @@ public class Map {
                 new Tile(new Texture(Gdx.files.internal("Paths\\left.png")), 4, 6, true),
                 new Tile(new Texture(Gdx.files.internal("Paths\\ground.png")), 4, 7, false),
 
-                new Tile(new Texture(Gdx.files.internal("Paths\\giro.png")), 5, 0, false),
+                new Tile(new Texture(Gdx.files.internal("Paths\\giro.png")), 5, 0,true),
                 new Tile(new Texture(Gdx.files.internal("Paths\\up.png")), 5, 1, true),
                 new Tile(new Texture(Gdx.files.internal("Paths\\up.png")), 5, 2, true),
                 new Tile(new Texture(Gdx.files.internal("Paths\\giro.png")), 5, 3, true),
@@ -172,13 +172,13 @@ public class Map {
                 new Tile(new Texture(Gdx.files.internal("Paths\\ground.png")), 14, 7, false),
         };
 
-        map[3 * 8 + 6].rotate(180);
-        map[6 * 8 + 6].rotate(90);
-        map[5 * 8 + 3].rotate(180);
-        map[5 * 8].rotate(270);
-        map[9 * 8 + 7].rotate(180);
-        map[12 * 8 + 7].rotate(90);
-        map[12 * 8 + 2].rotate(270);
+        map[3 * Constants.GRID_HEIGH + 6].rotate(180);
+        map[6 * Constants.GRID_HEIGH  + 6].rotate(90);
+        map[5 * Constants.GRID_HEIGH  + 3].rotate(180);
+        map[5 * Constants.GRID_HEIGH ].rotate(270);
+        map[9 * Constants.GRID_HEIGH  + 7].rotate(180);
+        map[12 * Constants.GRID_HEIGH  + 7].rotate(90);
+        map[12 * Constants.GRID_HEIGH  + 2].rotate(270);
 
         return map;
     }
@@ -195,7 +195,7 @@ public class Map {
                     posY = (Gdx.graphics.getHeight()-Gdx.input.getY()) / Constants.GRID_RESIZE_Y,
                     x = posX,
                     y = posY;
-            int position = ((Gdx.input.getX() / Constants.GRID_RESIZE_X) * Constants.GRID_HEIGH) + (Gdx.input.getY() / Constants.GRID_RESIZE_Y);
+            int position = x * Constants.GRID_HEIGH + y;
             if (map[position].isBuildeable()) {
                 if (posX == 0) {
                     x++;

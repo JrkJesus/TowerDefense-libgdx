@@ -14,12 +14,15 @@ public class Tile extends Sprite {
 
     private boolean road;
     private Turret turret;
+    private int x, y;
 
     public Tile(Texture texture, int gridX, int gridY, boolean road) {
         super(texture);
         setPosition(gridX * Constants.GRID_RESIZE_X, gridY * Constants.GRID_RESIZE_Y);
         setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
         this.road = road;
+        x = gridX;
+        y = gridY;
     }
 
     @Override
