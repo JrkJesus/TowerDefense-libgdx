@@ -42,7 +42,7 @@ public class ControllerGame {
         initTextures();
         this.dificulty = dificulty;
         score = 0;
-        money = 50;
+        money = 1000;
         life = 25 - 5 * (dificulty - 1);
         lastTouch = null;
         enemies = new Array<Enemy>();
@@ -105,7 +105,7 @@ public class ControllerGame {
     public void verifyButtonPress() {
         if (Gdx.input.justTouched()) {
             int posX = Gdx.input.getX() / Constants.GRID_RESIZE_X,
-                    posY = Gdx.input.getY() / Constants.GRID_RESIZE_Y;
+                    posY =  (Gdx.graphics.getHeight() - Gdx.input.getY() ) / Constants.GRID_RESIZE_Y;
             if (btn2 == null) { //Estamos mejorando torre
                 if (posX== lastTouch.x - 1  && posY == lastTouch.y + 1) {
                     if (mapa.upgradeCost(lastTouchPosition) <= money) {
@@ -256,7 +256,7 @@ public class ControllerGame {
         for (Enemy enemy : enemies) {
             if (enemy.getX() > Gdx.graphics.getWidth()) {
                 life--;
-                enemy.dispose();
+               // enemy.dispose();
                 enemies.removeValue(enemy, false);
             }
         }

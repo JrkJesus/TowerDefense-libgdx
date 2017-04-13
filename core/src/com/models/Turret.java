@@ -71,12 +71,15 @@ public class Turret extends Sprite {
     }
 
     public void shoot(ControllerGame control) {
+        System.out.println("Try shoot");
         Array<Enemy> enemies = control.getEnemies();
         int n = enemies.size;
         int i = 0;
-        while (i < n && reachable(enemies.get(i++))) ;
+        while (i < n && !reachable(enemies.get(i++)))
+            System.out.println(reachable(enemies.get(i-1)));
 
         if (i < n) {
+            System.out.println("Shoot");
             enemies.get(i).receiveDamage(control,damage);
             reload = attackSpeed;
             this.setRotation((float) (Math.atan2(enemies.get(i).y() - y(), enemies.get(i).x() - x())) * MathUtils.radiansToDegrees);
@@ -93,12 +96,21 @@ public class Turret extends Sprite {
     }
 
     private boolean reachable(Enemy enemy) {
-        return enemy.getDeadTime() == 0
-                && enemy.getType() % type == 0
+        return  enemy.getType() % type == 0
+                && enemy.getDeadTime() == 0
                 && enemy.getX() >= 0
                 && enemy.getX() < Gdx.graphics.getWidth()
-                && (enemy.getX() - getX())/Constants.GRID_RESIZE_X == rango
-                && (enemy.getY() - getY())/Constants.GRID_RESIZE_Y == rango;
+                && isNeighbour(enemy, rango);
+    }
+
+    private boolean isNeighbour(Enemy enemy, int rango) {
+        int enemyX = (int) (enemy.getX() / Constants.GRID_RESIZE_X),
+                enemyY = (int) (enemy.getY() / Constants.GRID_RESIZE_Y),
+                x = (int) (getX() / Constants.GRID_RESIZE_X),
+                y = (int) (getY() / Constants.GRID_RESIZE_Y);
+
+        return ( Math.abs(enemyX - x)  <= rango ||
+                Math.abs(enemyY - y)  <= rango );
     }
 
     public boolean shootable()  {
@@ -124,7 +136,6 @@ public class Turret extends Sprite {
 
     public int lvlUp(){
         setTexture(texturas[nivel++]);
-        rango+=rango*0.1;
         attackSpeed-=attackSpeed*0.15;
         damage += (type == Constants.ANTITANK) ? 3 : 1;
         pixmap.dispose();
