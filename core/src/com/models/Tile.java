@@ -47,11 +47,8 @@ public class Tile extends Sprite {
     }
 
     public void update(ControllerGame control) {
-        System.out.println("Tile try shoot");
-        if (turret != null && turret.shootable())
+        if (turret != null )
             turret.shoot(control);
-        System.out.println("Turret " + turret != null);
-        if (turret != null) System.out.println("Shoot " + turret.shootable());
     }
 
     @Override

@@ -258,6 +258,8 @@ public class ControllerGame {
                 life--;
                // enemy.dispose();
                 enemies.removeValue(enemy, false);
+            } else if (enemy.getDeadTime() > 5){
+                enemies.removeValue(enemy, false);
             }
         }
     }

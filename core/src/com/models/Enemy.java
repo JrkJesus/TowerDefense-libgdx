@@ -54,6 +54,7 @@ public class Enemy extends Sprite {
                 break;
         }
         this.path = path;
+        deadTime = 0;
     }
 
     public void dispose() {
@@ -91,12 +92,14 @@ public class Enemy extends Sprite {
     }
 
     public void receiveDamage(ControllerGame control,int dmg) {
+        System.out.println("Daño");
         this.life -= dmg;
         if (life <= 0) {
             this.setTexture(dead);
             control.addMoney(valor);
             control.addScore(valor);
         }
+        System.out.println("Life: "  + life);
     }
 
     public int x(){
@@ -113,5 +116,9 @@ public class Enemy extends Sprite {
 
     public int getType() {
         return tipo;
+    }
+
+    public int getLife() {
+        return life;
     }
 }

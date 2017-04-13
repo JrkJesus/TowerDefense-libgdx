@@ -26,8 +26,6 @@ public class Turret extends Sprite {
             nivel,
             damage,
             type;
-    private float attackSpeed,
-            reload;
     private boolean isSelected;
     private Pixmap pixmap;
     private Texture circuloRango;
@@ -37,28 +35,28 @@ public class Turret extends Sprite {
         super(t[0]);
         setPosition(x, y);
         setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
-        nivel=1;
+        nivel = 1;
         texturas = t;
         int altura = Gdx.graphics.getHeight();
         switch (tipo) {
             case Constants.ANTIAIR:
                 rango = 3;
-                damage = 1;
-                attackSpeed = 2;
+                damage = 10;
+//                attackSpeed = 2;
                 buildCost = Constants.PLANE_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.ANTITANK:
                 rango = 1;
-                damage = 3;
-                attackSpeed = 4;
+                damage = 30;
+//                attackSpeed = 4;
                 buildCost = Constants.TANK_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.MACHINEGUN:
                 rango = 2;
-                damage = 1;
-                attackSpeed = 2;
+                damage = 10;
+//                attackSpeed = 2;
                 buildCost = Constants.MACHINE_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
@@ -68,20 +66,18 @@ public class Turret extends Sprite {
         pixmap.setColor(Color.BLACK);
         pixmap.drawCircle(pixmap.getWidth() / 2, pixmap.getHeight() / 2, pixmap.getHeight() / 2 - 1);
         circuloRango = new Texture(pixmap);
+        type = tipo;
     }
 
     public void shoot(ControllerGame control) {
-        System.out.println("Try shoot");
         Array<Enemy> enemies = control.getEnemies();
         int n = enemies.size;
         int i = 0;
-        while (i < n && !reachable(enemies.get(i++)))
-            System.out.println(reachable(enemies.get(i-1)));
-
-        if (i < n) {
+        while (i < n && !reachable(enemies.get(i++))) ;
+        i--;
+        if (n > 0 && (i < n - 1 || (i == n - 1 && reachable(enemies.get(i))))) {
             System.out.println("Shoot");
-            enemies.get(i).receiveDamage(control,damage);
-            reload = attackSpeed;
+            enemies.get(i).receiveDamage(control, damage);
             this.setRotation((float) (Math.atan2(enemies.get(i).y() - y(), enemies.get(i).x() - x())) * MathUtils.radiansToDegrees);
             bullet = new Projectile(new Texture(Gdx.files.internal("Textures\\proyectil" + type + ".png")), new Vector2(getX(), getY()), new Vector2(enemies.get(i).getX(), enemies.get(i).getY()));
         }
@@ -96,8 +92,8 @@ public class Turret extends Sprite {
     }
 
     private boolean reachable(Enemy enemy) {
-        return  enemy.getType() % type == 0
-                && enemy.getDeadTime() == 0
+        return enemy.getType() % type == 0
+                && enemy.getLife() > 0
                 && enemy.getX() >= 0
                 && enemy.getX() < Gdx.graphics.getWidth()
                 && isNeighbour(enemy, rango);
@@ -109,12 +105,12 @@ public class Turret extends Sprite {
                 x = (int) (getX() / Constants.GRID_RESIZE_X),
                 y = (int) (getY() / Constants.GRID_RESIZE_Y);
 
-        return ( Math.abs(enemyX - x)  <= rango ||
-                Math.abs(enemyY - y)  <= rango );
+        return (Math.abs(enemyX - x) <= rango &&
+                Math.abs(enemyY - y) <= rango );
     }
 
-    public boolean shootable()  {
-        return (bullet != null && !bullet.isHundido());
+    public boolean shootable() {
+        return (bullet != null && bullet.isHundido());
     }
 
     @Override
@@ -122,7 +118,7 @@ public class Turret extends Sprite {
 
         super.draw(batch);
 //        if (isSelected) {
-            batch.draw(circuloRango, getX() - rango + (Constants.GRID_RESIZE_X / 2), getY() - rango + (Constants.GRID_RESIZE_Y / 2));
+//        batch.draw(circuloRango, getX() - rango + (Constants.GRID_RESIZE_X / 2), getY() - rango + (Constants.GRID_RESIZE_Y / 2));
 //        }
     }
 
@@ -134,18 +130,17 @@ public class Turret extends Sprite {
             bullet.dispose();
     }
 
-    public int lvlUp(){
+    public int lvlUp() {
         setTexture(texturas[nivel++]);
-        attackSpeed-=attackSpeed*0.15;
         damage += (type == Constants.ANTITANK) ? 3 : 1;
         pixmap.dispose();
         circuloRango.dispose();
-        pixmap = new Pixmap(rango*2, rango*2, Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(rango * 2, rango * 2, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.BLACK);
-        pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
+        pixmap.drawCircle(pixmap.getWidth() / 2, pixmap.getHeight() / 2, pixmap.getHeight() / 2 - 1);
         circuloRango = new Texture(pixmap);
 
-        return upgradeCost + buildCost*(nivel-2);
+        return upgradeCost + buildCost * (nivel - 2);
     }
 
     public int getLvl() {
@@ -154,17 +149,17 @@ public class Turret extends Sprite {
 
     public int getValue() {
         int value = buildCost;
-        if(nivel<3){
-            value += upgradeCost + buildCost*(nivel-2);
+        if (nivel < 3) {
+            value += upgradeCost + buildCost * (nivel - 2);
         }
-        if(nivel<2) {
+        if (nivel < 2) {
             value += upgradeCost;
         }
-        return (int) (value/3.5f);
+        return (int) (value / 3.5f);
     }
 
     public int getUpgradeCost() {
-        return upgradeCost + buildCost*(nivel-2);
+        return upgradeCost + buildCost * (nivel - 2);
     }
 
 }
