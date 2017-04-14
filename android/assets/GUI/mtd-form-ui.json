@@ -1,0 +1,59 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	font: {
+		file: font-export.fnt
+	}
+	title: {
+		file: font-title-export.fnt
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	background: {
+		r: 0.7484462
+		g: 0.64666665
+		b: 1
+		a: 1
+	}
+	black: {
+		r: 0
+		g: 0
+		b: 0
+		a: 1
+	}
+	color: {
+		r: 0.98611116
+		g: 0
+		b: 1
+		a: 1
+	}
+	pressed: {
+		r: 0.985234
+		g: 0.5
+		b: 1
+		a: 1
+	}
+	selection: {
+		r: 0
+		g: 0.4897771
+		b: 1
+		a: 1
+	}
+	touch-cursor: {
+		r: 0
+		g: 0
+		b: 0
+		a: 1
+	}
+	white: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+	window: {
+		r: 0.40784314
+		g: 0
+		b: 0.7176471
+		a: 1
+	}
+}

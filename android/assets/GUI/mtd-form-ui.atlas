@@ -1,0 +1,83 @@
+
+mtd-form-ui.png
+size: 1024, 256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+dificulty-easy
+  rotate: false
+  xy: 0, 0
+  size: 207, 66
+  orig: 207, 207
+  offset: 0, 0
+  index: -1
+dificulty-medium
+  rotate: false
+  xy: 0, 69
+  size: 207, 66
+  orig: 207, 207
+  offset: 0, 0
+  index: -1
+dificulty-hard
+  rotate: false
+  xy: 0, 137
+  size: 207, 66
+  orig: 207, 207
+  offset: 0, 0
+  index: -1
+back
+  rotate: false
+  xy: 210, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+sound-off
+  rotate: false
+  xy: 213, 78
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+reload
+  rotate: false
+  xy: 209, 139
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+setting-selected
+  rotate: false
+  xy: 270, 2
+  size: 309, 76
+  orig: 309, 76
+  offset: 0, 0
+  index: -1
+sound-on
+  rotate: false
+  xy: 271, 80
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+setting
+  rotate: false
+  xy: 579, 2
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
+leaderboard
+  rotate: false
+  xy: 318, 78 
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+leaderboard
+  rotate: false
+  xy: 318, 78 
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

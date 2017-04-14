@@ -97,12 +97,6 @@ public class ControllerGame {
 
     public void drawInterface(Batch batch){
         font.draw(batch, "Vidas: " + Integer.toString(getLife()) + "\tDinero: " + Integer.toString(getMoney()) + "\tPuntuacion: " + Integer.toString(getScore()), 25, Gdx.graphics.getHeight()-2);
-//        font.draw(batch, , 25, Gdx.graphics.getHeight() - 130);
-//        font.draw(batch, , 25, Gdx.graphics.getHeight() - 160);
-
-
-
-
     }
 
 
