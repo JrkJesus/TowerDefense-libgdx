@@ -19,7 +19,7 @@ import com.util.Constants;
 public class Enemy extends Sprite {
 
     private Texture dead;
-    private int tipo,
+    private int type,
             life,
             movSpeed,
             valor,
@@ -30,31 +30,32 @@ public class Enemy extends Sprite {
 
 
     //FUNCTIONS
-    public Enemy(Texture[] t, int type, Array<Vector2> path, int initialPos) {
+    public Enemy(Texture[] t, int tipo, Array<Vector2> path, int initialPos) {
         super(t[0]);
         setPosition(-initialPos, path.get(0).y*Constants.GRID_RESIZE_Y);
         setScale(Constants.ESCALA_X,Constants.ESCALA_Y);
         speed = new Vector2();
         dead = t[1];
-        switch (type) {
+        switch (tipo) {
             case Constants.PLANE:
                 life = 3;
-                movSpeed = 50;
+                movSpeed = 100;
                 valor = 10;
                 break;
             case Constants.PEOPLE:
                 life = 3;
-                movSpeed = 75;
+                movSpeed = 125;
                 valor = 5;
                 break;
             case Constants.TANK:
                 life = 9;
-                movSpeed = 40;
+                movSpeed = 75;
                 valor = 10;
                 break;
         }
         this.path = path;
         deadTime = 0;
+        type=tipo;
     }
 
     public void dispose() {
@@ -116,7 +117,7 @@ public class Enemy extends Sprite {
     }
 
     public int getType() {
-        return tipo;
+        return type;
     }
 
     public int getLife() {

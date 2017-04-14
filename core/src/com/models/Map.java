@@ -31,6 +31,8 @@ public class Map {
         Projectile b;
         for (Tile tile : map) {
             tile.draw(batch);
+        }
+        for (Tile tile : map) {
             if(tile.getTurret()!=null){
                 b=tile.getTurret().getBullet();
                 if(b!=null && !b.isHundido()){

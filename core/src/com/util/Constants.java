@@ -31,6 +31,8 @@ public final class Constants {
     public final static int PLANE_COST=75;
     public final static int TANK_COST=100;
 
+    public static final int INITIAL_MONEY = 125;
+
     public static float ESCALA_X = 1;
     public static float ESCALA_Y = 1;
     public static int GRID_RESIZE_X = 128;

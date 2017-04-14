@@ -25,7 +25,8 @@ public class Turret extends Sprite {
             upgradeCost,
             nivel,
             damage,
-            type;
+            type,
+            attackSpeed;
     private boolean isSelected;
     private Pixmap pixmap;
     private Texture circuloRango;
@@ -37,26 +38,25 @@ public class Turret extends Sprite {
         setScale(Constants.ESCALA_X, Constants.ESCALA_Y);
         nivel = 1;
         texturas = t;
-        int altura = Gdx.graphics.getHeight();
         switch (tipo) {
             case Constants.ANTIAIR:
                 rango = 3;
-                damage = 10;
-//                attackSpeed = 2;
+                damage = 1;
+                attackSpeed = 4;
                 buildCost = Constants.PLANE_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.ANTITANK:
                 rango = 1;
-                damage = 30;
-//                attackSpeed = 4;
+                damage = 3;
+                attackSpeed = 2;
                 buildCost = Constants.TANK_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
             case Constants.MACHINEGUN:
                 rango = 2;
-                damage = 10;
-//                attackSpeed = 2;
+                damage = 1;
+                attackSpeed = 2;
                 buildCost = Constants.MACHINE_COST;
                 upgradeCost = (int) (buildCost * .75);
                 break;
@@ -91,7 +91,7 @@ public class Turret extends Sprite {
             this.setRotation((float) (Math.atan2(e.y() - y(), e.x() - x())) * MathUtils.radiansToDegrees);
             bullet = new Projectile(new Texture(Gdx.files.internal("Textures\\proyectil" + type + ".png")),
                     new Vector2(getX() + getTexture().getWidth() / 2, getY() + getTexture().getHeight() / 2),
-                    new Vector2(e.getX() + e.getWidth() / 2, e.getY() + e.getHeight()/2));
+                    new Vector2(e.getX() + e.getWidth() / 2, e.getY() + e.getHeight()/2),attackSpeed);
         }
     }
 

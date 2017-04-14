@@ -17,7 +17,7 @@ public class Projectile extends Sprite {
     private float angle, movSpeed;
     private boolean hundido;
 
-    public Projectile(Texture t, Vector2 initialPos, Vector2 target) {
+    public Projectile(Texture t, Vector2 initialPos, Vector2 target, int velocidad) {
         super(t);
         setPosition(initialPos.x-getWidth()/2, initialPos.y-getHeight()/2);
         this.target = new Vector2(target.x-getWidth()/2,target.y-getHeight()/2);
@@ -25,7 +25,7 @@ public class Projectile extends Sprite {
         setRotation(angle * MathUtils.radiansToDegrees);
         hundido = false;
         speed=new Vector2();
-        movSpeed=500;
+        movSpeed=100*velocidad;
     }
 
     public boolean isHundido() {

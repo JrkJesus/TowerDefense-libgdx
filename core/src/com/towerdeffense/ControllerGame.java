@@ -1,6 +1,8 @@
 package com.towerdeffense;
 
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,13 +38,15 @@ public class ControllerGame {
     private Texture btn1,
             btn2,
             btn3;
+    private final BitmapFont font;
+
 
     public ControllerGame(int wave, int dificulty) {
         path = Constants.PATH_FASE1();
         initTextures();
         this.dificulty = dificulty;
         score = 0;
-        money = 1000;
+        money = Constants.INITIAL_MONEY;
         life = 25 - 5 * (dificulty - 1);
         lastTouch = null;
         enemies = new Array<Enemy>();
@@ -51,6 +55,9 @@ public class ControllerGame {
         newWave(dificulty);
         lastTouchPosition = -1;
         deltaTime=0;
+
+        font = new BitmapFont(Gdx.files.internal("GUI\\font-title-export.fnt"), Gdx.files.internal("GUI\\font-title-export.png"), false);
+        font.setColor(Color.YELLOW);
     }
 
     public ControllerGame(int dificulty) {
@@ -87,6 +94,17 @@ public class ControllerGame {
         };
 
     }
+
+    public void drawInterface(Batch batch){
+        font.draw(batch, "Vidas: " + Integer.toString(getLife()) + "\tDinero: " + Integer.toString(getMoney()) + "\tPuntuacion: " + Integer.toString(getScore()), 25, Gdx.graphics.getHeight()-2);
+//        font.draw(batch, , 25, Gdx.graphics.getHeight() - 130);
+//        font.draw(batch, , 25, Gdx.graphics.getHeight() - 160);
+
+
+
+
+    }
+
 
     public void newWave(int dificulty) {
         for (int i = 0; i < 5 + (wave * 2 / 5) * dificulty; i++) {
@@ -196,12 +214,11 @@ public class ControllerGame {
         } else {
             verifyButtonPress();
         }
-
         for (Enemy enemy : enemies) {
             enemy.draw(batch);
         }
         update();
-
+        drawInterface(batch);
         if (btn1 != null) {
             batch.draw(btn1, (lastTouch.x - 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
         }
@@ -212,6 +229,9 @@ public class ControllerGame {
             batch.draw(btn3, (lastTouch.x + 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
         }
 
+        if(enemies.size==0){
+            newWave(dificulty);
+        }
 
     }
 
