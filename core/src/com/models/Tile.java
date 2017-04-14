@@ -47,8 +47,8 @@ public class Tile extends Sprite {
     }
 
     public void update(ControllerGame control) {
-        if (turret != null )
-            turret.shoot(control);
+        if (turret != null)
+            turret.update(control);
     }
 
     @Override
@@ -79,4 +79,7 @@ public class Tile extends Sprite {
         return turret.getUpgradeCost();
     }
 
+    public Turret getTurret() {
+        return turret;
+    }
 }

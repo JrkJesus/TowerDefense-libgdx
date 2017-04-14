@@ -69,17 +69,29 @@ public class Turret extends Sprite {
         type = tipo;
     }
 
+    public void update(ControllerGame control) {
+        if (shootable()) {
+            shoot(control);
+        } else {
+            bullet.nextStep(Gdx.graphics.getDeltaTime());
+        }
+    }
+
     public void shoot(ControllerGame control) {
         Array<Enemy> enemies = control.getEnemies();
         int n = enemies.size;
         int i = 0;
         while (i < n && !reachable(enemies.get(i++))) ;
         i--;
+        //
         if (n > 0 && (i < n - 1 || (i == n - 1 && reachable(enemies.get(i))))) {
+            Enemy e = enemies.get(i);
             System.out.println("Shoot");
-            enemies.get(i).receiveDamage(control, damage);
-            this.setRotation((float) (Math.atan2(enemies.get(i).y() - y(), enemies.get(i).x() - x())) * MathUtils.radiansToDegrees);
-            bullet = new Projectile(new Texture(Gdx.files.internal("Textures\\proyectil" + type + ".png")), new Vector2(getX(), getY()), new Vector2(enemies.get(i).getX(), enemies.get(i).getY()));
+            e.receiveDamage(control, damage);
+            this.setRotation((float) (Math.atan2(e.y() - y(), e.x() - x())) * MathUtils.radiansToDegrees);
+            bullet = new Projectile(new Texture(Gdx.files.internal("Textures\\proyectil" + type + ".png")),
+                    new Vector2(getX() + getTexture().getWidth() / 2, getY() + getTexture().getHeight() / 2),
+                    new Vector2(e.getX() + e.getWidth() / 2, e.getY() + e.getHeight()/2));
         }
     }
 
@@ -100,26 +112,26 @@ public class Turret extends Sprite {
     }
 
     private boolean isNeighbour(Enemy enemy, int rango) {
-        int enemyX = (int) (enemy.getX() / Constants.GRID_RESIZE_X),
-                enemyY = (int) (enemy.getY() / Constants.GRID_RESIZE_Y),
-                x = (int) (getX() / Constants.GRID_RESIZE_X),
-                y = (int) (getY() / Constants.GRID_RESIZE_Y);
-
+        int enemyX = Math.round(enemy.getX() / Constants.GRID_RESIZE_X),
+                enemyY = Math.round(enemy.getY() / Constants.GRID_RESIZE_Y),
+                x = Math.round(getX() / Constants.GRID_RESIZE_X),
+                y = Math.round(getY() / Constants.GRID_RESIZE_Y);
         return (Math.abs(enemyX - x) <= rango &&
-                Math.abs(enemyY - y) <= rango );
+                Math.abs(enemyY - y) <= rango);
     }
 
     public boolean shootable() {
-        return (bullet != null && bullet.isHundido());
+        //(bullet != null && bullet.isHundido()) || (bullet==null)
+        return (bullet == null || bullet.isHundido());
     }
 
     @Override
     public void draw(Batch batch) {
-
         super.draw(batch);
-//        if (isSelected) {
-//        batch.draw(circuloRango, getX() - rango + (Constants.GRID_RESIZE_X / 2), getY() - rango + (Constants.GRID_RESIZE_Y / 2));
-//        }
+    }
+
+    public Projectile getBullet() {
+        return bullet;
     }
 
     public void dispose() {

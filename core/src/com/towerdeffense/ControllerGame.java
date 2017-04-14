@@ -161,7 +161,7 @@ public class ControllerGame {
             lastTouch = posicionBotones.item1;
             lastTouchPosition = posicionBotones.item3;
             if (posicionBotones.item2) {    //Mejora
-                if (mapa.upgradeCost(posicionBotones.item3) < money) {
+                if (mapa.upgradeCost(posicionBotones.item3) < money && mapa.getTurret(posicionBotones.item3).getLvl()<3) {
                     btn1 = new Texture(Gdx.files.internal("Buttons\\levelUp.png"));
                 } else {
                     btn1 = new Texture(Gdx.files.internal("Buttons\\noLevelUp.png"));

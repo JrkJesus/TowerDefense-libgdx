@@ -19,11 +19,13 @@ public class Projectile extends Sprite {
 
     public Projectile(Texture t, Vector2 initialPos, Vector2 target) {
         super(t);
-        setPosition(initialPos.x, initialPos.y);
-        this.target = target;
-        angle = (float) (Math.atan2(target.y - initialPos.y, target.x - initialPos.x) * MathUtils.radiansToDegrees);
-        setRotation(angle);
+        setPosition(initialPos.x-getWidth()/2, initialPos.y-getHeight()/2);
+        this.target = new Vector2(target.x-getWidth()/2,target.y-getHeight()/2);
+        angle = (float) (Math.atan2(target.y - initialPos.y, target.x - initialPos.x));
+        setRotation(angle * MathUtils.radiansToDegrees);
         hundido = false;
+        speed=new Vector2();
+        movSpeed=500;
     }
 
     public boolean isHundido() {
@@ -32,9 +34,8 @@ public class Projectile extends Sprite {
 
     public void nextStep(float deltaTime) {
         speed.set(movSpeed * (float) Math.cos(angle), movSpeed * (float) Math.sin(angle));
-        setRotation(angle * MathUtils.degreesToRadians);
         setPosition(getX() + speed.x * deltaTime, getY() + speed.y * deltaTime);
-        if (Math.abs(getX() - target.x) < 0 && Math.abs(getX() - target.x) < 0) {
+        if (Math.abs(getX() - target.x) < getTexture().getWidth()/2 && Math.abs(getX() - target.x) < getTexture().getHeight()/2) {
             hundido = true;
         }
     }

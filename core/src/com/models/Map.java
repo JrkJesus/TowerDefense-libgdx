@@ -28,8 +28,15 @@ public class Map {
     }
 
     public void draw(Batch batch) {
+        Projectile b;
         for (Tile tile : map) {
             tile.draw(batch);
+            if(tile.getTurret()!=null){
+                b=tile.getTurret().getBullet();
+                if(b!=null && !b.isHundido()){
+                    b.draw(batch);
+                }
+            }
         }
     }
 
@@ -183,7 +190,6 @@ public class Map {
         return map;
     }
 
-
     public int upgradeCost(int position) {
         return map[position].upgradeCost();
     }
@@ -230,5 +236,9 @@ public class Map {
 
     public void buildTurret(Texture[] t,int lastTouchPosition, int type) {
         map[lastTouchPosition].buildTurret(t,type);
+    }
+
+    public Turret getTurret(int pos) {
+        return map[pos].getTurret();
     }
 }

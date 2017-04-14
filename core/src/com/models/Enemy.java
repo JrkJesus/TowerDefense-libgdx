@@ -92,6 +92,7 @@ public class Enemy extends Sprite {
     }
 
     public void receiveDamage(ControllerGame control,int dmg) {
+        System.out.println("X:"+getX()/Constants.GRID_RESIZE_X+" Y:"+getY()/Constants.GRID_RESIZE_Y);
         System.out.println("Daño");
         this.life -= dmg;
         if (life <= 0) {
