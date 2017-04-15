@@ -171,7 +171,7 @@ public class Turret extends Sprite {
     }
 
     public int getUpgradeCost() {
-        return upgradeCost + buildCost * (nivel - 2);
+        return upgradeCost + buildCost * (nivel - 1);
     }
 
 }

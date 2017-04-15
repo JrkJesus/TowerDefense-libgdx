@@ -3,6 +3,7 @@ package com.towerdeffense;
 import com.view.PantallaJuego;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.view.PantallaPrincipal;
 
 public class MainTowerDeffense extends Game {
 
@@ -11,8 +12,8 @@ public class MainTowerDeffense extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-
-		this.setScreen(new PantallaJuego(this));
+		this.setScreen(new PantallaPrincipal(this));
+//		this.setScreen(new PantallaJuego(this));
 	}
 
 	@Override

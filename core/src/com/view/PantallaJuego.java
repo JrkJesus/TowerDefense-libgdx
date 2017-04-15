@@ -22,10 +22,10 @@ public class PantallaJuego extends PantallaBase {
     private Map map;
     private Pixmap pixmap;
 
-    public PantallaJuego(MainTowerDeffense _mtd) {
+    public PantallaJuego(MainTowerDeffense _mtd, int dificulty) {
         super(_mtd);
 
-        dificulty = 1;
+        this.dificulty = dificulty;
         player = new ControllerGame(dificulty);
         map = new Map();
         winner = new Texture(Gdx.files.internal("Textures\\winner.png"));
@@ -35,6 +35,10 @@ public class PantallaJuego extends PantallaBase {
         pixmap.setColor(0,0,0,0.5f);
         pixmap.drawRectangle(0,0,width,height);
         square = new Texture(pixmap);
+    }
+
+    public PantallaJuego(MainTowerDeffense _mtd) {
+        this(_mtd, 1);
     }
 
     @Override
