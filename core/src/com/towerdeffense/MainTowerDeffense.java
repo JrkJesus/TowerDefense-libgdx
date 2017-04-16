@@ -2,6 +2,7 @@ package com.towerdeffense;
 
 import com.util.Tuple;
 import com.util.XMLReader;
+import com.view.PantallaClasificacion;
 import com.view.PantallaJuego;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,22 +20,9 @@ public class MainTowerDeffense extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		Integer[] array = new Integer[]{5, 4, 8, 6, 3, 1, 2, 7, 10};
-		Arrays.sort(array, Collections.reverseOrder());
-		for(int number : array){
-			System.out.println(number);
-		}
-
-		Integer[] better = Arrays.copyOf(array, 3);
-
-
-		System.out.println();
-		for(int number : better){
-			System.out.println(number);
-		}
 //		this.setScreen(new PantallaPrincipal(this));
 //		this.setScreen(new PantallaJuego(this));
-		app.exit();
+		this.setScreen(new PantallaClasificacion(this));
 	}
 
 	@Override

@@ -28,13 +28,13 @@ public class PantallaBase implements Screen
     protected final Skin skin;
     protected final Stage stage;
     protected final TextureAtlas atlas;
-    protected final BitmapFont font;
+    protected BitmapFont font;
     public final int width, height;
 
     public PantallaBase(MainTowerDeffense _mtd)
     {
         mtd = _mtd;
-        background = new Texture(Gdx.files.internal("Buttons\\background.png"));
+        background = new Texture(Gdx.files.internal("GUI\\background.png"));
         font = new BitmapFont(Gdx.files.internal("GUI\\font-export.fnt"), Gdx.files.internal("GUI\\font-export.png"), false);
         font.setColor(Color.BLACK);
         skin = new Skin(Gdx.files.internal("GUI\\quantum-horizon-ui.json"));
