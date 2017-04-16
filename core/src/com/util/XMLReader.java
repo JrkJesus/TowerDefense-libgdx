@@ -1,7 +1,7 @@
 package com.util;
 
 
-import com.badlogic.gdx.Gdx;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +16,6 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.jdom2.xpath.XPath;
 
 /**
  * Created by jesus on 16/04/2017.
@@ -86,6 +85,50 @@ public class XMLReader {
             Element settings = raiz.getChild("configuracion");
             settings.getChild("dificultad").setText(level + "");
 
+            XMLOutputter xmlOutput = new XMLOutputter();
+
+            // display nice nice
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            xmlOutput.output(doc, new FileWriter("Configuracion\\datos.xml"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void changeSound() {
+        SAXBuilder builder = new SAXBuilder();
+        try {
+            Document doc = builder.build(new FileInputStream("Configuracion/datos.xml"));
+            Element raiz = doc.getRootElement();
+            Element settings = raiz.getChild("configuracion");
+            Element dificulty = settings.getChild("sound");
+            dificulty.setText(Boolean.parseBoolean(dificulty.getText())? "false" : "true");
+            XMLOutputter xmlOutput = new XMLOutputter();
+
+            // display nice nice
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            xmlOutput.output(doc, new FileWriter("Configuracion\\datos.xml"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void changeMusic() {
+        SAXBuilder builder = new SAXBuilder();
+        try {
+            Document doc = builder.build(new FileInputStream("Configuracion/datos.xml"));
+            Element raiz = doc.getRootElement();
+            Element settings = raiz.getChild("configuracion");
+            Element dificulty = settings.getChild("music");
+            dificulty.setText(Integer.toString(1-Integer.parseInt(dificulty.getText())));
             XMLOutputter xmlOutput = new XMLOutputter();
 
             // display nice nice

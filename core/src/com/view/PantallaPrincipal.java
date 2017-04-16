@@ -50,9 +50,9 @@ public class PantallaPrincipal extends PantallaBase {
                 mtd.setScreen(new PantallaJuego(mtd, 2));
             } else if (dificil.isSeleccionado(x, y)){
                 mtd.setScreen(new PantallaJuego(mtd, 3));
+            } else if(setting.verifyTouch(x, y) ){
+                mtd.setScreen(new PantallaClasificacion(mtd));
             }
-
-            setting.verifyTouch(x,y);
         }
     }
 

@@ -3,7 +3,7 @@
   <configuracion>
     <dificultad>3</dificultad>
     <music>1</music>
-    <sound>true</sound>
+    <sound>false</sound>
   </configuracion>
   <leaderboard>
     <score>258000</score>

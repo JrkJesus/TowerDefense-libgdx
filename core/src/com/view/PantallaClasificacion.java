@@ -20,8 +20,7 @@ import java.util.Collections;
 public class PantallaClasificacion extends PantallaBase {
 
     private final Texture win;
-    private final BotonesMenu btnBack,
-            btnRestart;
+    private final BotonesMenu btnBack;
     Integer[] scores;
 
     public PantallaClasificacion(MainTowerDeffense _mtd) {
@@ -38,7 +37,7 @@ public class PantallaClasificacion extends PantallaBase {
 
         win = new Texture(Gdx.files.internal("GUI\\clasificacion.png"));
         btnBack = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(width / 2 - win.getWidth() / 4, height / 2 - win.getHeight() / 2.15f ));
-        btnRestart = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\reload.png")), new Vector2(width / 2 + win.getWidth() / 4, height / 2 - win.getHeight() / 2.15f));
+
         font = new BitmapFont(Gdx.files.internal("GUI\\font-title-export.fnt"), Gdx.files.internal("GUI\\font-title-export.png"), false);
         font.setColor(Color.BLACK);
     }
@@ -55,7 +54,19 @@ public class PantallaClasificacion extends PantallaBase {
             font.draw(mtd.batch, text, (width - text.width)/2, (height + text.height)/ 2 + 20 - 40 * i++);
         }
         btnBack.draw(mtd.batch);
-        btnRestart.draw(mtd.batch);
+
         mtd.batch.end();
+        verifyButtonGameOverPress();
+    }
+
+    public void verifyButtonGameOverPress() {
+        if (Gdx.input.justTouched()) {
+            int posX = Gdx.input.getX(),
+                    posY = (Gdx.graphics.getHeight() - Gdx.input.getY());
+            if(btnBack.isSeleccionado(posX,posY)){
+                mtd.setScreen(new PantallaPrincipal(mtd));
+            }
+
+        }
     }
 }

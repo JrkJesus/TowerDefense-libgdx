@@ -1,6 +1,7 @@
 package com.util;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -16,15 +17,11 @@ public class DobleBoton extends BotonesMenu {
         otherTexture = pulsado;
     }
 
-    @Override
-    public boolean isSeleccionado(int x, int y) {
-        boolean selecion = super.isSeleccionado(x, y);
-        if( selecion ){
-            Texture temp = otherTexture;
-            otherTexture = noPulsado;
-            noPulsado = temp;
-        }
-        return selecion;
+    public void draw(Batch batch, boolean option) {
+        if(option)
+            super.draw(batch);
+        else
+            batch.draw(otherTexture, position.x, position.y);
     }
 
     @Override
