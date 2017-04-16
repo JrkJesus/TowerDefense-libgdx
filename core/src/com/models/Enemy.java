@@ -38,17 +38,17 @@ public class Enemy extends Sprite {
         dead = t[1];
         switch (tipo) {
             case Constants.PLANE:
-                life = 3 * 7;
+                life = 3 * 3;
                 movSpeed = 100;
                 valor = 10;
                 break;
             case Constants.PEOPLE:
-                life = 3 * 7;
+                life = 3 * 3;
                 movSpeed = 125;
                 valor = 5;
                 break;
             case Constants.TANK:
-                life = 9 * 7;
+                life = 9 * 3;
                 movSpeed = 75;
                 valor = 10;
                 break;

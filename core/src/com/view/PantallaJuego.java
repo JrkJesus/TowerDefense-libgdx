@@ -1,13 +1,16 @@
 package com.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.models.Map;
 import com.towerdeffense.*;
+import com.util.BotonesMenu;
 import com.util.Constants;
 
 
@@ -18,8 +21,11 @@ import com.util.Constants;
 public class PantallaJuego extends PantallaBase {
     private int dificulty;
     private ControllerGame player;
-    private Texture winner, loser;
+    private Texture win;
     private Map map;
+    private Music gameMusic;
+    private BotonesMenu btnBack,
+            btnRestart;
 
     public PantallaJuego(MainTowerDeffense _mtd, int dificulty) {
         super(_mtd);
@@ -27,9 +33,13 @@ public class PantallaJuego extends PantallaBase {
         this.dificulty = dificulty;
         player = new ControllerGame(dificulty);
         map = new Map();
-        winner = new Texture(Gdx.files.internal("Textures\\winner.png"));
-        loser = new Texture(Gdx.files.internal("Textures\\loser.png"));
         font.getData().setScale(2.5f, 2.5f);
+
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds\\background-battle.ogg"));
+
+        win = new Texture(Gdx.files.internal("Textures\\winner.png"));
+        btnBack = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(Gdx.graphics.getWidth() / 2 - win.getWidth() / 10, Gdx.graphics.getHeight() / 2 - win.getHeight() / 3));
+        btnRestart = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\reload.png")), new Vector2(Gdx.graphics.getWidth() / 2 + win.getWidth() / 10, Gdx.graphics.getHeight() / 2 - win.getHeight() / 3));
 }
 
     public PantallaJuego(MainTowerDeffense _mtd) {
@@ -46,20 +56,50 @@ public class PantallaJuego extends PantallaBase {
             player.newWave(dificulty);
             player.addScore();
         } else if (player.isLoser()) {
-            mtd.batch.draw(loser, Gdx.graphics.getWidth() / 2 - winner.getWidth() / 2, Gdx.graphics.getHeight() / 2 - winner.getHeight() / 2);
+            mtd.batch.draw(win, Gdx.graphics.getWidth() / 2 - win.getWidth() / 2, Gdx.graphics.getHeight() / 2 - win.getHeight() / 2);
+            font.setColor(Color.BLACK);
+            font.getData().setScale(0.9f);
+            font.draw(mtd.batch, "\tPuntuacion \n\n\t" + Integer.toString(player.getScore()), Gdx.graphics.getWidth() / 2 - win.getWidth() / 4, Gdx.graphics.getHeight() / 2 + win.getHeight() / 5);
+
+            btnBack.draw(mtd.batch);
+            btnRestart.draw(mtd.batch);
+            verifyButtonGameOverPress();
         } else {
             player.draw(mtd.batch);
         }
+
         mtd.batch.end();
+
     }
 
+    @Override
+    public void show() {
+        super.show();
+        //gameMusic.setLooping(true);
+        //gameMusic.play();
+    }
+
+    public void verifyButtonGameOverPress() {
+        if (Gdx.input.justTouched()) {
+            int posX = Gdx.input.getX(),
+                    posY = (Gdx.graphics.getHeight() - Gdx.input.getY());
+            if(btnBack.isSeleccionado(posX,posY)){
+                mtd.setScreen(new PantallaPrincipal(mtd));
+            }
+            else if(btnRestart.isSeleccionado(posX,posY)){
+                mtd.setScreen(new PantallaJuego(mtd,dificulty));
+            }
+        }
+    }
 
     @Override
     public void dispose() {
         super.dispose();
         player.dispose();
         background.dispose();
-        winner.dispose();
-        loser.dispose();
+        gameMusic.stop();
+        gameMusic.dispose();
+        btnBack.dispose();
+        btnRestart.dispose();
     }
 }

@@ -39,6 +39,14 @@ public class PantallaPrincipal extends PantallaBase {
         verifyTouch();
     }
 
+    @Override
+    public void show() {
+        super.show();
+        mainMenuMusic.setLooping(true);
+        mainMenuMusic.play();
+    }
+
+
     public void verifyTouch(){
         if( Gdx.input.justTouched() ){
             int x = Gdx.input.getX(),

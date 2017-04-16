@@ -2,6 +2,7 @@ package com.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,6 +29,7 @@ public class PantallaBase implements Screen
     protected final TextureAtlas atlas;
     protected final BitmapFont font;
     public final int width, height;
+    public Music mainMenuMusic;
 
     public PantallaBase(MainTowerDeffense _mtd)
     {
@@ -42,6 +44,8 @@ public class PantallaBase implements Screen
         height = Gdx.graphics.getHeight();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
+
+        mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/Loop-Menu.wav"));
     }
 
     protected void scaleFont(BitmapFont font, float scale){
@@ -85,5 +89,7 @@ public class PantallaBase implements Screen
         skin.dispose();
         stage.dispose();
         background.dispose();
+        mainMenuMusic.stop();
+        mainMenuMusic.dispose();
     }
 }
