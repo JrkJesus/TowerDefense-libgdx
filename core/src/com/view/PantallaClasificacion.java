@@ -21,7 +21,8 @@ public class PantallaClasificacion extends PantallaBase {
 
     private final Texture win;
     private final BotonesMenu btnBack;
-    Integer[] scores;
+    private Integer[] scores;
+    private float volume;
 
     public PantallaClasificacion(MainTowerDeffense _mtd) {
         super(_mtd);
@@ -38,6 +39,15 @@ public class PantallaClasificacion extends PantallaBase {
         win = new Texture(Gdx.files.internal("GUI\\clasificacion.png"));
         btnBack = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(width / 2 - win.getWidth() / 4, height / 2 - win.getHeight() / 2.15f ));
 
+        volume=XMLReader.getConfiguration().item2;
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        mainMenuMusic.setLooping(true);
+        mainMenuMusic.setVolume(volume);
+        mainMenuMusic.play();
     }
 
     @Override

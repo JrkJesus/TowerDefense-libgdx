@@ -3,10 +3,12 @@ package com.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.XmlReader;
 import com.towerdeffense.MainTowerDeffense;
 import com.util.BotonesMenu;
 import com.util.DobleBoton;
 import com.util.Multibotones;
+import com.util.XMLReader;
 
 /**
  * Created by jesus on 15/04/2017.
@@ -19,6 +21,7 @@ public class PantallaPrincipal extends PantallaBase {
 
     public PantallaPrincipal(MainTowerDeffense _mtd) {
         super(_mtd);
+
         facil = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\easy.png")), new Vector2(width/2, height - 2 * height / 4));
         medio = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\medium.png")), new Vector2(width/2, height - (int)(2.5 * height / 4)));
         dificil = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\hard.png")), new Vector2(width/2, height - 3 * height / 4));
@@ -43,6 +46,7 @@ public class PantallaPrincipal extends PantallaBase {
     public void show() {
         super.show();
         mainMenuMusic.setLooping(true);
+        mainMenuMusic.setVolume(XMLReader.getConfiguration().item2);
         mainMenuMusic.play();
     }
 
@@ -61,6 +65,10 @@ public class PantallaPrincipal extends PantallaBase {
             } else if(setting.verifyTouch(x, y) ){
                 mtd.setScreen(new PantallaClasificacion(mtd));
             }
+
+            mainMenuMusic.setVolume(XMLReader.getConfiguration().item2);
+
+
         }
     }
 
