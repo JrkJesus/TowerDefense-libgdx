@@ -13,7 +13,6 @@ public class BotonesMenu {
     protected Texture noPulsado;
     protected Vector2 position;
 
-
     public BotonesMenu(Texture noPulsado, Vector2 position) {
         this.noPulsado = noPulsado;
         this.position = new Vector2(position.x - noPulsado.getWidth() / 2, position.y - noPulsado.getHeight() / 2);

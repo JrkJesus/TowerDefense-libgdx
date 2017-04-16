@@ -35,8 +35,8 @@ public class PantallaBase implements Screen
     {
         mtd = _mtd;
         background = new Texture(Gdx.files.internal("Buttons\\background.png"));
-        font = new BitmapFont(Gdx.files.internal("GUI\\font-export.fnt"), Gdx.files.internal("GUI\\font-export.png"), false);
-        font.setColor(Color.BLACK);
+        font = new BitmapFont(Gdx.files.internal("GUI\\font-title-export.fnt"), Gdx.files.internal("GUI\\font-title-export.png"), false);
+        font.setColor(Color.GRAY);
         skin = new Skin(Gdx.files.internal("GUI\\quantum-horizon-ui.json"));
         atlas = new TextureAtlas(Gdx.files.internal("GUI\\quantum-horizon-ui.atlas"));
         skin.addRegions(atlas);

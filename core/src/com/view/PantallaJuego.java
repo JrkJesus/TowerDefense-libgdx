@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 import com.models.Map;
 import com.towerdeffense.*;
@@ -33,11 +34,10 @@ public class PantallaJuego extends PantallaBase {
         this.dificulty = dificulty;
         player = new ControllerGame(dificulty);
         map = new Map();
-        font.getData().setScale(2.5f, 2.5f);
 
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds\\background-battle.ogg"));
 
-        win = new Texture(Gdx.files.internal("Textures\\winner.png"));
+        win = new Texture(Gdx.files.internal("GUI\\winner.png"));
         btnBack = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(Gdx.graphics.getWidth() / 2 - win.getWidth() / 10, Gdx.graphics.getHeight() / 2 - win.getHeight() / 3));
         btnRestart = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\reload.png")), new Vector2(Gdx.graphics.getWidth() / 2 + win.getWidth() / 10, Gdx.graphics.getHeight() / 2 - win.getHeight() / 3));
 }
@@ -57,9 +57,12 @@ public class PantallaJuego extends PantallaBase {
             player.addScore();
         } else if (player.isLoser()) {
             mtd.batch.draw(win, Gdx.graphics.getWidth() / 2 - win.getWidth() / 2, Gdx.graphics.getHeight() / 2 - win.getHeight() / 2);
-            font.setColor(Color.BLACK);
-            font.getData().setScale(0.9f);
-            font.draw(mtd.batch, "\tPuntuacion \n\n\t" + Integer.toString(player.getScore()), Gdx.graphics.getWidth() / 2 - win.getWidth() / 4, Gdx.graphics.getHeight() / 2 + win.getHeight() / 5);
+
+            GlyphLayout glyphLayout=new GlyphLayout();
+            glyphLayout.setText(font,"Puntuacion");
+            font.draw(mtd.batch,glyphLayout,(width - glyphLayout.width)/2, (height + glyphLayout.height)/ 2);
+            glyphLayout.setText(font,Integer.toString(player.getScore()));
+            font.draw(mtd.batch,glyphLayout,(width - glyphLayout.width)/2, (height + glyphLayout.height)/ 2 -40);
 
             btnBack.draw(mtd.batch);
             btnRestart.draw(mtd.batch);
@@ -75,8 +78,8 @@ public class PantallaJuego extends PantallaBase {
     @Override
     public void show() {
         super.show();
-        //gameMusic.setLooping(true);
-        //gameMusic.play();
+        gameMusic.setLooping(true);
+        gameMusic.play();
     }
 
     public void verifyButtonGameOverPress() {

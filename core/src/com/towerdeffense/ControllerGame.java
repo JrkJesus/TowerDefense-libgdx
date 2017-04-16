@@ -57,7 +57,7 @@ public class ControllerGame {
         initTextures();
         this.dificulty = dificulty;
         score = 0;
-        money = Constants.INITIAL_MONEY;
+        money = Constants.INITIAL_MONEY + 10000;
         life = 6 - 5 * (dificulty - 1); //25
         lastTouch = null;
         enemies = new Array<Enemy>();

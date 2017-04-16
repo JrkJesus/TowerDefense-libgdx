@@ -19,8 +19,8 @@ public class PantallaPrincipal extends PantallaBase {
 
     public PantallaPrincipal(MainTowerDeffense _mtd) {
         super(_mtd);
-        facil = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\easy.png")), new Vector2(width/2, height - 1 * height / 4));
-        medio = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\medium.png")), new Vector2(width/2, height - 2 * height / 4));
+        facil = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\easy.png")), new Vector2(width/2, height - 2 * height / 4));
+        medio = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\medium.png")), new Vector2(width/2, height - (int)(2.5 * height / 4)));
         dificil = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\hard.png")), new Vector2(width/2, height - 3 * height / 4));
         setting = new Multibotones();
         background = new Texture(Gdx.files.internal("GUI\\background.png"));
