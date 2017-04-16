@@ -18,9 +18,8 @@ import com.util.Constants;
 public class PantallaJuego extends PantallaBase {
     private int dificulty;
     private ControllerGame player;
-    private Texture winner, loser, square;
+    private Texture winner, loser;
     private Map map;
-    private Pixmap pixmap;
 
     public PantallaJuego(MainTowerDeffense _mtd, int dificulty) {
         super(_mtd);
@@ -31,11 +30,7 @@ public class PantallaJuego extends PantallaBase {
         winner = new Texture(Gdx.files.internal("Textures\\winner.png"));
         loser = new Texture(Gdx.files.internal("Textures\\loser.png"));
         font.getData().setScale(2.5f, 2.5f);
-        pixmap = new Pixmap(200, (int) font.getXHeight()*4, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0,0,0,0.5f);
-        pixmap.drawRectangle(0,0,width,height);
-        square = new Texture(pixmap);
-    }
+}
 
     public PantallaJuego(MainTowerDeffense _mtd) {
         this(_mtd, 1);
