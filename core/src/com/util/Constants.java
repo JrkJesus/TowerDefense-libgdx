@@ -14,15 +14,6 @@ import com.models.Tile;
 public final class Constants {
     public static RandomXS128 rnd = new RandomXS128();
 
-    public final static int FASE1 = 1;
-    public final static int FASE2 = 2;
-    public final static int FASE3 = 3;
-
-    public static final int UP = 1;
-    public static final int LEFT = 2;
-    public static final int GIRO = 3;
-    public static final int GROUND = 4;
-
     public final static int GRID_SIZE = 128;
     public final static int GRID_WIDTH = 15;
     public final static int GRID_HEIGH = 8;
