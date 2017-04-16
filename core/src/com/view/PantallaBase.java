@@ -34,7 +34,7 @@ public class PantallaBase implements Screen
     public PantallaBase(MainTowerDeffense _mtd)
     {
         mtd = _mtd;
-        background = new Texture(Gdx.files.internal("Buttons\\background.png"));
+        background = new Texture(Gdx.files.internal("GUI\\background.png"));
         font = new BitmapFont(Gdx.files.internal("GUI\\font-title-export.fnt"), Gdx.files.internal("GUI\\font-title-export.png"), false);
         font.setColor(Color.GRAY);
         skin = new Skin(Gdx.files.internal("GUI\\quantum-horizon-ui.json"));

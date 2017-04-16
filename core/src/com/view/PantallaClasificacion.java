@@ -38,8 +38,6 @@ public class PantallaClasificacion extends PantallaBase {
         win = new Texture(Gdx.files.internal("GUI\\clasificacion.png"));
         btnBack = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(width / 2 - win.getWidth() / 4, height / 2 - win.getHeight() / 2.15f ));
 
-        font = new BitmapFont(Gdx.files.internal("GUI\\font-title-export.fnt"), Gdx.files.internal("GUI\\font-title-export.png"), false);
-        font.setColor(Color.BLACK);
     }
 
     @Override
