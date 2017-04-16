@@ -1,6 +1,9 @@
 package com.towerdeffense;
 
 
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.models.*;
@@ -9,8 +12,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.util.BotonesMenu;
 import com.util.Constants;
 import com.util.Tuple;
+import com.view.PantallaJuego;
+import com.view.PantallaPrincipal;
+
 
 /**
  * Created by jesus on 05/04/2017.
@@ -38,26 +45,36 @@ public class ControllerGame {
     private Texture btn1,
             btn2,
             btn3;
+    private BotonesMenu btnBack,
+            btnRestart;
     private final BitmapFont font;
-
+    private Sound upgradeSound,
+            sellSound,
+            waveSound;
 
     public ControllerGame(int wave, int dificulty) {
         path = Constants.PATH_FASE1();
         initTextures();
         this.dificulty = dificulty;
         score = 0;
-        money = Constants.INITIAL_MONEY;
-        life = 25 - 5 * (dificulty - 1);
+        money = Constants.INITIAL_MONEY + 10000;
+        life = 6 - 5 * (dificulty - 1); //25
         lastTouch = null;
         enemies = new Array<Enemy>();
         mapa = new Map();
         this.wave = wave;
+
+        upgradeSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/levelUpTurret.wav"));
+        sellSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/sellTower.mp3"));
+        waveSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/end_wave.wav"));
+
         newWave(dificulty);
         lastTouchPosition = -1;
-        deltaTime=0;
+        deltaTime = 0;
 
         font = new BitmapFont(Gdx.files.internal("GUI\\font-title-export.fnt"), Gdx.files.internal("GUI\\font-title-export.png"), false);
         font.setColor(Color.YELLOW);
+
     }
 
     public ControllerGame(int dificulty) {
@@ -95,10 +112,9 @@ public class ControllerGame {
 
     }
 
-    public void drawInterface(Batch batch){
-        font.draw(batch, "Vidas: " + Integer.toString(getLife()) + "\tDinero: " + Integer.toString(getMoney()) + "\tPuntuacion: " + Integer.toString(getScore()), 25, Gdx.graphics.getHeight()-2);
+    public void drawInterface(Batch batch) {
+        font.draw(batch, "Vidas: " + Integer.toString(getLife()) + "\tDinero: " + Integer.toString(getMoney()) + "\tPuntuacion: " + Integer.toString(getScore()), 25, Gdx.graphics.getHeight() - 2);
     }
-
 
     public void newWave(int dificulty) {
         for (int i = 0; i < 5 + (wave * 2 / 5) * dificulty; i++) {
@@ -117,13 +133,13 @@ public class ControllerGame {
     public void verifyButtonPress() {
         if (Gdx.input.justTouched()) {
             int posX = Gdx.input.getX() / Constants.GRID_RESIZE_X,
-                    posY =  (Gdx.graphics.getHeight() - Gdx.input.getY() ) / Constants.GRID_RESIZE_Y;
+                    posY = (Gdx.graphics.getHeight() - Gdx.input.getY()) / Constants.GRID_RESIZE_Y;
             if (btn2 == null) { //Estamos mejorando torre
-                if (posX== lastTouch.x - 1  && posY == lastTouch.y + 1) {
+                if (posX == lastTouch.x - 1 && posY == lastTouch.y + 1) {
                     if (mapa.upgradeCost(lastTouchPosition) <= money) {
                         mapa.lvlUpTurret(this, lastTouchPosition);
                     }
-                } else if (posX == lastTouch.x + 1 && posY == lastTouch.y + 1 ) {
+                } else if (posX == lastTouch.x + 1 && posY == lastTouch.y + 1) {
                     mapa.sellTurret(this, lastTouchPosition);
                 }
             } else { //Estamos construyendo torre
@@ -132,12 +148,12 @@ public class ControllerGame {
                         mapa.buildTurret(machineGun, lastTouchPosition, Constants.MACHINEGUN);
                         money -= Constants.MACHINE_COST;
                     }
-                } else if (posX == lastTouch.x && posY == lastTouch.y + 1 ) {
+                } else if (posX == lastTouch.x && posY == lastTouch.y + 1) {
                     if (Constants.PLANE_COST <= money) {
                         mapa.buildTurret(missiles, lastTouchPosition, Constants.ANTIAIR);
                         money -= Constants.PLANE_COST;
                     }
-                } else if (posX == lastTouch.x + 1 && posY == lastTouch.y + 1 ) {
+                } else if (posX == lastTouch.x + 1 && posY == lastTouch.y + 1) {
                     if (Constants.TANK_COST <= money) {
                         mapa.buildTurret(antiTank, lastTouchPosition, Constants.ANTITANK);
                         money -= Constants.TANK_COST;
@@ -151,20 +167,20 @@ public class ControllerGame {
     public void deleteBtns() {
         lastTouch = null;
         lastTouchPosition = -1;
-        if(btn1 != null){
+        if (btn1 != null) {
             btn1.dispose();
             btn1 = null;
         }
-        if(btn2 != null){
+        if (btn2 != null) {
             btn2.dispose();
             btn2 = null;
         }
-        if(btn3 != null){
+        if (btn3 != null) {
             btn3.dispose();
             btn3 = null;
         }
 
-        deltaTime=0;
+        deltaTime = 0;
     }
 
     public void verifyTouch() {
@@ -173,7 +189,7 @@ public class ControllerGame {
             lastTouch = posicionBotones.item1;
             lastTouchPosition = posicionBotones.item3;
             if (posicionBotones.item2) {    //Mejora
-                if (mapa.upgradeCost(posicionBotones.item3) < money && mapa.getTurret(posicionBotones.item3).getLvl()<3) {
+                if (mapa.upgradeCost(posicionBotones.item3) < money && mapa.getTurret(posicionBotones.item3).getLvl() < 3) {
                     btn1 = new Texture(Gdx.files.internal("Buttons\\levelUp.png"));
                 } else {
                     btn1 = new Texture(Gdx.files.internal("Buttons\\noLevelUp.png"));
@@ -222,11 +238,6 @@ public class ControllerGame {
         if (btn3 != null) {
             batch.draw(btn3, (lastTouch.x + 1) * Constants.GRID_RESIZE_X, (lastTouch.y + 1) * Constants.GRID_RESIZE_Y);
         }
-
-        if(enemies.size==0){
-            newWave(dificulty);
-        }
-
     }
 
     public void addScore() {
@@ -258,11 +269,11 @@ public class ControllerGame {
     }
 
     public boolean isWinner() {
-        return false;
+        return enemies.size==0;
     }
 
     public boolean isLoser() {
-        return false;
+        return life<=0;
     }
 
 
@@ -270,9 +281,9 @@ public class ControllerGame {
         for (Enemy enemy : enemies) {
             if (enemy.getX() > Gdx.graphics.getWidth()) {
                 life--;
-               // enemy.dispose();
+                // enemy.dispose();
                 enemies.removeValue(enemy, false);
-            } else if (enemy.getDeadTime() > 5){
+            } else if (enemy.getDeadTime() > 5) {
                 enemies.removeValue(enemy, false);
             }
         }

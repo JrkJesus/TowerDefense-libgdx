@@ -1,6 +1,5 @@
 package com.view;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -28,15 +27,16 @@ public class PantallaBase implements Screen
     protected final Skin skin;
     protected final Stage stage;
     protected final TextureAtlas atlas;
-    protected BitmapFont font;
+    protected final BitmapFont font;
     public final int width, height;
+    public Music mainMenuMusic;
 
     public PantallaBase(MainTowerDeffense _mtd)
     {
         mtd = _mtd;
-        background = new Texture(Gdx.files.internal("GUI\\background.png"));
-        font = new BitmapFont(Gdx.files.internal("GUI\\font-export.fnt"), Gdx.files.internal("GUI\\font-export.png"), false);
-        font.setColor(Color.BLACK);
+        background = new Texture(Gdx.files.internal("Buttons\\background.png"));
+        font = new BitmapFont(Gdx.files.internal("GUI\\font-title-export.fnt"), Gdx.files.internal("GUI\\font-title-export.png"), false);
+        font.setColor(Color.GRAY);
         skin = new Skin(Gdx.files.internal("GUI\\quantum-horizon-ui.json"));
         atlas = new TextureAtlas(Gdx.files.internal("GUI\\quantum-horizon-ui.atlas"));
         skin.addRegions(atlas);
@@ -44,6 +44,8 @@ public class PantallaBase implements Screen
         height = Gdx.graphics.getHeight();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
+
+        mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/Loop-Menu.wav"));
     }
 
     protected void scaleFont(BitmapFont font, float scale){
@@ -87,5 +89,7 @@ public class PantallaBase implements Screen
         skin.dispose();
         stage.dispose();
         background.dispose();
+        mainMenuMusic.stop();
+        mainMenuMusic.dispose();
     }
 }
