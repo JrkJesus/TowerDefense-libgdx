@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.XmlReader;
 import com.util.Constants;
 import com.towerdeffense.ControllerGame;
+import com.util.XMLReader;
 
 /**
  * Created by jesus on 16/03/2017.
@@ -30,7 +32,8 @@ public class Turret extends Sprite {
     private boolean isSelected;
     private Pixmap pixmap;
     private Texture circuloRango;
-    private Projectile bullet;
+    private Array<Projectile> bullets;
+    private float recarga, delay;
 
     public Turret(Texture[] t, int tipo, int x, int y) {
         super(t[0]);
@@ -61,21 +64,29 @@ public class Turret extends Sprite {
                 upgradeCost = (int) (buildCost * .75);
                 break;
         }
+        damage += 3-XMLReader.getConfiguration().item1;
+        recarga =attackSpeed/4.0f;
+        delay = 0;
         isSelected = false;
         pixmap = new Pixmap(rango * Constants.GRID_RESIZE_X * 2, rango * Constants.GRID_RESIZE_Y * 2, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.BLACK);
         pixmap.drawCircle(pixmap.getWidth() / 2, pixmap.getHeight() / 2, pixmap.getHeight() / 2 - 1);
         circuloRango = new Texture(pixmap);
         type = tipo;
+        bullets = new Array<Projectile>();
     }
 
     public void update(ControllerGame control) {
-        if (shootable()) {
-            shoot(control);
-        } else {
-            bullet.nextStep(Gdx.graphics.getDeltaTime());
+        if(shootable()) shoot(control);
+        for(Projectile bullet : bullets) {
+            bullet.nextStep(Constants.DELTA_TIME);
+            if(bullet.end()){
+                bullet.dispose();
+                bullets.removeValue(bullet, false);
+            }
         }
     }
+
 
     public void shoot(ControllerGame control) {
         Array<Enemy> enemies = control.getEnemies();
@@ -86,12 +97,11 @@ public class Turret extends Sprite {
         //
         if (n > 0 && (i < n - 1 || (i == n - 1 && reachable(enemies.get(i))))) {
             Enemy e = enemies.get(i);
-            System.out.println("Shoot");
             e.receiveDamage(control, damage);
             this.setRotation((float) (Math.atan2(e.y() - y(), e.x() - x())) * MathUtils.radiansToDegrees);
-            bullet = new Projectile(new Texture(Gdx.files.internal("Textures\\proyectil" + type + ".png")),
+            bullets.add(new Projectile(new Texture(Gdx.files.internal("Textures\\proyectil" + type + ".png")),
                     new Vector2(getX() + getTexture().getWidth() / 2, getY() + getTexture().getHeight() / 2),
-                    new Vector2(e.getX() + e.getWidth() / 2, e.getY() + e.getHeight()/2),attackSpeed);
+                    new Vector2(e.getX() + e.getWidth() / 2, e.getY() + e.getHeight()/2)));
         }
     }
 
@@ -121,8 +131,13 @@ public class Turret extends Sprite {
     }
 
     public boolean shootable() {
-        //(bullet != null && bullet.isHundido()) || (bullet==null)
-        return (bullet == null || bullet.isHundido());
+        if(delay < recarga){
+            delay += Constants.DELTA_TIME;
+            return false;
+        } else {
+            delay = 0;
+            return true;
+        }
     }
 
     @Override
@@ -130,16 +145,18 @@ public class Turret extends Sprite {
         super.draw(batch);
     }
 
-    public Projectile getBullet() {
-        return bullet;
+    public Array<Projectile> getBullet() {
+        return bullets;
     }
 
     public void dispose() {
         getTexture().dispose();
         pixmap.dispose();
         circuloRango.dispose();
+        for(Projectile bullet : bullets){
         if (bullet != null)
             bullet.dispose();
+        }
     }
 
     public int lvlUp() {
@@ -151,6 +168,7 @@ public class Turret extends Sprite {
         pixmap.setColor(Color.BLACK);
         pixmap.drawCircle(pixmap.getWidth() / 2, pixmap.getHeight() / 2, pixmap.getHeight() / 2 - 1);
         circuloRango = new Texture(pixmap);
+        recarga *= 0.8;
 
         return upgradeCost + buildCost * (nivel - 2);
     }

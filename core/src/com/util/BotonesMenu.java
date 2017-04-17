@@ -30,4 +30,7 @@ public class BotonesMenu {
         noPulsado.dispose();
     }
 
+    public int getWitdh() {
+        return noPulsado.getWidth();
+    }
 }

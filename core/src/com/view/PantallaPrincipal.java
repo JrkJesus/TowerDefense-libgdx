@@ -18,6 +18,7 @@ public class PantallaPrincipal extends PantallaBase {
 
     BotonesMenu facil, medio, dificil;
     Multibotones setting;
+    Texture logo;
 
     public PantallaPrincipal(MainTowerDeffense _mtd) {
         super(_mtd);
@@ -27,12 +28,14 @@ public class PantallaPrincipal extends PantallaBase {
         dificil = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\hard.png")), new Vector2(width/2, height - 3 * height / 4));
         setting = new Multibotones();
         background = new Texture(Gdx.files.internal("GUI\\background.png"));
+        logo = new Texture(Gdx.files.internal("GUI\\escudo.png"));
     }
 
     @Override
     public void render(float delta) {
         mtd.batch.begin();
         mtd.batch.draw(background, 0, 0);
+        mtd.batch.draw(logo, (width-logo.getWidth())/2, height/2+logo.getHeight()/4);
         facil.draw(mtd.batch);
         medio.draw(mtd.batch);
         dificil.draw(mtd.batch);
@@ -57,10 +60,13 @@ public class PantallaPrincipal extends PantallaBase {
                     y = height - Gdx.input.getY();
 
             if(facil.isSeleccionado(x, y)){
+                XMLReader.setDificulty(1);
                 mtd.setScreen(new PantallaJuego(mtd, 1));
             } else if (medio.isSeleccionado(x, y)){
+                XMLReader.setDificulty(2);
                 mtd.setScreen(new PantallaJuego(mtd, 2));
             } else if (dificil.isSeleccionado(x, y)){
+                XMLReader.setDificulty(3);
                 mtd.setScreen(new PantallaJuego(mtd, 3));
             } else if(setting.verifyTouch(x, y) ){
                 mtd.setScreen(new PantallaClasificacion(mtd));

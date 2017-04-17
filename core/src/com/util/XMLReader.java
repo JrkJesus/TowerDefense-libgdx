@@ -1,8 +1,6 @@
 package com.util;
 
 
-
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,10 +20,6 @@ import org.jdom2.output.XMLOutputter;
  */
 
 public class XMLReader {
-
-    public static void addScore(String nick, int score) {
-
-    }
 
     public static Integer[] getScore() {
 
@@ -106,7 +100,7 @@ public class XMLReader {
             Element raiz = doc.getRootElement();
             Element settings = raiz.getChild("configuracion");
             Element dificulty = settings.getChild("sound");
-            dificulty.setText(Boolean.parseBoolean(dificulty.getText())? "false" : "true");
+            dificulty.setText(Boolean.parseBoolean(dificulty.getText()) ? "false" : "true");
             XMLOutputter xmlOutput = new XMLOutputter();
 
             // display nice nice
@@ -128,7 +122,7 @@ public class XMLReader {
             Element raiz = doc.getRootElement();
             Element settings = raiz.getChild("configuracion");
             Element dificulty = settings.getChild("music");
-            dificulty.setText(Integer.toString(1-Integer.parseInt(dificulty.getText())));
+            dificulty.setText(Integer.toString(1 - Integer.parseInt(dificulty.getText())));
             XMLOutputter xmlOutput = new XMLOutputter();
 
             // display nice nice
@@ -170,7 +164,7 @@ public class XMLReader {
         }
     }
 
-    public static void setScore(Integer[] scores){
+    public static void setScore(Integer[] scores) {
         try {
             SAXBuilder builder = new SAXBuilder();
             File xmlFile = new File("Configuracion\\datos.xml");
@@ -180,7 +174,7 @@ public class XMLReader {
 //            Element leaderboard = raiz.getChild("leaderboard");
             raiz.removeChild("leaderboard");
             Element leaderboard = new Element("leaderboard");
-            for(int score : scores) {
+            for (int score : scores) {
                 Element scoreChild = new Element("score").setText(Integer.toString(score));
                 leaderboard.addContent(scoreChild);
             }

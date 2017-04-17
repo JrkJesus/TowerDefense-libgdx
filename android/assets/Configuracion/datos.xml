@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <towerDeffense xmlns:xela="http://www.latascadexela.es">
   <configuracion>
-    <dificultad>3</dificultad>
-    <music>0</music>
-    <sound>true</sound>
+    <dificultad>1</dificultad>
+    <music>1</music>
+    <sound>false</sound>
   </configuracion>
   <leaderboard>
     <score>258000</score>

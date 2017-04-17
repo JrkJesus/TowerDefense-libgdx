@@ -20,9 +20,7 @@ public class MainTowerDeffense extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-//		this.setScreen(new PantallaPrincipal(this));
-//		this.setScreen(new PantallaJuego(this));
-		this.setScreen(new PantallaClasificacion(this));
+		this.setScreen(new PantallaPrincipal(this));
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.towerdeffense.ControllerGame;
 import com.util.Constants;
 import com.util.Tuple;
@@ -28,15 +29,16 @@ public class Map {
     }
 
     public void draw(Batch batch) {
-        Projectile b;
+        Array<Projectile> bullets;
         for (Tile tile : map) {
             tile.draw(batch);
         }
         for (Tile tile : map) {
             if(tile.getTurret()!=null){
-                b=tile.getTurret().getBullet();
-                if(b!=null && !b.isHundido()){
-                    b.draw(batch);
+                bullets=tile.getTurret().getBullet();
+                for(Projectile bullet : bullets)
+                if(bullet!=null && !bullet.end()){
+                    bullet.draw(batch);
                 }
             }
         }
@@ -204,7 +206,7 @@ public class Map {
                     x = posX,
                     y = posY;
             int position = x * Constants.GRID_HEIGH + y;
-            if (map[position].isBuildeable()) {
+            if (position < map.length && map[position].isBuildeable()) {
                 if (posX == 0) {
                     x++;
                 } else if (posX == Constants.GRID_WIDTH-1) {

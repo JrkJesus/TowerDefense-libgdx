@@ -30,7 +30,7 @@ public class Enemy extends Sprite {
 
 
     //FUNCTIONS
-    public Enemy(Texture[] t, int tipo, Array<Vector2> path, int initialPos) {
+    public Enemy(Texture[] t, int tipo, Array<Vector2> path, int initialPos, int wave) {
         super(t[0]);
         setPosition(-initialPos, path.get(0).y*Constants.GRID_RESIZE_Y);
         setScale(Constants.ESCALA_X,Constants.ESCALA_Y);
@@ -38,17 +38,17 @@ public class Enemy extends Sprite {
         dead = t[1];
         switch (tipo) {
             case Constants.PLANE:
-                life = 3*5;
+                life = 3*3;
                 movSpeed = 100;
                 valor = 10;
                 break;
             case Constants.PEOPLE:
-                life = 3*10;
+                life =3*3;
                 movSpeed = 125;
                 valor = 5;
                 break;
             case Constants.TANK:
-                life = 9*15;
+                life = 9*5;
                 movSpeed = 75;
                 valor = 10;
                 break;
@@ -84,25 +84,21 @@ public class Enemy extends Sprite {
 
     @Override
     public void draw(Batch batch) {
-        float deltaTime = Gdx.graphics.getDeltaTime();
         if (life > 0) {
-            nextStep(deltaTime);
+            nextStep(Constants.DELTA_TIME);
         } else {
-            deadTime += deltaTime;
+            deadTime += Constants.DELTA_TIME;
         }
         super.draw(batch);
     }
 
     public void receiveDamage(ControllerGame control,int dmg) {
-        System.out.println("X:"+getX()/Constants.GRID_RESIZE_X+" Y:"+getY()/Constants.GRID_RESIZE_Y);
-        System.out.println("Daño");
         this.life -= dmg;
         if (life <= 0) {
             this.setTexture(dead);
             control.addMoney(valor);
             control.addScore(valor);
         }
-        System.out.println("Life: "  + life);
     }
 
     public int x(){

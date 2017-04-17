@@ -118,13 +118,13 @@ public class ControllerGame {
 
     public void newWave(int dificulty) {
         for (int i = 0; i < 5 + (wave * 2 / 5) * dificulty; i++) {
-            enemies.add(new Enemy(people, Constants.PEOPLE, path, people[0].getWidth() * i));
+            enemies.add(new Enemy(people, Constants.PEOPLE, path, people[0].getWidth() * i, wave));
         }
         for (int i = 0; i < 0 + wave * dificulty / 4; i++) {
-            enemies.add(new Enemy(tank, Constants.TANK, path, people[0].getWidth() * (5 + (wave * 2 / 5) * dificulty) + tank[0].getWidth() * i));
+            enemies.add(new Enemy(tank, Constants.TANK, path, people[0].getWidth() * (5 + (wave * 2 / 5) * dificulty) + tank[0].getWidth() * i, wave));
         }
         for (int i = 0; i < 0 + wave * dificulty / 5; i++) {
-            enemies.add(new Enemy(plane, Constants.PLANE, Constants.PATH_PLANE(), (5 + (wave * 2 / 5) * dificulty) + plane[0].getWidth() * i));
+            enemies.add(new Enemy(plane, Constants.PLANE, Constants.PATH_PLANE(), (5 + (wave * 2 / 5) * dificulty) + plane[0].getWidth() * i, wave));
         }
         wave++;
     }

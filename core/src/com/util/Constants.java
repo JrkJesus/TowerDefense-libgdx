@@ -12,6 +12,7 @@ import com.models.Tile;
  */
 
 public final class Constants {
+
     public static RandomXS128 rnd = new RandomXS128();
 
     public final static int GRID_SIZE = 128;
@@ -23,6 +24,7 @@ public final class Constants {
     public final static int TANK_COST=100;
 
     public static final int INITIAL_MONEY = 125;
+    public static float DELTA_TIME = 0.025f;
 
     public static float ESCALA_X = 1;
     public static float ESCALA_Y = 1;
