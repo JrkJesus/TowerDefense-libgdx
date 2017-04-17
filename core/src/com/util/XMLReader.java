@@ -21,14 +21,15 @@ import org.jdom2.output.XMLOutputter;
 
 public class XMLReader {
 
-    public static Integer[] getScore() {
+    public static Integer[] getScore(int indx) {
 
         SAXBuilder builder = new SAXBuilder();
 
         try {
             Document doc = builder.build(new FileInputStream("Configuracion/datos.xml"));
             Element raiz = doc.getRootElement();
-            Element element = raiz.getChild("leaderboard");
+            Element element = raiz.getChild("leaderboard"+indx);
+
             List<Element> scores = element.getChildren();
             Integer[] leaderboard = new Integer[scores.size()];
             int i = 0;
@@ -164,7 +165,7 @@ public class XMLReader {
         }
     }
 
-    public static void setScore(Integer[] scores) {
+    public static void setScore(Integer[] scores, int indx) {
         try {
             SAXBuilder builder = new SAXBuilder();
             File xmlFile = new File("Configuracion\\datos.xml");
@@ -172,8 +173,8 @@ public class XMLReader {
             Document doc = builder.build(xmlFile);
             Element raiz = doc.getRootElement();
 //            Element leaderboard = raiz.getChild("leaderboard");
-            raiz.removeChild("leaderboard");
-            Element leaderboard = new Element("leaderboard");
+            raiz.removeChild("leaderboard"+indx);
+            Element leaderboard = new Element("leaderboard"+indx);
             for (int score : scores) {
                 Element scoreChild = new Element("score").setText(Integer.toString(score));
                 leaderboard.addContent(scoreChild);

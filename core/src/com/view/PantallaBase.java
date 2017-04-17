@@ -27,7 +27,7 @@ public class PantallaBase implements Screen
     protected final Skin skin;
     protected final Stage stage;
     protected final TextureAtlas atlas;
-    protected final BitmapFont font;
+    protected BitmapFont font;
     public final int width, height;
     public Music mainMenuMusic;
 

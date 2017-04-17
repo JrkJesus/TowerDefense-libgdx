@@ -5,11 +5,17 @@
     <music>1</music>
     <sound>false</sound>
   </configuracion>
-  <leaderboard>
+  <leaderboard2>
+    <score>100</score>
+  </leaderboard2>
+  <leaderboard1>
+    <score>100</score>
+  </leaderboard1>
+  <leaderboard0>
     <score>258000</score>
     <score>82000</score>
     <score>48000</score>
     <score>18000</score>
     <score>9000</score>
-  </leaderboard>
+  </leaderboard0>
 </towerDeffense>
