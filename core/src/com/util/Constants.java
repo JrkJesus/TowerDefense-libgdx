@@ -1,11 +1,8 @@
 package com.util;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.models.Tile;
 
 /**
  * Created by jesus on 16/03/2017.

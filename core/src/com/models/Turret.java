@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.XmlReader;
 import com.util.Constants;
 import com.towerdeffense.ControllerGame;
 import com.util.XMLReader;
@@ -64,7 +63,7 @@ public class Turret extends Sprite {
                 upgradeCost = (int) (buildCost * .75);
                 break;
         }
-        damage += 3-XMLReader.getConfiguration().item1;
+        damage += 3-XMLReader.readConfig().dificultad;
         recarga =attackSpeed/4.0f;
         delay = 0;
         isSelected = false;

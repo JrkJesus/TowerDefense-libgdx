@@ -2,11 +2,8 @@ package com.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 import com.models.Map;
@@ -99,7 +96,7 @@ public class PantallaJuego extends PantallaBase {
     public void show() {
         super.show();
         gameMusic.setLooping(true);
-        gameMusic.setVolume(XMLReader.getConfiguration().item2);
+        gameMusic.setVolume(XMLReader.readConfig().music);
         gameMusic.play();
     }
 
@@ -109,10 +106,10 @@ public class PantallaJuego extends PantallaBase {
                     posY = (Gdx.graphics.getHeight() - Gdx.input.getY());
             if (btnBack.isSeleccionado(posX, posY)) {
                 mtd.setScreen(new PantallaPrincipal(mtd));
-                XMLReader.addScore(player.getScore());
+                XMLReader.addScore(dificulty, player.getScore());
             } else if (btnRestart.isSeleccionado(posX, posY)) {
                 mtd.setScreen(new PantallaJuego(mtd, dificulty));
-                XMLReader.addScore(player.getScore());
+                XMLReader.addScore(dificulty, player.getScore());
             }
         }
     }

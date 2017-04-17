@@ -3,10 +3,8 @@ package com.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.XmlReader;
 import com.towerdeffense.MainTowerDeffense;
 import com.util.BotonesMenu;
-import com.util.DobleBoton;
 import com.util.Multibotones;
 import com.util.XMLReader;
 
@@ -49,7 +47,7 @@ public class PantallaPrincipal extends PantallaBase {
     public void show() {
         super.show();
         mainMenuMusic.setLooping(true);
-        mainMenuMusic.setVolume(XMLReader.getConfiguration().item2);
+        mainMenuMusic.setVolume(XMLReader.readConfig().music);
         mainMenuMusic.play();
     }
 
@@ -60,19 +58,19 @@ public class PantallaPrincipal extends PantallaBase {
                     y = height - Gdx.input.getY();
 
             if(facil.isSeleccionado(x, y)){
-                XMLReader.setDificulty(1);
+                XMLReader.changeDificulty(1);
                 mtd.setScreen(new PantallaJuego(mtd, 1));
             } else if (medio.isSeleccionado(x, y)){
-                XMLReader.setDificulty(2);
+                XMLReader.changeDificulty(2);
                 mtd.setScreen(new PantallaJuego(mtd, 2));
             } else if (dificil.isSeleccionado(x, y)){
-                XMLReader.setDificulty(3);
+                XMLReader.changeDificulty(3);
                 mtd.setScreen(new PantallaJuego(mtd, 3));
             } else if(setting.verifyTouch(x, y) ){
                 mtd.setScreen(new PantallaClasificacion(mtd));
             }
 
-            mainMenuMusic.setVolume(XMLReader.getConfiguration().item2);
+            mainMenuMusic.setVolume(XMLReader.readConfig().music);
 
 
         }

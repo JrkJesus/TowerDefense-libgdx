@@ -34,14 +34,14 @@ public class Multibotones extends BotonesMenu {
     @Override
     public void draw(Batch batch) {
         super.draw(batch);
-        Tuple<Integer, Integer, Boolean> setting = XMLReader.getConfiguration();
+        Config setting = XMLReader.readConfig();
         if (isPress) {
 //            for (BotonesMenu boton : botones) {
 //                boton.draw(batch);
 //            }
             botones[0].draw(batch);
-            ((DobleBoton)botones[1]).draw(batch, setting.item2 == 1);
-            ((DobleBoton)botones[2]).draw(batch, setting.item3);
+            ((DobleBoton)botones[1]).draw(batch, setting.music == 1);
+            ((DobleBoton)botones[2]).draw(batch, setting.sound == 1);
         }
     }
 

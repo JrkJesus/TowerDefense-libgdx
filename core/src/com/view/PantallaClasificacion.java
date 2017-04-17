@@ -10,9 +10,6 @@ import com.towerdeffense.MainTowerDeffense;
 import com.util.BotonesMenu;
 import com.util.XMLReader;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 /**
  * Created by jesus on 16/04/2017.
  */
@@ -38,19 +35,11 @@ public class PantallaClasificacion extends PantallaBase {
         font = new BitmapFont(Gdx.files.internal("GUI\\font-button-export.fnt"));
         font.setColor(Color.BLACK);
 
-        volume=XMLReader.getConfiguration().item2;
+        volume=XMLReader.readConfig().music;
     }
 
     private void setScore() {
-        Integer[] clasification = XMLReader.getScore(indx);
-        Arrays.sort(clasification, Collections.reverseOrder());
-        int mostrar = 5;
-        if (clasification.length <= mostrar) {
-            scores = clasification;
-        } else {
-            scores = Arrays.copyOf(clasification, mostrar);
-        }
-        XMLReader.setScore(scores, indx);
+        scores = XMLReader.readScore(indx).getScore();
     }
 
     @Override

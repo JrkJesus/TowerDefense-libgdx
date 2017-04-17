@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>  
-<etiquetaPrincipal xmlns:xela="http://www.latascadexela.es" >  
-   <etiquetaHija id="1" atributo1="valorAtributo1" atributo2="valorAtributo2">  
-      Texto dentro de la etiqueta hija  
-   </etiquetaHija>  
-   <!-- Comentario -->  
-   <xela:etiquetaConNamespace descripcion="etiqueta con un namespace"/>    
-</etiquetaPrincipal>
-

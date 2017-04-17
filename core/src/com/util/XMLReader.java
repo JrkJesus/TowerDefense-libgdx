@@ -1,19 +1,11 @@
 package com.util;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
+
 
 /**
  * Created by jesus on 16/04/2017.
@@ -21,178 +13,59 @@ import org.jdom2.output.XMLOutputter;
 
 public class XMLReader {
 
-    public static Integer[] getScore(int indx) {
-
-        SAXBuilder builder = new SAXBuilder();
-
-        try {
-            Document doc = builder.build(new FileInputStream("Configuracion/datos.xml"));
-            Element raiz = doc.getRootElement();
-            Element element = raiz.getChild("leaderboard"+indx);
-
-            List<Element> scores = element.getChildren();
-            Integer[] leaderboard = new Integer[scores.size()];
-            int i = 0;
-            for (Element score : scores) {
-                leaderboard[i++] = Integer.parseInt(score.getText());
-            }
-
-            return leaderboard;
-
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    public static Config readConfig(){
+        FileHandle file = Gdx.files.local("Configuracion/configuration.json");
+        String config = file.readString();
+        Json json = new Json();
+        return json.fromJson(Config.class, config);
     }
 
-    public static Tuple<Integer, Integer, Boolean> getConfiguration() {
+    public static void writeConfiguration(Config config){
+        Json  json = new Json();
+        String configuration = json.prettyPrint(config);
+        FileHandle handle = Gdx.files.local("Configuracion/configuration.json");
+        handle.writeString(configuration, false);
 
-        SAXBuilder builder = new SAXBuilder();
-        try {
-            Document doc = builder.build(new FileInputStream("Configuracion/datos.xml"));
-            Element raiz = doc.getRootElement();
-            Element settings = raiz.getChild("configuracion");
-            String dificulty = settings.getChildText("dificultad");
-            String music = settings.getChildText("music");
-            String sound = settings.getChildText("sound");
-
-            return new Tuple<Integer, Integer, Boolean>(Integer.parseInt(dificulty),
-                    Integer.parseInt(music), Boolean.parseBoolean(sound));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
-    public static void setDificulty(int level) {
-        SAXBuilder builder = new SAXBuilder();
-        try {
-            Document doc = builder.build(new FileInputStream("Configuracion/datos.xml"));
-            Element raiz = doc.getRootElement();
-            Element settings = raiz.getChild("configuracion");
-            settings.getChild("dificultad").setText(level + "");
-
-            XMLOutputter xmlOutput = new XMLOutputter();
-
-            // display nice nice
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(doc, new FileWriter("Configuracion\\datos.xml"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        }
+    public static void changeDificulty(int dificulty){
+        Config config = readConfig();
+        config.dificultad = dificulty;
+        writeConfiguration(config);
+    }
+    public static void changeSound(){
+        Config config = readConfig();
+        config.sound = 1 - config.sound;
+        writeConfiguration(config);
+    }
+    public static void changeMusic(){
+        Config config = readConfig();
+        config.music = 1 - config.music;
+        writeConfiguration(config);
     }
 
-    public static void changeSound() {
-        SAXBuilder builder = new SAXBuilder();
-        try {
-            Document doc = builder.build(new FileInputStream("Configuracion/datos.xml"));
-            Element raiz = doc.getRootElement();
-            Element settings = raiz.getChild("configuracion");
-            Element dificulty = settings.getChild("sound");
-            dificulty.setText(Boolean.parseBoolean(dificulty.getText()) ? "false" : "true");
-            XMLOutputter xmlOutput = new XMLOutputter();
-
-            // display nice nice
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(doc, new FileWriter("Configuracion\\datos.xml"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        }
+    public static Score readScore(int indx){
+        FileHandle file = Gdx.files.local("Configuracion/score"+indx+".json");
+        String score = file.readString();
+        Json json = new Json();
+        return json.fromJson(Score.class, score);
     }
 
-    public static void changeMusic() {
-        SAXBuilder builder = new SAXBuilder();
-        try {
-            Document doc = builder.build(new FileInputStream("Configuracion/datos.xml"));
-            Element raiz = doc.getRootElement();
-            Element settings = raiz.getChild("configuracion");
-            Element dificulty = settings.getChild("music");
-            dificulty.setText(Integer.toString(1 - Integer.parseInt(dificulty.getText())));
-            XMLOutputter xmlOutput = new XMLOutputter();
-
-            // display nice nice
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(doc, new FileWriter("Configuracion\\datos.xml"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        }
+    public static void addScore(int indx, int ponts){
+        Score score = readScore(indx);
+        score.addScore(ponts);
+        Json  json = new Json();
+        String leaderboard = json.prettyPrint(score);
+        FileHandle handle = Gdx.files.local("Configuracion/score"+indx+".json");
+        handle.writeString(leaderboard, false);
     }
 
-    public static void addScore(int points) {
-
-        try {
-            SAXBuilder builder = new SAXBuilder();
-            File xmlFile = new File("Configuracion\\datos.xml");
-
-            Document doc = builder.build(xmlFile);
-            Element raiz = doc.getRootElement();
-            Element leaderboard = raiz.getChild("leaderboard");
-            Element score = new Element("score").setText(Integer.toString(points));
-            leaderboard.addContent(score);
-            XMLOutputter xmlOutput = new XMLOutputter();
-
-            // display nice nice
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(doc, new FileWriter("Configuracion\\datos.xml"));
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        }
+    public static void writeScore(int indx){
+        Score score = new Score(8);
+        Json  json = new Json();
+        String leaderboard = json.prettyPrint(score);
+        FileHandle handle = Gdx.files.local("Configuracion/score"+indx+".json");
+        handle.writeString(leaderboard, false);
     }
 
-    public static void setScore(Integer[] scores, int indx) {
-        try {
-            SAXBuilder builder = new SAXBuilder();
-            File xmlFile = new File("Configuracion\\datos.xml");
-
-            Document doc = builder.build(xmlFile);
-            Element raiz = doc.getRootElement();
-//            Element leaderboard = raiz.getChild("leaderboard");
-            raiz.removeChild("leaderboard"+indx);
-            Element leaderboard = new Element("leaderboard"+indx);
-            for (int score : scores) {
-                Element scoreChild = new Element("score").setText(Integer.toString(score));
-                leaderboard.addContent(scoreChild);
-            }
-            raiz.addContent(leaderboard);
-            XMLOutputter xmlOutput = new XMLOutputter();
-
-            // display nice nice
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(doc, new FileWriter("Configuracion\\datos.xml"));
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        }
-    }
 }

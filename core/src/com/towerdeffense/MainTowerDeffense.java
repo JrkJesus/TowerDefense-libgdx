@@ -1,17 +1,9 @@
 package com.towerdeffense;
 
-import com.util.Tuple;
-import com.util.XMLReader;
-import com.view.PantallaClasificacion;
-import com.view.PantallaJuego;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.view.PantallaPrincipal;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import static com.badlogic.gdx.Gdx.app;
 
 public class MainTowerDeffense extends Game {
 
