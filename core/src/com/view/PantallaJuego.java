@@ -85,7 +85,7 @@ public class PantallaJuego extends PantallaBase {
             int posX = Gdx.input.getX(),
                     posY = (Gdx.graphics.getHeight() - Gdx.input.getY());
             if (btnPause.isSeleccionado(posX, posY)) {
-                Constants.DELTA_TIME = 0.025f - Constants.DELTA_TIME ;
+                Constants.DELTA_TIME = 0.035f - Constants.DELTA_TIME ;
             } else if (btnBackMenu.isSeleccionado(posX, posY)){
                 mtd.setScreen(new PantallaPrincipal(mtd));
             }
