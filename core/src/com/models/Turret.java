@@ -64,6 +64,8 @@ public class Turret extends Sprite {
                 break;
         }
         damage += 3-XMLReader.readConfig().dificultad;
+        buildCost *= 1 + 0.25*(XMLReader.readConfig().dificultad-1);
+        upgradeCost *= 1 + 0.25*(XMLReader.readConfig().dificultad-1);
         recarga =attackSpeed/4.0f;
         delay = 0;
         isSelected = false;

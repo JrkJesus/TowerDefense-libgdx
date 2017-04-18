@@ -3,6 +3,7 @@ package com.util;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
@@ -13,59 +14,65 @@ import com.badlogic.gdx.utils.Json;
 
 public class XMLReader {
 
-    public static Config readConfig(){
-        FileHandle file = Gdx.files.local("Configuracion/configuration.json");
-        String config = file.readString();
-        Json json = new Json();
-        return json.fromJson(Config.class, config);
+    private static Preferences pref;
+
+    private static Preferences getPref(){
+        if(pref == null){
+            pref = Gdx.app.getPreferences("mtd-pref");
+        }
+        return pref;
     }
 
-    public static void writeConfiguration(Config config){
-        Json  json = new Json();
-        String configuration = json.prettyPrint(config);
-        FileHandle handle = Gdx.files.local("Configuracion/configuration.json");
-        handle.writeString(configuration, false);
+    public static void initPref(){
+        getPref().clear();
+        getPref().putInteger("dificultad", 1);
+        getPref().putInteger("music", 1);
+        getPref().putInteger("sound", 1);
+        getPref().putString("leaderboard0", "9000, 500, 3, 50, 65, 98, ");
+        getPref().putString("leaderboard1", "300, ");
+        getPref().putString("leaderboard2", "5, ");
+        getPref().flush();
+    }
 
+    public static Config readConfig(){
+        return new Config(getPref().getInteger("dificultad"),
+                getPref().getInteger("music"),
+                getPref().getInteger("sound") );
     }
 
     public static void changeDificulty(int dificulty){
-        Config config = readConfig();
-        config.dificultad = dificulty;
-        writeConfiguration(config);
+        getPref().putInteger("dificultad", dificulty);
+        getPref().flush();
     }
     public static void changeSound(){
-        Config config = readConfig();
-        config.sound = 1 - config.sound;
-        writeConfiguration(config);
+        getPref().putInteger("sound", 1-getPref().getInteger("sound"));
+        getPref().flush();
     }
     public static void changeMusic(){
-        Config config = readConfig();
-        config.music = 1 - config.music;
-        writeConfiguration(config);
+        getPref().putInteger("music", 1-getPref().getInteger("music"));
+        getPref().flush();
     }
 
     public static Score readScore(int indx){
-        FileHandle file = Gdx.files.local("Configuracion/score"+indx+".json");
-        String score = file.readString();
-        Json json = new Json();
-        return json.fromJson(Score.class, score);
+        String[] stringScores = getPref().getString("leaderboard"+indx).split(", ");
+        Integer[] score = new Integer[stringScores.length];
+        int i = 0;
+        for(String stringScore : stringScores){
+            if(stringScore != "")
+                score[i++] = Integer.parseInt(stringScore);
+        }
+
+        return new Score(score);
     }
 
     public static void addScore(int indx, int ponts){
         Score score = readScore(indx);
         score.addScore(ponts);
-        Json  json = new Json();
-        String leaderboard = json.prettyPrint(score);
-        FileHandle handle = Gdx.files.local("Configuracion/score"+indx+".json");
-        handle.writeString(leaderboard, false);
+        String s="";
+        for(Integer point : score.getScore()){
+            s+=point+", ";
+        }
+        getPref().putString("leaderboard"+indx, s);
+        getPref().flush();
     }
-
-    public static void writeScore(int indx){
-        Score score = new Score(8);
-        Json  json = new Json();
-        String leaderboard = json.prettyPrint(score);
-        FileHandle handle = Gdx.files.local("Configuracion/score"+indx+".json");
-        handle.writeString(leaderboard, false);
-    }
-
 }

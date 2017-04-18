@@ -29,9 +29,15 @@ public class Score {
     }
 
     public void addScore(Integer score){
-        Integer[] copy = Arrays.copyOf(leaderboard, leaderboard.length+1);
-        copy[leaderboard.length] = score;
-        Arrays.sort(copy, Collections.reverseOrder());
+        Integer[] copy;
+        if(leaderboard != null) {
+            copy = Arrays.copyOf(leaderboard, leaderboard.length + 1);
+            copy[leaderboard.length] = score;
+            Arrays.sort(copy, Collections.reverseOrder());
+        } else {
+            copy = new Integer[]{score};
+        }
+
         if(copy.length < 5){
             leaderboard = copy;
         }else {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.towerdeffense.ControllerGame;
 import com.util.Constants;
+import com.util.XMLReader;
 
 /**
  * Created by jesus on 16/03/2017.
@@ -39,20 +40,19 @@ public class Enemy extends Sprite {
             case Constants.PLANE:
                 life = 3*3;
                 movSpeed = 100;
-                valor = 10;
                 break;
             case Constants.PEOPLE:
                 life =3*3;
                 movSpeed = 125;
-                valor = 5;
                 break;
             case Constants.TANK:
                 life = 9*5;
                 movSpeed = 75;
-                valor = 10;
                 break;
         }
-        //life*=10;
+        life += (3- XMLReader.readConfig().dificultad)*2;
+        valor = life*(int)( 1 + 0.25f*(XMLReader.readConfig().dificultad-1));
+        movSpeed *= 1 + 0.25*(XMLReader.readConfig().dificultad-1);
         this.path = path;
         deadTime = 0;
         type=tipo;

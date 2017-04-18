@@ -2,6 +2,7 @@ package com.towerdeffense;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.util.XMLReader;
 import com.view.PantallaPrincipal;
 
 
@@ -11,6 +12,7 @@ public class MainTowerDeffense extends Game {
 
 	@Override
 	public void create () {
+		XMLReader.initPref();
 		batch = new SpriteBatch();
 		this.setScreen(new PantallaPrincipal(this));
 	}

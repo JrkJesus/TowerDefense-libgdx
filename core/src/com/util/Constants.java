@@ -21,7 +21,7 @@ public final class Constants {
     public final static int TANK_COST=100;
 
     public static final int INITIAL_MONEY = 125;
-    public static float DELTA_TIME = 0.025f;
+    public static float DELTA_TIME = 0.035f;
 
     public static float ESCALA_X = 1;
     public static float ESCALA_Y = 1;

@@ -27,7 +27,7 @@ public class PantallaClasificacion extends PantallaBase {
         indx = 0;
         setScore();
 
-        win = new Texture(Gdx.files.internal("GUI\\clasificacion.png"));
+        win = new Texture(Gdx.files.internal("GUI\\background-leaderboard.png"));
         btnBack = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(width / 2 - win.getWidth() / 4, height / 2 - win.getHeight() / 2.15f ));
         btnForward = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\forward.png")), new Vector2(width / 2 + win.getWidth() / 4, height / 2 - win.getHeight() / 2.15f ));
         btnHome = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\home.png")), new Vector2(width / 2, height / 2 - win.getHeight() / 2.15f ));
@@ -55,18 +55,20 @@ public class PantallaClasificacion extends PantallaBase {
         mtd.batch.begin();
         mtd.batch.draw(background, 0, 0);
         mtd.batch.draw(win, width / 2 - win.getWidth() / 2, height / 2 - win.getHeight() / 2);
-        int i = -Math.round(scores.length/2)+2;
+        int i = -Math.round(scores.length/2)+1;
         GlyphLayout text = new GlyphLayout();
+        font.getData().setScale(3f, 1);
         if(indx == 0)
             text.setText(font, "Facil");
         else if(indx == 1)
             text.setText(font, "Normal");
         else
             text.setText(font, "Dificil");
-        font.draw(mtd.batch, text, (width - text.width)/2, (height + text.height)/ 2 + 100);
+        font.getData().setScale(1.5f);
+        font.draw(mtd.batch, text, (width - text.width)/2, (height + text.height)/ 2 + 150);
         for (Integer score : scores) {
             text.setText(font, Integer.toString(score));
-            font.draw(mtd.batch, text, (width - text.width)/2, (height + text.height)/ 2 + 20 - 40 * i++);
+            font.draw(mtd.batch, text, (width - text.width)/2, (height + text.height)/ 2 + 10 - 50 * i++);
         }
         btnForward.draw(mtd.batch);
         btnHome.draw(mtd.batch);

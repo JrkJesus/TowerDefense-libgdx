@@ -21,13 +21,13 @@ public class Multibotones extends BotonesMenu {
     public Multibotones() {
         this(new Texture(Gdx.files.internal("GUI\\setting.png")), new Vector2(74, Gdx.graphics.getHeight() - 74));
         pressed = new Texture(Gdx.files.internal("GUI\\setting-selected.png"));
-        int x = 110,
-                y = Gdx.graphics.getHeight() - pressed.getHeight() - 10;
+        int x = 160,
+                y = Gdx.graphics.getHeight() - pressed.getHeight() + 54;
 
         botones = new BotonesMenu[]{
                 new BotonesMenu(new Texture(Gdx.files.internal("GUI\\leaderboard.png")), new Vector2(x + 10, y)),
-                new DobleBoton(new Texture(Gdx.files.internal("GUI\\sound-high.png")), new Texture(Gdx.files.internal("GUI\\sound-low.png")), new Vector2(x + 69, y )),
-                new DobleBoton(new Texture(Gdx.files.internal("GUI\\musicOn.png")), new Texture(Gdx.files.internal("GUI\\musicOff.png")), new Vector2(x + 64*2+5, y ))
+                new DobleBoton(new Texture(Gdx.files.internal("GUI\\sound-high.png")), new Texture(Gdx.files.internal("GUI\\sound-low.png")), new Vector2(x + 128, y )),
+                new DobleBoton(new Texture(Gdx.files.internal("GUI\\musicOn.png")), new Texture(Gdx.files.internal("GUI\\musicOff.png")), new Vector2(x + 128*2+5, y ))
         };
     }
 

@@ -41,10 +41,10 @@ public class PantallaJuego extends PantallaBase {
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds\\background-battle.ogg"));
 
         win = new Texture(Gdx.files.internal("GUI\\winner.png"));
-        btnBack = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(Gdx.graphics.getWidth() / 2 - win.getWidth() / 10, Gdx.graphics.getHeight() / 2 - win.getHeight() / 3));
-        btnRestart = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\reload.png")), new Vector2(Gdx.graphics.getWidth() / 2 + win.getWidth() / 10, Gdx.graphics.getHeight() / 2 - win.getHeight() / 3));
-        btnPause = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\pause.png")), new Vector2(Gdx.graphics.getWidth() - 32, Gdx.graphics.getHeight() - 32));
-        btnBackMenu = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(Gdx.graphics.getWidth() - btnPause.getWitdh()*1.5f - 32, Gdx.graphics.getHeight() - 32));
+        btnBack = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(Gdx.graphics.getWidth() / 2 - win.getWidth() / 4, Gdx.graphics.getHeight() / 2 - win.getHeight() / 2.15f));
+        btnRestart = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\reload.png")), new Vector2(Gdx.graphics.getWidth() / 2 + win.getWidth() / 4, Gdx.graphics.getHeight() / 2 -win.getHeight() / 2.15f));
+        btnPause = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\pause.png")), new Vector2(Gdx.graphics.getWidth() - 64, Gdx.graphics.getHeight() - 64));
+        btnBackMenu = new BotonesMenu(new Texture(Gdx.files.internal("GUI\\back.png")), new Vector2(Gdx.graphics.getWidth() - btnPause.getWitdh()*1.5f - 64, Gdx.graphics.getHeight() - 64));
     }
 
     public PantallaJuego(MainTowerDeffense _mtd) {
@@ -106,10 +106,10 @@ public class PantallaJuego extends PantallaBase {
                     posY = (Gdx.graphics.getHeight() - Gdx.input.getY());
             if (btnBack.isSeleccionado(posX, posY)) {
                 mtd.setScreen(new PantallaPrincipal(mtd));
-                XMLReader.addScore(dificulty, player.getScore());
+                XMLReader.addScore(dificulty-1, player.getScore());
             } else if (btnRestart.isSeleccionado(posX, posY)) {
                 mtd.setScreen(new PantallaJuego(mtd, dificulty));
-                XMLReader.addScore(dificulty, player.getScore());
+                XMLReader.addScore(dificulty-1, player.getScore());
             }
         }
     }
